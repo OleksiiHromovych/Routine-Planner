@@ -10,7 +10,10 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="action_date_picker">Date picker</string>
-    <string name="positive_button_title">Yes</string>
-    <string name="negative_button_title">No</string>
+    <string name="positive_button_title">Save</string>
+    <string name="negative_button_title">Cancel</string>
     <string name="doing_dialog_title_field_hint">Doing title</string>
+    <string name="menu_action_edit_title">Edit</string>
+    <string name="menu_action_delete_title">Delete</string>
+    <string name="action_templates">Templates</string>
 </resources>

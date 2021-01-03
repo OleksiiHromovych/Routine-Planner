@@ -11,5 +11,9 @@
         android:id="@+id/action_date_picker"
         android:icon="@drawable/ic_date_picker"
         android:title="@string/action_date_picker"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/action_templates_list"
+        android:title="@string/action_templates"/>
 </menu>

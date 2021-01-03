@@ -8,15 +8,28 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="dialog_negative_btn">#850000</color>
+    <color name="dialog_positive_btn">#045C08</color>
+
+
     <color name="application_background">#FFFFFF</color>
     <color name="tool_bar_background">#ADADAD</color>
     <color name="tool_bar_title">#FFFFFF</color>
     <color name="status_bar">#636363</color>
+    <color name="doing_completed_background">#8FF5F5F5</color>
 
     <color name="hint">#888888</color>
     <color name="edit_dialog_background">#FAFAFA</color>
-    <color name="edit_dialog_button_title">#000000</color>
 
+    <!--night version-->
+    <color name="application_background_night">#000125</color>
+    <color name="tool_bar_background_night">#202020</color>
+    <color name="tool_bar_title_night">#FFFFFF</color>
+    <color name="status_bar_night">@color/tool_bar_background_night</color>
+    <color name="doing_completed_background_night">#9A232323</color>
+
+    <color name="edit_dialog_background_night">@color/tool_bar_background_night</color>
+    <color name="hint_night">#888888</color>
 
     <color name="text">#000000</color>
 </resources>

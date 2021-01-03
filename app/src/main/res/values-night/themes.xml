@@ -4,13 +4,54 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/application_background_night</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondary">@color/hint</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar_night</item>
         <!-- Customize your theme here. -->
+        <item name="toolbarStyle">@style/ToolBarStyle</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+    </style>
+
+    <style name="Theme.RoutinePlanner.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.RoutinePlanner.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight">
+        <item name="android:textColor">@color/tool_bar_title_night</item>
+        <item name="popupMenuBackground">@color/tool_bar_background_night</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:textColorHint">@color/hint_night</item>
+        <item name="android:windowBackground">@color/tool_bar_background_night</item>
+
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/dialog_negative_btn</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/dialog_positive_btn</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="android:background">@color/tool_bar_background_night</item>
+        <item name="titleTextColor">@color/tool_bar_title_night</item>
+        <item name="subtitleTextColor">@color/tool_bar_title_night</item>
+        <item name="popupTheme">@style/Theme.RoutinePlanner.PopupOverlay</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <item name="colorPrimary">@color/hint_night</item>
+    </style>
+
+    <style name="ToolbarMenuStyle" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/tool_bar_background_night</item>
+        <item name="android:textColor">@color/tool_bar_title_night</item>
     </style>
 </resources>
