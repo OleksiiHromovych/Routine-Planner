@@ -1,8 +1,7 @@
 package android.hromovych.com.routineplanner
 
+import android.hromovych.com.routineplanner.doings.DoingsFragment
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -14,19 +13,16 @@ class MainActivity : AppCompatActivity() {
 
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, DoingsFragment.newInstance())
+            .add(R.id.container, DoingsFragment.newInstance())
             .commit()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount < 1) {
+            setResult(RESULT_OK)
+            finish()
+        } else {
+            super.onBackPressed()
         }
     }
 }

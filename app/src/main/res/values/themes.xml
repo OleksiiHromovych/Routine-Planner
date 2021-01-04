@@ -25,7 +25,7 @@
     </style>
 
     <style name="Theme.RoutinePlanner.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight">
-        <item name="android:textColor">@color/tool_bar_background</item>
+        <item name="android:textColor">@color/text</item>
         <item name="popupMenuBackground">@color/tool_bar_title</item>
     </style>
 

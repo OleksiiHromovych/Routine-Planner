@@ -32,4 +32,7 @@
     <color name="hint_night">#888888</color>
 
     <color name="text">#000000</color>
+    <color name="subtext">#525252</color>
+
+    <color name="template_item_lines">#989898</color>
 </resources>

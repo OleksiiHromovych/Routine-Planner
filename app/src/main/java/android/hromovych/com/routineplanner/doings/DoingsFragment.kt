@@ -1,57 +1,40 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
-import android.hromovych.com.routineplanner.doings.DoingEditDialog
-import android.hromovych.com.routineplanner.doings.DoingsAdapter
-import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.hromovych.com.routineplanner.DefaultFragment
+import android.hromovych.com.routineplanner.Doing
+import android.hromovych.com.routineplanner.R
+import android.hromovych.com.routineplanner.templates.TemplatesFragment
+import android.hromovych.com.routineplanner.toast
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class DoingsFragment : Fragment() {
+class DoingsFragment : DefaultFragment() {
 
-    private lateinit var recyclerView: RecyclerView
     private var adapter: DoingsAdapter? = null
 
     companion object {
         fun newInstance() = DoingsFragment()
-
     }
 
     private val doings = mutableListOf<Doing>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val v = inflater.inflate(R.layout.fragment_doings, container, false)
-
-        recyclerView = v.findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-
-        v.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            DoingEditDialog(
-                requireContext(), Doing(""),
-                "Create new doing note"
-            ) {
-                doings += it
-            }.show()
-
-        }
-
-        updateUi()
-
-        return v
+    override fun setAdapterToNull() {
+        adapter = null
     }
 
-    fun updateUi() {
+    override val onFABClickListener: (View) -> Unit = {
+        DoingEditDialog(
+            requireContext(), Doing(""),
+            "Create new doing note"
+        ) {
+            doings += it
+            updateUi()
+        }.show()
+    }
+
+    override fun updateUi() {
         if (doings.isEmpty()) getDoings()
         if (adapter == null) {
             adapter = DoingsAdapter(doings) {view: View, doing: Doing ->
@@ -100,6 +83,25 @@ class DoingsFragment : Fragment() {
         doings.add(Doing("This completed", true))
 
         return doings
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.action_templates_list -> {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(this.id, TemplatesFragment())
+                    .addToBackStack(null)
+                    .commit()
+                return true
+            }
+            else -> context.toast(item.title.toString())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
