@@ -1,11 +1,8 @@
 package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
-import android.hromovych.com.routineplanner.DefaultFragment
-import android.hromovych.com.routineplanner.Doing
-import android.hromovych.com.routineplanner.R
+import android.hromovych.com.routineplanner.*
 import android.hromovych.com.routineplanner.templates.TemplatesFragment
-import android.hromovych.com.routineplanner.toast
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
@@ -27,7 +24,7 @@ class DoingsFragment : DefaultFragment() {
     override val onFABClickListener: (View) -> Unit = {
         DoingEditDialog(
             requireContext(), Doing(""),
-            "Create new doing note"
+            R.string.dialog_title_create_new_doing
         ) {
             doings += it
             updateUi()
@@ -56,7 +53,7 @@ class DoingsFragment : DefaultFragment() {
                     DoingEditDialog(
                         context,
                         doing,
-                        "Edit doing"
+                        R.string.dialog_title_edit_doing
                     ) { editedDoing ->
                         save(editedDoing)
                     }.show()

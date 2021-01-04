@@ -16,4 +16,10 @@
     <string name="menu_action_edit_title">Edit</string>
     <string name="menu_action_delete_title">Delete</string>
     <string name="action_templates">Templates</string>
+    <string name="template_edit_name_hint">Template name</string>
+    <string name="dialog_button_yet_exist">Yet exist</string>
+    <string name="dialog_button_new">New</string>
+    <string name="dialog_title_create_new_doing">Create new doing note</string>
+    <string name="dialog_title_edit_doing">Edit doing</string>
+    <string name="dialog_button_ok">OK</string>
 </resources>

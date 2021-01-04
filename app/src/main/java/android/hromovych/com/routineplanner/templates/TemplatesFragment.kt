@@ -2,6 +2,7 @@ package android.hromovych.com.routineplanner.templates
 
 import android.hromovych.com.routineplanner.DefaultFragment
 import android.hromovych.com.routineplanner.Doing
+import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.toast
 import android.view.View
 
@@ -21,8 +22,12 @@ class TemplatesFragment : DefaultFragment() {
         val templates: List<Template> = getTemplates()
         if (adapter == null) {
             adapter = TemplatesAdapter(templates) {
-                context.toast("Item clicked")
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, TemplateEditFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit()
             }
+
             recyclerView.adapter = adapter
         } else {
             adapter!!.templates = templates

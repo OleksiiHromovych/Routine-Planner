@@ -21,16 +21,6 @@
     <color name="hint">#888888</color>
     <color name="edit_dialog_background">#FAFAFA</color>
 
-    <!--night version-->
-    <color name="application_background_night">#000125</color>
-    <color name="tool_bar_background_night">#202020</color>
-    <color name="tool_bar_title_night">#FFFFFF</color>
-    <color name="status_bar_night">@color/tool_bar_background_night</color>
-    <color name="doing_completed_background_night">#9A232323</color>
-
-    <color name="edit_dialog_background_night">@color/tool_bar_background_night</color>
-    <color name="hint_night">#888888</color>
-
     <color name="text">#000000</color>
     <color name="subtext">#525252</color>
 

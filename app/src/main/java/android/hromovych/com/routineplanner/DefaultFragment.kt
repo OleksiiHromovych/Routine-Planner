@@ -24,14 +24,18 @@ abstract class DefaultFragment : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_default, container, false)
 
+        initViews(v)
+
+        return v
+    }
+
+    protected fun initViews(v: View) {
         recyclerView = v.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         v.findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
             onFABClickListener(view)
         }
-
-        return v
     }
 
     override fun onResume() {

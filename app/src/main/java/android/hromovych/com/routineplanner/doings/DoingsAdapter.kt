@@ -2,18 +2,20 @@ package android.hromovych.com.routineplanner.doings
 
 import android.hromovych.com.routineplanner.Doing
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.isDarkModeOn
 import android.hromovych.com.routineplanner.strike
+import android.hromovych.com.routineplanner.toast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doing) -> Unit) :
     RecyclerView.Adapter<DoingsAdapter.Holder>() {
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val moveImage = itemView.findViewById<ImageView>(R.id.doing_move_image_view)
         val statusCheckBox = itemView.findViewById<CheckBox>(R.id.doing_checkbox)
         val titleView = itemView.findViewById<TextView>(R.id.doing_title)
         var doing: Doing? = null
@@ -25,6 +27,10 @@ class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doin
             }
             titleView.setOnClickListener {
                 onTitleClickAction(it, doing!!)
+            }
+            moveImage.setOnLongClickListener {
+                it.context.toast("Long click")
+                true
             }
         }
 
@@ -41,11 +47,7 @@ class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doin
             val backgroundColor = if (!status)
                 android.R.color.transparent
             else {
-                if (itemView.context.isDarkModeOn()) {
-                    R.color.doing_completed_background_night
-                } else {
-                    R.color.doing_completed_background
-                }
+                R.color.doing_completed_background
             }
             itemView.setBackgroundResource(backgroundColor)
 
