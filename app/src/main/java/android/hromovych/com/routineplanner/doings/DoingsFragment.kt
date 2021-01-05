@@ -2,6 +2,7 @@ package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
 import android.hromovych.com.routineplanner.*
+import android.hromovych.com.routineplanner.databases.DoingLab
 import android.hromovych.com.routineplanner.templates.TemplatesFragment
 import android.view.*
 import android.widget.Toast
@@ -15,26 +16,26 @@ class DoingsFragment : DefaultFragment() {
         fun newInstance() = DoingsFragment()
     }
 
-    private val doings = mutableListOf<Doing>()
-
     override fun setAdapterToNull() {
         adapter = null
     }
 
     override val onFABClickListener: (View) -> Unit = {
         DoingEditDialog(
-            requireContext(), Doing(""),
+            requireContext(), "",
             R.string.dialog_title_create_new_doing
         ) {
-            doings += it
+            DoingLab(requireContext()).insertNewDoing(Doing().apply {
+                title = it
+            })
             updateUi()
         }.show()
     }
 
     override fun updateUi() {
-        if (doings.isEmpty()) getDoings()
+        val doings = getDoings()
         if (adapter == null) {
-            adapter = DoingsAdapter(doings) {view: View, doing: Doing ->
+            adapter = DoingsAdapter(doings) { view: View, doing: Doing ->
                 showPopupMenu(requireContext(), view, doing)
             }
             recyclerView.adapter = adapter
@@ -52,15 +53,21 @@ class DoingsFragment : DefaultFragment() {
                 R.id.menu_action_edit -> {
                     DoingEditDialog(
                         context,
-                        doing,
+                        doing.title,
                         R.string.dialog_title_edit_doing
-                    ) { editedDoing ->
-                        save(editedDoing)
+                    ) { editedDoingTitle ->
+                        DoingLab(requireContext()).updateDoing(doing.apply {title=editedDoingTitle})
+                        updateUi()
                     }.show()
                     true
                 }
                 R.id.menu_action_delete -> {
-                    Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT).show()
+                    if (DoingLab(requireContext()).deleteDoing(doing) == 0)
+                        context.toast("Something go wrong. No such id")
+                    else
+                        Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT)
+                            .show()
+                    updateUi()
                     true
                 }
                 else -> false
@@ -69,18 +76,8 @@ class DoingsFragment : DefaultFragment() {
         popupMenu.show()
     }
 
-    private fun save(doing: Doing) {
-        doings += doing
-    }
+    private fun getDoings(): List<Doing> = DoingLab(requireContext()).getDoings()
 
-    fun getDoings(): List<Doing> {
-//        val doings = mutableListOf<Doing>()
-
-        doings.add(Doing("test", false))
-        doings.add(Doing("This completed", true))
-
-        return doings
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -88,7 +85,7 @@ class DoingsFragment : DefaultFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.action_templates_list -> {
                 requireActivity().supportFragmentManager.beginTransaction()
                     .replace(this.id, TemplatesFragment())

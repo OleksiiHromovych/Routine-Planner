@@ -2,21 +2,37 @@ package android.hromovych.com.routineplanner.templates
 
 import android.content.Context
 import android.hromovych.com.routineplanner.*
+import android.hromovych.com.routineplanner.databases.DoingLab
+import android.hromovych.com.routineplanner.databases.TemplateLab
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import com.google.android.material.textfield.TextInputEditText
 
 class TemplateEditFragment : DefaultFragment() {
 
     private var adapter: TemplateEditAdapter? = null
+    private lateinit var template: Template
+    private lateinit var templateLab: TemplateLab
 
     companion object {
-        fun newInstance() = TemplateEditFragment()
+        private const val ARG_TEMPLATE_ID = "template id"
+
+        fun newInstance(id: Long) = TemplateEditFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_TEMPLATE_ID, id)
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        templateLab = TemplateLab(requireContext())
+        template = templateLab.getTemplate(requireArguments().getLong(ARG_TEMPLATE_ID))
+
     }
 
     override fun onCreateView(
@@ -27,9 +43,25 @@ class TemplateEditFragment : DefaultFragment() {
         val v = inflater.inflate(R.layout.fragment_template_edit, container, false)
 
         initViews(v)
-        v.findViewById<TextView>(R.id.template_edit_input_view).text = "Template Name"
+        v.findViewById<TextInputEditText>(R.id.template_edit_input_view).apply {
+            setText(template.name)
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
 
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    templateLab.updateTemplateName(template.apply {
+                        name = s.toString()
+                    })
+                }
+
+            })
+        }
         return v
+
     }
 
     override fun setAdapterToNull() {
@@ -48,16 +80,19 @@ class TemplateEditFragment : DefaultFragment() {
                         it.title
                     }.toTypedArray()
                 ) {
-                    context.toast(it.toString())
+                    context.toast(it.toString()) //todo
                 }
             },
             DialogButton(R.string.dialog_button_new) {
                 DoingEditDialog(
                     requireContext(),
-                    Doing(""),
+                    "",
                     R.string.dialog_title_create_new_doing
                 ) {
-                    context.toast("new created")
+                    templateLab.addNewDoing(template, Doing().apply {
+                        title = it
+                    })
+                    updateUi()
                 }.show()
             }
         )
@@ -85,16 +120,23 @@ class TemplateEditFragment : DefaultFragment() {
                 R.id.menu_action_edit -> {
                     DoingEditDialog(
                         context,
-                        doing,
+                        doing.title,
                         R.string.dialog_title_edit_doing
-                    ) { editedDoing ->
-                        context.toast(editedDoing.toString())
+                    ) { editedDoingTitle -> //todo: треба запитувати чи юзер хоче змінити глобально чи створити копію тої, тоді потрібно буде видалити дану з записів шаблону і замінити новою
+                        DoingLab(requireContext()).updateDoing(doing.apply {
+                            title = editedDoingTitle
+                        })
+                        updateUi()
                     }.show()
                     true
                 }
                 R.id.menu_action_delete -> {
-                    Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT)
-                        .show()
+                    if (DoingLab(requireContext()).deleteDoing(doing) == 0)
+                        context.toast("Something go wrong. No such id")
+                    else
+                        Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT)
+                            .show()
+                    updateUi()
                     true
                 }
                 else -> false
@@ -103,14 +145,22 @@ class TemplateEditFragment : DefaultFragment() {
         popupMenu.show()
     }
 
-    private fun getDoings(): List<Doing> {
-        val doings = mutableListOf<Doing>()
+    private fun getDoings(): List<Doing> = templateLab.getDoings(template)
 
-        doings.add(Doing("test", false))
-        doings.add(Doing("This completed", true))
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_template_edit, menu)
+    }
 
-        return doings
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_action_use_this -> {
+                context.toast("Choice date") // TODO: show DatePicker
+                return true
+            }
+            else -> context.toast(item.title.toString())
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

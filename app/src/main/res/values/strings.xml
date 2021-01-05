@@ -12,7 +12,7 @@
     <string name="action_date_picker">Date picker</string>
     <string name="positive_button_title">Save</string>
     <string name="negative_button_title">Cancel</string>
-    <string name="doing_dialog_title_field_hint">Doing title</string>
+    <string name="doing_dialog_title_field_hint">Title</string>
     <string name="menu_action_edit_title">Edit</string>
     <string name="menu_action_delete_title">Delete</string>
     <string name="action_templates">Templates</string>
@@ -22,4 +22,5 @@
     <string name="dialog_title_create_new_doing">Create new doing note</string>
     <string name="dialog_title_edit_doing">Edit doing</string>
     <string name="dialog_button_ok">OK</string>
+    <string name="dialog_title_create_new_template">Create new template</string>
 </resources>

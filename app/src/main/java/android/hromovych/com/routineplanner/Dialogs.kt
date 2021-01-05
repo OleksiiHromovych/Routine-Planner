@@ -8,11 +8,11 @@ import com.google.android.material.textfield.TextInputEditText
 
 class DoingEditDialog(
     context: Context,
-    doing: Doing,
-    title: Int,
-    positiveButtonAction: (Doing) -> Unit
+    inputTitle: String,
+    dialogTitle: Int,
+    positiveButtonAction: (String) -> Unit
 ) :
-    AlertDialog.Builder(context) {//, R.style.AlertDialogTheme
+    AlertDialog.Builder(context) {
 
     init {
         val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)
@@ -23,11 +23,11 @@ class DoingEditDialog(
 
         setView(view)
 
-        setTitle(title)
+        setTitle(dialogTitle)
 
-        titleEditText.setText(doing.title)
+        titleEditText.setText(inputTitle)
         setPositiveButton(context.getString(R.string.positive_button_title)) { _, _ ->
-            positiveButtonAction(doing.apply { this.title = titleEditText.text.toString() })
+            positiveButtonAction(titleEditText.text.toString())
         }
 
         setNegativeButton(context.getString(R.string.negative_button_title), null)

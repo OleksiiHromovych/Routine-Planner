@@ -27,7 +27,7 @@ class TemplatesAdapter(var templates: List<Template>, val onItemClickAction: (Te
             titleView.text = template.name
             doingsListView.text = template.doings.joinToString("; "){
                 it.title
-            }
+            }.ifEmpty { "Empty template list" }
         }
     }
 
