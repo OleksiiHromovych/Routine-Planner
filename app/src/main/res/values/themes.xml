@@ -64,4 +64,26 @@
         <item name="android:textColor">@color/tool_bar_title</item>
     </style>
 
+    <style name="DatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+
+        <item name="android:textColor">@color/text</item>
+
+        <item name="android:textColorPrimaryInverse">@color/tool_bar_title</item>
+
+        <item name="android:windowBackground">@color/application_background</item> <!--calendar background-->
+        <item name="android:textColorSecondaryInverse">@color/subtext</item><!--year text color-->
+        <item name="android:textColorPrimary">@color/text</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/tool_bar_background</item>    <!--days of the week-->
+        <item name="android:colorControlActivated">@color/tool_bar_background</item> <!--selected day-->
+        <item name="colorAccent">@color/tool_bar_background</item> <!--header background-->
+        <item name="buttonBarButtonStyle">@style/DatePickerTheme.ButtonBarButtonStyle</item>
+<!--                <item name="android:colorBackground">@color/tool_bar_background</item>-->
+    </style>
+
+    <style name="DatePickerTheme.ButtonBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text</item>
+    </style>
 </resources>

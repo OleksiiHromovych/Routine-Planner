@@ -73,14 +73,15 @@ class TemplateEditFragment : DefaultFragment() {
             requireContext(),
             "You want to create new doing or use yet exist?",
             DialogButton(R.string.dialog_button_yet_exist) {
-                showMultiSelectedListDialog(
+                showDoingsMultiSelectedListDialog(
                     requireContext(),
-                    "Choice from exist",
-                    getDoings().map {
-                        it.title
-                    }.toTypedArray()
+                    getString(R.string.dialog_title_choice_from_exist),
+                    DoingLab(requireContext()).getDoings()
                 ) {
-                    context.toast(it.toString()) //todo
+                    for (doing in it){
+                        templateLab.addNewDoing(template, doing)
+                    }
+                    updateUi()
                 }
             },
             DialogButton(R.string.dialog_button_new) {

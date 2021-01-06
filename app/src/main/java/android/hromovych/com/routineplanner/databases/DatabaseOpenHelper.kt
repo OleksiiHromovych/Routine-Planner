@@ -13,7 +13,7 @@ class DatabaseOpenHelper private constructor(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "RoutinePlannerDatabase"
-        const val DATABASE_VERSION = 2
+        const val DATABASE_VERSION = 1
 
         private var instance: DatabaseOpenHelper? = null
 
@@ -34,12 +34,11 @@ class DatabaseOpenHelper private constructor(context: Context) :
             DoingsTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
             DoingsTable.COL_NAME to TEXT
         )
-        db.createTable(
-            DayTable.TABLE_NAME, true,
-            DayTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
-            DayTable.COL_DATE to INTEGER,   //date to second from unix time start
-            DayTable.COL_STATUS to INTEGER,         //0 or 1 as boolean
-        )
+//        db.createTable(
+//            DayTable.TABLE_NAME, true,
+//            DayTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
+//            DayTable.COL_DATE to INTEGER,   //date to second from unix time start
+//        )
 
         // and 2 base for communicate
         db.createTable(
@@ -51,8 +50,9 @@ class DatabaseOpenHelper private constructor(context: Context) :
         db.createTable(
             DailyDoingsTable.TABLE_NAME, true,
             DailyDoingsTable.COL_POSITION to INTEGER,
-            DailyDoingsTable.COL_DAY_ID to INTEGER,
+            DailyDoingsTable.COL_DATE to INTEGER,
             DailyDoingsTable.COL_DOING_ID to INTEGER,
+            DailyDoingsTable.COL_STATUS to INTEGER,         //0 or 1 as boolean
         )
     }
 

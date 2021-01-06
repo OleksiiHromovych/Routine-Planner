@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.graphics.Paint
 import android.widget.TextView
 import android.widget.Toast
+import java.util.*
 
 inline var TextView.strike: Boolean
     set(visible) {
@@ -20,3 +21,10 @@ fun Context.isDarkModeOn(): Boolean =
 fun Context?.toast(text: String){
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
+
+fun Calendar.setDayStartTime() = this.apply {
+    set(Calendar.HOUR, 0)
+    set(Calendar.MINUTE, 0)
+    set(Calendar.SECOND, 0)
+    set(Calendar.MILLISECOND, 0)
+}.timeInMillis

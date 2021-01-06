@@ -1,10 +1,12 @@
 package android.hromovych.com.routineplanner
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.LayoutInflater
 import com.google.android.material.textfield.TextInputEditText
+import java.util.*
 
 class DoingEditDialog(
     context: Context,
@@ -56,17 +58,17 @@ fun showTwoActionDialog(
 // first name, second action for button
 typealias DialogButton = Pair<Int, () -> Unit>
 
-fun showMultiSelectedListDialog(
+fun showDoingsMultiSelectedListDialog(
     context: Context,
     messageTitle: String,
-    items: Array<String>,
-    positiveButtonAction: (List<String>) -> Unit
+    items: List<Doing>,
+    positiveButtonAction: (List<Doing>) -> Unit
 ) {
     AlertDialog.Builder(context).apply {
         val selectedItems = BooleanArray(items.size)
 
         setTitle(messageTitle)
-        setMultiChoiceItems(items, null){ _: DialogInterface, position: Int, isChecked: Boolean ->
+        setMultiChoiceItems(items.map { it.title }.toTypedArray(), null) { _: DialogInterface, position: Int, isChecked: Boolean ->
             selectedItems[position] = isChecked
         }
         setPositiveButton(context.getString(R.string.dialog_button_ok)) { _, _ ->
@@ -77,4 +79,24 @@ fun showMultiSelectedListDialog(
 
         setNegativeButton(context.getString(R.string.negative_button_title), null)
     }.show()
+}
+
+fun showDatePickerDialog(
+    context: Context,
+    timeInMillis: Long,
+    callback: (Calendar) -> Unit
+) {
+    val calendar = Calendar.getInstance().apply { this.timeInMillis = timeInMillis }
+    DatePickerDialog(
+        context,
+        R.style.DatePickerDialog,
+        { _, year, monthOfYear, dayOfMonth ->
+            callback(
+                Calendar.getInstance().apply { set(year, monthOfYear, dayOfMonth) }
+            )
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).show()
 }

@@ -15,6 +15,24 @@ class DoingLab(context: Context) {
             DoingsTable.COL_NAME to doing.title
         )
 
+    fun addNewDailyDoing(dateInMillis: Long, doing: Doing): Long {
+        if (doing.id == -1L)
+            doing.id = insertNewDoing(doing)
+        return db.insert(
+            DailyDoingsTable.TABLE_NAME,
+            DailyDoingsTable.COL_DATE to dateInMillis,
+            DailyDoingsTable.COL_STATUS to if (doing.isCompleted) 1 else 0,
+            DailyDoingsTable.COL_POSITION to doing.position,
+            DailyDoingsTable.COL_DOING_ID to doing.id,
+        )
+    }
+
+    fun deleteDailyDoing(doing: Doing) =
+        db.delete(
+            DailyDoingsTable.TABLE_NAME, "${DailyDoingsTable.COL_DOING_ID} = {doing_id}",
+            "doing_id" to doing.id
+        )
+
 
     fun getDoings(): List<Doing> {
         val parser = rowParser { id: Long, title: String -> Doing(id, title) }
@@ -26,9 +44,28 @@ class DoingLab(context: Context) {
         return doings
     }
 
+    fun getDoing(id: Long): Doing {
+        val parser = rowParser { id: Long, title: String -> Doing(id, title) }
+        var doing: Doing? = null
+        db.select(DoingsTable.TABLE_NAME)
+            .whereArgs("${DoingsTable.COL_ID} = {id}", "id" to id)
+            .exec {
+                doing = parseSingle(parser)
+            }
+        return doing ?: throw Exception("No doing with this id")
+    }
+
     fun updateDoing(doing: Doing) =
         db.update(DoingsTable.TABLE_NAME, DoingsTable.COL_NAME to doing.title)
             .whereArgs("${DoingsTable.COL_ID} = {id}", "id" to doing.id)
+            .exec()
+
+    fun updateDailyDoingInfo(dateInMillis: Long, doing: Doing) =
+        db.update(DailyDoingsTable.TABLE_NAME,
+            DailyDoingsTable.COL_DATE to dateInMillis,
+            DailyDoingsTable.COL_STATUS to if (doing.isCompleted) 1 else 0,
+            DailyDoingsTable.COL_POSITION to doing.position)
+            .whereArgs("${DailyDoingsTable.COL_DOING_ID} = {id}", "id" to doing.id)
             .exec()
 
     fun deleteDoing(doing: Doing) =
@@ -36,6 +73,30 @@ class DoingLab(context: Context) {
             DoingsTable.TABLE_NAME, "${DoingsTable.COL_ID} = {doing_id}",
             "doing_id" to doing.id
         )
+
+    fun getDailyDoings(dataInMillis: Long): List<Doing> {
+        return db.select(
+            DailyDoingsTable.TABLE_NAME,
+            DailyDoingsTable.COL_DOING_ID,
+            DailyDoingsTable.COL_POSITION,
+            DailyDoingsTable.COL_STATUS,
+        ).whereArgs(
+            "${DailyDoingsTable.COL_DATE} = {data}",
+            "data" to dataInMillis
+        )
+            .exec<List<Doing>> {
+                parseList(rowParser { doing_id: Long, position: Int, status: Int ->
+
+                    Doing().apply {
+                        this.id = doing_id
+                        isCompleted = status == 1
+                        this.position = position
+                        title = getDoing(doing_id).title
+                    }
+                })
+            }
+    }
+
 }
 
 class TemplateLab(val context: Context) {
@@ -56,11 +117,14 @@ class TemplateLab(val context: Context) {
 
             parseList(parser).forEach { templateRaw: Pair<Long, String> ->
 
-                templates += with(templateRaw){
-                    Template(id = first,
-                    name = second,
-                    doings = getDoings(first))
-                }}
+                templates += with(templateRaw) {
+                    Template(
+                        id = first,
+                        name = second,
+                        doings = getDoings(first)
+                    )
+                }
+            }
         }
         return templates
     }
@@ -111,8 +175,8 @@ class TemplateLab(val context: Context) {
     fun getTemplate(id: Long): Template = db.select(TemplatesTable.TABLE_NAME)
         .whereArgs("${TemplatesTable.COL_ID} = {id}", "id" to id)
         .exec {
-        parseSingle(rowParser { id: Long, title: String -> Template(id = id, name = title) })
-    }
+            parseSingle(rowParser { id: Long, title: String -> Template(id = id, name = title) })
+        }
 
     fun addNewDoing(template: Template, doing: Doing) {
         val id = DoingLab(context).insertNewDoing(doing)

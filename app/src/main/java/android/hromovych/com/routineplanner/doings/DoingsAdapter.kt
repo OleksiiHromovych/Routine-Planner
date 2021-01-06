@@ -12,7 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doing) -> Unit) :
+class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doing) -> Unit,
+                    val onChangedCallback: (Doing) -> Unit) :
     RecyclerView.Adapter<DoingsAdapter.Holder>() {
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val moveImage = itemView.findViewById<ImageView>(R.id.doing_move_image_view)
@@ -23,6 +24,7 @@ class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doin
         init {
             statusCheckBox.setOnCheckedChangeListener { _, checked ->
                 doing?.isCompleted = checked
+                doing?.let { onChangedCallback(it) }
                 setStatusUi(checked)
             }
             titleView.setOnClickListener {
