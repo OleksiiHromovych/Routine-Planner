@@ -176,6 +176,8 @@ class TemplateLab(val context: Context) {
         .whereArgs("${TemplatesTable.COL_ID} = {id}", "id" to id)
         .exec {
             parseSingle(rowParser { id: Long, title: String -> Template(id = id, name = title) })
+        }.apply{
+            doings = getDoings(id)
         }
 
     fun addNewDoing(template: Template, doing: Doing) {
@@ -186,6 +188,14 @@ class TemplateLab(val context: Context) {
             TemplateDoingsTable.COL_DOING_ID to id,
             TemplateDoingsTable.COL_POSITION to 0,
         )
+    }
+
+    fun addTemplateToDate(template: Template, dateInMillis: Long): Int{
+        val lab = DoingLab(context)
+        template.doings.forEach {
+            lab.addNewDailyDoing(dateInMillis, it)
+        }
+        return template.doings.size
     }
 
 }

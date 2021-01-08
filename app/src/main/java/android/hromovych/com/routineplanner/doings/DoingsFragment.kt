@@ -10,7 +10,6 @@ import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -24,7 +23,13 @@ class DoingsFragment : DefaultFragment() {
     private lateinit var doingLab: DoingLab
 
     companion object {
+        private const val ARG_DAY_TIME = "template id"
         fun newInstance() = DoingsFragment()
+        fun newInstance(timeInMillis: Long) = DoingsFragment().apply {
+            arguments = Bundle().apply {
+                putLong(ARG_DAY_TIME, timeInMillis)
+            }
+        }
     }
 
     override fun setAdapterToNull() {
@@ -34,6 +39,9 @@ class DoingsFragment : DefaultFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         doingLab = DoingLab(requireContext())
+        arguments?.apply {
+            getLong(ARG_DAY_TIME, -1).apply { dateInMillis = this}
+        }
     }
 
     override val onFABClickListener: (View) -> Unit = {
@@ -121,7 +129,7 @@ class DoingsFragment : DefaultFragment() {
 
     private fun getDoings(): List<Doing> {
         if (dateInMillis == -1L) {
-            dateInMillis = Calendar.getInstance().setDayStartTime()
+            dateInMillis = Calendar.getInstance().getDayStartTime()
         }
 
         return doingLab.getDailyDoings(dateInMillis)
@@ -129,7 +137,7 @@ class DoingsFragment : DefaultFragment() {
 
     private fun updateSubtitle() {
         (activity as AppCompatActivity).supportActionBar?.apply {
-            subtitle = getDateFormatString(dateInMillis)
+            subtitle = dateInMillis.toDateFormatString()
         }
     }
 
@@ -153,7 +161,7 @@ class DoingsFragment : DefaultFragment() {
                     requireContext(),
                     dateInMillis
                 ) {
-                    dateInMillis = it.setDayStartTime()
+                    dateInMillis = it.getDayStartTime()
                     updateUi()
                 }
             }
@@ -161,8 +169,5 @@ class DoingsFragment : DefaultFragment() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-    private fun getDateFormatString(it: Long) =
-        SimpleDateFormat.getDateInstance().format(Date(it))
 
 }

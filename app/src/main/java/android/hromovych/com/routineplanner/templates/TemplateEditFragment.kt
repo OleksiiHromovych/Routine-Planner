@@ -4,13 +4,16 @@ import android.content.Context
 import android.hromovych.com.routineplanner.*
 import android.hromovych.com.routineplanner.databases.DoingLab
 import android.hromovych.com.routineplanner.databases.TemplateLab
+import android.hromovych.com.routineplanner.doings.DoingsFragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.textfield.TextInputEditText
+import java.util.*
 
 class TemplateEditFragment : DefaultFragment() {
 
@@ -78,7 +81,7 @@ class TemplateEditFragment : DefaultFragment() {
                     getString(R.string.dialog_title_choice_from_exist),
                     DoingLab(requireContext()).getDoings()
                 ) {
-                    for (doing in it){
+                    for (doing in it) {
                         templateLab.addNewDoing(template, doing)
                     }
                     updateUi()
@@ -146,7 +149,9 @@ class TemplateEditFragment : DefaultFragment() {
         popupMenu.show()
     }
 
-    private fun getDoings(): List<Doing> = templateLab.getDoings(template)
+    private fun getDoings(): List<Doing> = templateLab.getDoings(template).apply {
+        template.doings = this
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -156,12 +161,30 @@ class TemplateEditFragment : DefaultFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_action_use_this -> {
-                context.toast("Choice date") // TODO: show DatePicker
+                showDatePickerDialog(
+                    requireContext(),
+                    Calendar.getInstance().getDayStartTime()
+                ) {
+                    extendAndStartDoingsFragment(it.getDayStartTime())
+                }
                 return true
             }
             else -> context.toast(item.title.toString())
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun extendAndStartDoingsFragment(timeInMillis: Long) {
+        val size = templateLab.addTemplateToDate(template, timeInMillis)
+        context.toast("$size doings where added to ${timeInMillis.toDateFormatString()}")
+
+        activity?.supportFragmentManager?.apply {
+            popBackStack(
+                null, FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+
+            beginTransaction().replace(R.id.container, DoingsFragment.newInstance(timeInMillis)).commit()
+        }
     }
 
 }
