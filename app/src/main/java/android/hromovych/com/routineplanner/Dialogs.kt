@@ -83,10 +83,9 @@ fun showDoingsMultiSelectedListDialog(
 
 fun showDatePickerDialog(
     context: Context,
-    timeInMillis: Long,
+    calendar: Calendar,
     callback: (Calendar) -> Unit
 ) {
-    val calendar = Calendar.getInstance().apply { this.timeInMillis = timeInMillis }
     DatePickerDialog(
         context,
         R.style.DatePickerDialog,

@@ -16,7 +16,8 @@ import kotlin.properties.Delegates
 class DoingsFragment : DefaultFragment() {
 
     private var adapter: DoingsAdapter? = null
-    private var dateInMillis: Long by Delegates.observable(-1L){
+
+    private var date: Calendar by Delegates.observable(Calendar.getInstance()){
     _, _, _ ->
         updateSubtitle()
     }
@@ -40,8 +41,10 @@ class DoingsFragment : DefaultFragment() {
         super.onCreate(savedInstanceState)
         doingLab = DoingLab(requireContext())
         arguments?.apply {
-            getLong(ARG_DAY_TIME, -1).apply { dateInMillis = this}
+            getLong(ARG_DAY_TIME, -1).let {
+                date = Calendar.getInstance().apply {this.timeInMillis = it}}
         }
+        updateSubtitle()
     }
 
     override val onFABClickListener: (View) -> Unit = {
@@ -55,7 +58,7 @@ class DoingsFragment : DefaultFragment() {
                     doingLab.getDoings()
                 ) {
                     for (doing in it){
-                        doingLab.addNewDailyDoing(dateInMillis, doing)
+                        doingLab.addNewDailyDoing(date, doing)
                     }
                     updateUi()
                 }
@@ -68,7 +71,7 @@ class DoingsFragment : DefaultFragment() {
                     Log.d(
                         "TAG",
                         "index of insert doing: " + doingLab.addNewDailyDoing(
-                            dateInMillis,
+                            date,
                             Doing().apply {
                                 title = it
                             })
@@ -85,7 +88,7 @@ class DoingsFragment : DefaultFragment() {
             adapter = DoingsAdapter(doings, { view: View, doing: Doing ->
                 showPopupMenu(requireContext(), view, doing)
             }, {
-                doingLab.updateDailyDoingInfo(dateInMillis, it)
+                doingLab.updateDailyDoingInfo(date, it)
             })
             recyclerView.adapter = adapter
         } else {
@@ -128,16 +131,13 @@ class DoingsFragment : DefaultFragment() {
     }
 
     private fun getDoings(): List<Doing> {
-        if (dateInMillis == -1L) {
-            dateInMillis = Calendar.getInstance().getDayStartTime()
-        }
 
-        return doingLab.getDailyDoings(dateInMillis)
+        return doingLab.getDailyDoings(date)
     }
 
     private fun updateSubtitle() {
         (activity as AppCompatActivity).supportActionBar?.apply {
-            subtitle = dateInMillis.toDateFormatString()
+            subtitle = date.timeInMillis.toDateFormatString()
         }
     }
 
@@ -159,9 +159,9 @@ class DoingsFragment : DefaultFragment() {
             R.id.action_date_picker -> {
                 showDatePickerDialog(
                     requireContext(),
-                    dateInMillis
+                    date
                 ) {
-                    dateInMillis = it.getDayStartTime()
+                    date = it
                     updateUi()
                 }
             }

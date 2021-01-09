@@ -163,9 +163,9 @@ class TemplateEditFragment : DefaultFragment() {
             R.id.menu_action_use_this -> {
                 showDatePickerDialog(
                     requireContext(),
-                    Calendar.getInstance().getDayStartTime()
+                    Calendar.getInstance()
                 ) {
-                    extendAndStartDoingsFragment(it.getDayStartTime())
+                    extendAndStartDoingsFragment(it)
                 }
                 return true
             }
@@ -174,16 +174,16 @@ class TemplateEditFragment : DefaultFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun extendAndStartDoingsFragment(timeInMillis: Long) {
-        val size = templateLab.addTemplateToDate(template, timeInMillis)
-        context.toast("$size doings where added to ${timeInMillis.toDateFormatString()}")
+    private fun extendAndStartDoingsFragment(calendar: Calendar) {
+        val size = templateLab.addTemplateToDate(template, calendar)
+        context.toast("$size doings where added to ${calendar.timeInMillis.toDateFormatString()}")
 
         activity?.supportFragmentManager?.apply {
             popBackStack(
                 null, FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
 
-            beginTransaction().replace(R.id.container, DoingsFragment.newInstance(timeInMillis)).commit()
+            beginTransaction().replace(R.id.container, DoingsFragment.newInstance(calendar.timeInMillis)).commit()
         }
     }
 

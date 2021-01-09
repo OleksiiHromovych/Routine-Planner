@@ -23,13 +23,5 @@ fun Context?.toast(text: String){
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
-fun Calendar.getDayStartTime() = this.apply {
-    set(Calendar.HOUR, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 0)
-    set(Calendar.MILLISECOND, 0)
-}.timeInMillis
-
-
 fun Long.toDateFormatString() =
     SimpleDateFormat.getDateInstance().format(Date(this))

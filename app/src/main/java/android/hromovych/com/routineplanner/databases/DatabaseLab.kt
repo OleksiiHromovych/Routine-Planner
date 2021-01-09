@@ -4,6 +4,7 @@ import android.content.Context
 import android.hromovych.com.routineplanner.Doing
 import android.hromovych.com.routineplanner.templates.Template
 import org.jetbrains.anko.db.*
+import java.util.*
 
 class DoingLab(context: Context) {
 
@@ -15,12 +16,12 @@ class DoingLab(context: Context) {
             DoingsTable.COL_NAME to doing.title
         )
 
-    fun addNewDailyDoing(dateInMillis: Long, doing: Doing): Long {
+    fun addNewDailyDoing(date: Calendar, doing: Doing): Long {
         if (doing.id == -1L)
             doing.id = insertNewDoing(doing)
         return db.insert(
             DailyDoingsTable.TABLE_NAME,
-            DailyDoingsTable.COL_DATE to dateInMillis,
+            DailyDoingsTable.COL_DATE to date.toLongPattern(),
             DailyDoingsTable.COL_STATUS to if (doing.isCompleted) 1 else 0,
             DailyDoingsTable.COL_POSITION to doing.position,
             DailyDoingsTable.COL_DOING_ID to doing.id,
@@ -60,11 +61,13 @@ class DoingLab(context: Context) {
             .whereArgs("${DoingsTable.COL_ID} = {id}", "id" to doing.id)
             .exec()
 
-    fun updateDailyDoingInfo(dateInMillis: Long, doing: Doing) =
-        db.update(DailyDoingsTable.TABLE_NAME,
-            DailyDoingsTable.COL_DATE to dateInMillis,
+    fun updateDailyDoingInfo(date: Calendar, doing: Doing) =
+        db.update(
+            DailyDoingsTable.TABLE_NAME,
+            DailyDoingsTable.COL_DATE to date.toLongPattern(),
             DailyDoingsTable.COL_STATUS to if (doing.isCompleted) 1 else 0,
-            DailyDoingsTable.COL_POSITION to doing.position)
+            DailyDoingsTable.COL_POSITION to doing.position
+        )
             .whereArgs("${DailyDoingsTable.COL_DOING_ID} = {id}", "id" to doing.id)
             .exec()
 
@@ -74,7 +77,7 @@ class DoingLab(context: Context) {
             "doing_id" to doing.id
         )
 
-    fun getDailyDoings(dataInMillis: Long): List<Doing> {
+    fun getDailyDoings(data: Calendar): List<Doing> {
         return db.select(
             DailyDoingsTable.TABLE_NAME,
             DailyDoingsTable.COL_DOING_ID,
@@ -82,7 +85,7 @@ class DoingLab(context: Context) {
             DailyDoingsTable.COL_STATUS,
         ).whereArgs(
             "${DailyDoingsTable.COL_DATE} = {data}",
-            "data" to dataInMillis
+            "data" to data.toLongPattern()
         )
             .exec<List<Doing>> {
                 parseList(rowParser { doing_id: Long, position: Int, status: Int ->
@@ -176,26 +179,34 @@ class TemplateLab(val context: Context) {
         .whereArgs("${TemplatesTable.COL_ID} = {id}", "id" to id)
         .exec {
             parseSingle(rowParser { id: Long, title: String -> Template(id = id, name = title) })
-        }.apply{
+        }.apply {
             doings = getDoings(id)
         }
 
     fun addNewDoing(template: Template, doing: Doing) {
-        val id = DoingLab(context).insertNewDoing(doing)
+        if (doing.id == -1L)
+            doing.id = DoingLab(context).insertNewDoing(doing)
         db.insert(
             TemplateDoingsTable.TABLE_NAME,
             TemplateDoingsTable.COL_TEMPLATE_ID to template.id,
-            TemplateDoingsTable.COL_DOING_ID to id,
+            TemplateDoingsTable.COL_DOING_ID to doing.id,
             TemplateDoingsTable.COL_POSITION to 0,
         )
     }
 
-    fun addTemplateToDate(template: Template, dateInMillis: Long): Int{
+    fun addTemplateToDate(template: Template, date: Calendar): Int {
         val lab = DoingLab(context)
         template.doings.forEach {
-            lab.addNewDailyDoing(dateInMillis, it)
+            lab.addNewDailyDoing(date, it)
         }
         return template.doings.size
     }
 
 }
+
+//    need smth like 2021.01.09 for correct equals
+private fun Calendar.toLongPattern() =
+    listOf(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH).joinToString("") {
+        val value = this.get(it)
+        if (value < 10) "0$value" else value.toString()
+    }.toLong()
