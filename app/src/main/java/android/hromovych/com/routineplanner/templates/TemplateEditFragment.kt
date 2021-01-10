@@ -72,6 +72,9 @@ class TemplateEditFragment : DefaultFragment() {
     }
 
     override val onFABClickListener: (View) -> Unit = {
+        val idList = getDoings().map { dayDoing ->
+            dayDoing.id
+        }
         showTwoActionDialog(
             requireContext(),
             "You want to create new doing or use yet exist?",
@@ -79,7 +82,9 @@ class TemplateEditFragment : DefaultFragment() {
                 showDoingsMultiSelectedListDialog(
                     requireContext(),
                     getString(R.string.dialog_title_choice_from_exist),
-                    DoingLab(requireContext()).getDoings()
+                    DoingLab(requireContext()).getDoings().filterNot {
+                        idList.contains(it.id)
+                    }
                 ) {
                     for (doing in it) {
                         templateLab.addNewDoing(template, doing)
@@ -135,7 +140,7 @@ class TemplateEditFragment : DefaultFragment() {
                     true
                 }
                 R.id.menu_action_delete -> {
-                    if (DoingLab(requireContext()).deleteDoing(doing) == 0)
+                    if (templateLab.deleteDoing(template, doing) == 0)
                         context.toast("Something go wrong. No such id")
                     else
                         Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT)

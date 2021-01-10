@@ -202,6 +202,12 @@ class TemplateLab(val context: Context) {
         }
         return template.doings.size
     }
+    fun deleteDoing(template: Template, doing: Doing) =
+        db.delete(
+            TemplateDoingsTable.TABLE_NAME, "${TemplateDoingsTable.COL_DOING_ID} = {doing_id} " +
+                    "AND ${TemplateDoingsTable.COL_TEMPLATE_ID} = {template_id}",
+            "doing_id" to doing.id, "template_id" to template.id
+        )
 
 }
 

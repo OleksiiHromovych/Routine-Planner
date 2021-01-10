@@ -17,8 +17,7 @@ class DoingsFragment : DefaultFragment() {
 
     private var adapter: DoingsAdapter? = null
 
-    private var date: Calendar by Delegates.observable(Calendar.getInstance()){
-    _, _, _ ->
+    private var date: Calendar by Delegates.observable(Calendar.getInstance()) { _, _, _ ->
         updateSubtitle()
     }
     private lateinit var doingLab: DoingLab
@@ -42,12 +41,16 @@ class DoingsFragment : DefaultFragment() {
         doingLab = DoingLab(requireContext())
         arguments?.apply {
             getLong(ARG_DAY_TIME, -1).let {
-                date = Calendar.getInstance().apply {this.timeInMillis = it}}
+                date = Calendar.getInstance().apply { this.timeInMillis = it }
+            }
         }
         updateSubtitle()
     }
 
     override val onFABClickListener: (View) -> Unit = {
+        val idList = getDoings().map { dayDoing ->
+            dayDoing.id
+        }
         showTwoActionDialog(
             requireContext(),
             "You want to create new doing or use yet exist?",
@@ -55,9 +58,12 @@ class DoingsFragment : DefaultFragment() {
                 showDoingsMultiSelectedListDialog(
                     requireContext(),
                     getString(R.string.dialog_title_choice_from_exist),
-                    doingLab.getDoings()
+                        doingLab.getDoings().filterNot {
+                            idList.contains(it.id)
+                        }
+
                 ) {
-                    for (doing in it){
+                    for (doing in it) {
                         doingLab.addNewDailyDoing(date, doing)
                     }
                     updateUi()
