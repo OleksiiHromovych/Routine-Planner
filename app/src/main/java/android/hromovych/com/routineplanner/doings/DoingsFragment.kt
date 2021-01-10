@@ -116,7 +116,7 @@ class DoingsFragment : DefaultFragment() {
                     true
                 }
                 R.id.menu_action_delete -> {
-                    if (doingLab.deleteDailyDoing(doing) == 0)
+                    if (doingLab.deleteDailyDoing(date, doing) == 0)
                         context.toast("Something go wrong. No such id")
                     else
                         Toast.makeText(context, "Item ${doing.title} deleted", Toast.LENGTH_SHORT)

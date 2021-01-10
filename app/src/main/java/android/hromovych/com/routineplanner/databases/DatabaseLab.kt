@@ -28,10 +28,11 @@ class DoingLab(context: Context) {
         )
     }
 
-    fun deleteDailyDoing(doing: Doing) =
+    fun deleteDailyDoing(date: Calendar, doing: Doing) =
         db.delete(
-            DailyDoingsTable.TABLE_NAME, "${DailyDoingsTable.COL_DOING_ID} = {doing_id}",
-            "doing_id" to doing.id
+            DailyDoingsTable.TABLE_NAME, "${DailyDoingsTable.COL_DOING_ID} = {doing_id} " +
+                    "AND ${DailyDoingsTable.COL_DATE} = {date}",
+            "doing_id" to doing.id, "date" to date.toLongPattern()
         )
 
 
@@ -68,7 +69,7 @@ class DoingLab(context: Context) {
             DailyDoingsTable.COL_STATUS to if (doing.isCompleted) 1 else 0,
             DailyDoingsTable.COL_POSITION to doing.position
         )
-            .whereArgs("${DailyDoingsTable.COL_DOING_ID} = {id}", "id" to doing.id)
+            .whereArgs("${DailyDoingsTable.COL_DOING_ID} = {id} AND ${DailyDoingsTable.COL_DATE} = {date}", "id" to doing.id, "date" to date.toLongPattern())
             .exec()
 
     fun deleteDoing(doing: Doing) =
