@@ -1,10 +1,13 @@
 package android.hromovych.com.routineplanner.templates
 
 import android.content.Context
-import android.hromovych.com.routineplanner.*
+import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databases.DoingLab
 import android.hromovych.com.routineplanner.databases.TemplateLab
+import android.hromovych.com.routineplanner.doings.Doing
 import android.hromovych.com.routineplanner.doings.DoingsFragment
+import android.hromovych.com.routineplanner.fragments.DefaultFragment
+import android.hromovych.com.routineplanner.utils.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -98,7 +101,8 @@ class TemplateEditFragment : DefaultFragment() {
                     "",
                     R.string.dialog_title_create_new_doing
                 ) {
-                    templateLab.addNewDoing(template, Doing().apply {
+                    templateLab.addNewDoing(template, Doing()
+                        .apply {
                         title = it
                     })
                     updateUi()

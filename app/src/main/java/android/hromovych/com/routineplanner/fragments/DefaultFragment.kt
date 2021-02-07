@@ -1,5 +1,6 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.fragments
 
+import android.hromovych.com.routineplanner.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

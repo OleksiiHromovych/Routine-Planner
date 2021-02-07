@@ -1,9 +1,8 @@
 package android.hromovych.com.routineplanner.doings
 
-import android.hromovych.com.routineplanner.Doing
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.strike
-import android.hromovych.com.routineplanner.toast
+import android.hromovych.com.routineplanner.utils.strike
+import android.hromovych.com.routineplanner.utils.toast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

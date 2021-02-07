@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.utils
 
 import android.content.Context
 import android.content.res.Configuration

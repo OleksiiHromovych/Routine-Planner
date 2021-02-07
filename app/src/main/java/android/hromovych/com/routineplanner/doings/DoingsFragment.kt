@@ -1,9 +1,11 @@
 package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
-import android.hromovych.com.routineplanner.*
+import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databases.DoingLab
+import android.hromovych.com.routineplanner.fragments.DefaultFragment
 import android.hromovych.com.routineplanner.templates.TemplatesFragment
+import android.hromovych.com.routineplanner.utils.*
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -58,9 +60,9 @@ class DoingsFragment : DefaultFragment() {
                 showDoingsMultiSelectedListDialog(
                     requireContext(),
                     getString(R.string.dialog_title_choice_from_exist),
-                        doingLab.getDoings().filterNot {
-                            idList.contains(it.id)
-                        }
+                    doingLab.getDoings().filterNot {
+                        idList.contains(it.id)
+                    }
 
                 ) {
                     for (doing in it) {

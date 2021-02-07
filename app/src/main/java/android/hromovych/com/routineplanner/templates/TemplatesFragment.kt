@@ -1,9 +1,9 @@
 package android.hromovych.com.routineplanner.templates
 
-import android.hromovych.com.routineplanner.DefaultFragment
-import android.hromovych.com.routineplanner.DoingEditDialog
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databases.TemplateLab
+import android.hromovych.com.routineplanner.fragments.DefaultFragment
+import android.hromovych.com.routineplanner.utils.DoingEditDialog
 import android.os.Bundle
 import android.view.View
 

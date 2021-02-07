@@ -1,7 +1,7 @@
 package android.hromovych.com.routineplanner.templates
 
-import android.hromovych.com.routineplanner.Doing
 import android.hromovych.com.routineplanner.R
+import android.hromovych.com.routineplanner.doings.Doing
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

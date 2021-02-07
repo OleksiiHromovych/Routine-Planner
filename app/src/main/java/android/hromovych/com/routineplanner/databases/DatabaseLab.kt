@@ -1,7 +1,7 @@
 package android.hromovych.com.routineplanner.databases
 
 import android.content.Context
-import android.hromovych.com.routineplanner.Doing
+import android.hromovych.com.routineplanner.doings.Doing
 import android.hromovych.com.routineplanner.templates.Template
 import org.jetbrains.anko.db.*
 import java.util.*
@@ -37,7 +37,12 @@ class DoingLab(context: Context) {
 
 
     fun getDoings(): List<Doing> {
-        val parser = rowParser { id: Long, title: String -> Doing(id, title) }
+        val parser = rowParser { id: Long, title: String ->
+            Doing(
+                id,
+                title
+            )
+        }
         lateinit var doings: List<Doing>
 
         db.select(DoingsTable.TABLE_NAME).exec {
@@ -47,7 +52,12 @@ class DoingLab(context: Context) {
     }
 
     fun getDoing(id: Long): Doing {
-        val parser = rowParser { id: Long, title: String -> Doing(id, title) }
+        val parser = rowParser { id: Long, title: String ->
+            Doing(
+                id,
+                title
+            )
+        }
         var doing: Doing? = null
         db.select(DoingsTable.TABLE_NAME)
             .whereArgs("${DoingsTable.COL_ID} = {id}", "id" to id)
@@ -158,7 +168,10 @@ class TemplateLab(val context: Context) {
                         .exec {
                             doings +=
                                 parseSingle(rowParser { id: Long, title: String ->
-                                    Doing(id, title).apply {
+                                    Doing(
+                                        id,
+                                        title
+                                    ).apply {
                                         position = it.third
                                     }
                                 })

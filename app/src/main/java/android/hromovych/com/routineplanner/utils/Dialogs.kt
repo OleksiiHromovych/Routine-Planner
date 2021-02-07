@@ -1,9 +1,11 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.utils
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.hromovych.com.routineplanner.R
+import android.hromovych.com.routineplanner.doings.Doing
 import android.view.LayoutInflater
 import com.google.android.material.textfield.TextInputEditText
 import java.util.*
