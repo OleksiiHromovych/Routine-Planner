@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.fragments
+package android.hromovych.com.routineplanner.defaults
 
 import android.hromovych.com.routineplanner.R
 import android.os.Bundle

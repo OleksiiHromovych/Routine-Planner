@@ -14,13 +14,6 @@ object DoingsTable {
     const val COL_NAME = "name"
 }
 
-//object DayTable {
-//    const val TABLE_NAME = "day"
-//
-//    const val COL_ID = "_id"
-//    const val COL_DATE = "date"
-//}
-
 object TemplateDoingsTable {
     const val TABLE_NAME = "template_doings"
 
@@ -37,3 +30,12 @@ object DailyDoingsTable {
     const val COL_POSITION = "position"
     const val COL_STATUS = "status"
 }
+
+object WeekDayDoingsTable {
+    const val TABLE_NAME = "week_day_doings"
+
+    const val COL_WEEK_DAY = "week_day"
+    const val COL_DOING_ID = "doing_id"
+    const val COL_POSITION = "position"
+}
+

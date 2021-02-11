@@ -1,8 +1,8 @@
 package android.hromovych.com.routineplanner.templates
 
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.databases.TemplateLab
-import android.hromovych.com.routineplanner.fragments.DefaultFragment
+import android.hromovych.com.routineplanner.databases.labs.TemplateLab
+import android.hromovych.com.routineplanner.defaults.DefaultFragment
 import android.hromovych.com.routineplanner.utils.DoingEditDialog
 import android.os.Bundle
 import android.view.View
@@ -17,7 +17,10 @@ class TemplatesFragment : DefaultFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        templateLab = TemplateLab(requireContext())
+        templateLab =
+            TemplateLab(
+                requireContext()
+            )
     }
 
     override val onFABClickListener: (View) -> Unit = {

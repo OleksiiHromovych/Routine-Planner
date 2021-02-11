@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.templates
+package android.hromovych.com.routineplanner.defaults
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.doings.Doing
@@ -9,8 +9,17 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TemplateEditAdapter(var doings: List<Doing>, val onItemClickAction: (View, Doing) -> Unit) :
-    RecyclerView.Adapter<TemplateEditAdapter.Holder>() {
+class DefaultDoingRecyclerAdapter(
+    doings: List<Doing>,
+    val onItemClickAction: (View, Doing) -> Unit
+) :
+    RecyclerView.Adapter<DefaultDoingRecyclerAdapter.Holder>() {
+    var doings = doings
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
     inner class Holder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.doing_title)
         var doing: Doing? = null
@@ -40,5 +49,4 @@ class TemplateEditAdapter(var doings: List<Doing>, val onItemClickAction: (View,
     }
 
     override fun getItemCount() = doings.size
-
 }

@@ -24,4 +24,5 @@
     <string name="dialog_button_ok">OK</string>
     <string name="dialog_title_create_new_template">Create new template</string>
     <string name="dialog_title_choice_from_exist">Choice from exist</string>
+    <string name="action_weekdays_doings">Weekdays doings</string>
 </resources>

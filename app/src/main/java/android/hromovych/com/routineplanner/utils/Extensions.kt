@@ -19,9 +19,18 @@ fun Context.isDarkModeOn(): Boolean =
     (this.resources.configuration.uiMode
             and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
 
-fun Context?.toast(text: String){
+fun Context?.toast(text: String) {
     Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
 }
 
 fun Long.toDateFormatString() =
     SimpleDateFormat.getDateInstance().format(Date(this))
+
+fun <T> List<T>.rotate(distance: Int) = toList().apply { Collections.rotate(this, distance) }
+
+//    need smth like 2021.01.09 for correct equals
+fun Calendar.toLongPattern() =
+    listOf(Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH).joinToString("") {
+        val value = this.get(it)
+        if (value < 10) "0$value" else value.toString()
+    }.toLong()

@@ -13,7 +13,7 @@ class DatabaseOpenHelper private constructor(context: Context) :
 
     companion object {
         const val DATABASE_NAME = "RoutinePlannerDatabase"
-        const val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 3
 
         private var instance: DatabaseOpenHelper? = null
 
@@ -23,7 +23,7 @@ class DatabaseOpenHelper private constructor(context: Context) :
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        // 3 main tables
+        // 2 main tables
         db.createTable(
             TemplatesTable.TABLE_NAME, true,
             TemplatesTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
@@ -34,12 +34,6 @@ class DatabaseOpenHelper private constructor(context: Context) :
             DoingsTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
             DoingsTable.COL_NAME to TEXT
         )
-//        db.createTable(
-//            DayTable.TABLE_NAME, true,
-//            DayTable.COL_ID to INTEGER + PRIMARY_KEY  + AUTOINCREMENT,
-//            DayTable.COL_DATE to INTEGER,   //date to second from unix time start
-//        )
-
         // and 2 base for communicate
         db.createTable(
             TemplateDoingsTable.TABLE_NAME, true,
@@ -54,9 +48,23 @@ class DatabaseOpenHelper private constructor(context: Context) :
             DailyDoingsTable.COL_DOING_ID to INTEGER,
             DailyDoingsTable.COL_STATUS to INTEGER,         //0 or 1 as boolean
         )
+        db.createTable(
+            WeekDayDoingsTable.TABLE_NAME, true,
+            WeekDayDoingsTable.COL_WEEK_DAY to INTEGER,  // from 1 to 7 (from Sunday to Saturday)
+            WeekDayDoingsTable.COL_DOING_ID to INTEGER,
+            WeekDayDoingsTable.COL_POSITION to INTEGER,
+        )
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2){
+            onCreate(db)
+        }
+        if (oldVersion < 3){
+            db.dropTable(WeekDayDoingsTable.TABLE_NAME, true)
+            onCreate(db)
+        }
     }
 }
 

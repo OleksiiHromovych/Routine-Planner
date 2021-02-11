@@ -2,8 +2,9 @@ package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.databases.DoingLab
-import android.hromovych.com.routineplanner.fragments.DefaultFragment
+import android.hromovych.com.routineplanner.databases.labs.DoingLab
+import android.hromovych.com.routineplanner.defaults.DefaultFragment
+import android.hromovych.com.routineplanner.repetitive_doings.WeekdaysDoingsFragment
 import android.hromovych.com.routineplanner.templates.TemplatesFragment
 import android.hromovych.com.routineplanner.utils.*
 import android.os.Bundle
@@ -40,7 +41,9 @@ class DoingsFragment : DefaultFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        doingLab = DoingLab(requireContext())
+        doingLab = DoingLab(
+            requireContext()
+        )
         arguments?.apply {
             getLong(ARG_DAY_TIME, -1).let {
                 date = Calendar.getInstance().apply { this.timeInMillis = it }
@@ -172,6 +175,14 @@ class DoingsFragment : DefaultFragment() {
                     date = it
                     updateUi()
                 }
+                return true
+            }
+            R.id.action_weekdays_doings -> {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(this.id, WeekdaysDoingsFragment())
+                    .addToBackStack(null)
+                    .commit()
+                return true
             }
             else -> context.toast(item.title.toString())
         }
