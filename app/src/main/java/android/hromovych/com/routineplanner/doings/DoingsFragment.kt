@@ -3,6 +3,7 @@ package android.hromovych.com.routineplanner.doings
 import android.content.Context
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databases.labs.DoingLab
+import android.hromovych.com.routineplanner.databases.labs.WeekDayLab
 import android.hromovych.com.routineplanner.defaults.DefaultFragment
 import android.hromovych.com.routineplanner.repetitive_doings.WeekdaysDoingsFragment
 import android.hromovych.com.routineplanner.templates.TemplatesFragment
@@ -94,7 +95,11 @@ class DoingsFragment : DefaultFragment() {
     }
 
     override fun updateUi() {
-        val doings = getDoings()
+        var doings = getDoings()
+        if (doings.isEmpty() && date >= Calendar.getInstance()) {
+            doings = WeekDayLab(requireContext()).getDoings(date.get(Calendar.DAY_OF_WEEK))
+            doings.forEach { doingLab.addNewDailyDoing(date, it) }
+        }
         if (adapter == null) {
             adapter = DoingsAdapter(doings, { view: View, doing: Doing ->
                 showPopupMenu(requireContext(), view, doing)
