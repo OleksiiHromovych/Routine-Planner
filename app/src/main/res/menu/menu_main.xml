@@ -20,4 +20,12 @@
     <item
         android:id="@+id/action_weekdays_doings"
         android:title="@string/action_weekdays_doings"/>
+
+    <item
+        android:id="@+id/action_dayNight"
+        android:title="@string/action_dayNight"/>
+
+    <item
+        android:id="@+id/action_theme"
+        android:title="@string/action_theme"/>
 </menu>

@@ -25,4 +25,7 @@
     <color name="subtext">#525252</color>
 
     <color name="template_item_lines">#989898</color>
+    
+    <color name="vasyl_theme_main">#EF6400</color>
+    <color name="vasyl_theme_secondary">#C95604</color>
 </resources>

@@ -25,4 +25,8 @@
     <string name="dialog_title_create_new_template">Create new template</string>
     <string name="dialog_title_choice_from_exist">Choice from exist</string>
     <string name="action_weekdays_doings">Weekdays doings</string>
+    <string name="action_dayNight">DayNight</string>
+    <string name="action_theme">Themes</string>
+    <string name="dayNight_dialog_title">Choice dayNight mode</string>
+    <string name="theme_dialog_title">Choice theme</string>
 </resources>

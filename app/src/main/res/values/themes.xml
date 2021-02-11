@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.RoutinePlanner" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/tool_bar_background</item>
+        <item name="colorPrimaryVariant">@color/tool_bar_background</item>
         <item name="colorOnPrimary">@color/application_background</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/status_bar</item>
@@ -11,6 +11,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <!-- Customize your theme here. -->
         <item name="toolbarStyle">@style/ToolBarStyle</item>
         <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
@@ -49,7 +51,7 @@
     </style>
 
     <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
-        <item name="android:background">@color/tool_bar_background</item>
+        <!--        <item name="android:background">@color/tool_bar_background</item>-->
         <item name="titleTextColor">@color/tool_bar_title</item>
         <item name="subtitleTextColor">@color/tool_bar_title</item>
         <item name="popupTheme">@style/Theme.RoutinePlanner.PopupOverlay</item>
@@ -73,14 +75,17 @@
 
         <item name="android:textColorPrimaryInverse">@color/tool_bar_title</item>
 
-        <item name="android:windowBackground">@color/application_background</item> <!--calendar background-->
+        <item name="android:windowBackground">@color/application_background
+        </item> <!--calendar background-->
         <item name="android:textColorSecondaryInverse">@color/subtext</item><!--year text color-->
         <item name="android:textColorPrimary">@color/text</item> <!--days of the month-->
-        <item name="android:textColorSecondary">@color/tool_bar_background</item>    <!--days of the week-->
-        <item name="android:colorControlActivated">@color/tool_bar_background</item> <!--selected day-->
+        <item name="android:textColorSecondary">@color/tool_bar_background
+        </item>    <!--days of the week-->
+        <item name="android:colorControlActivated">@color/tool_bar_background
+        </item> <!--selected day-->
         <item name="colorAccent">@color/tool_bar_background</item> <!--header background-->
         <item name="buttonBarButtonStyle">@style/DatePickerTheme.ButtonBarButtonStyle</item>
-<!--                <item name="android:colorBackground">@color/tool_bar_background</item>-->
+        <!--                <item name="android:colorBackground">@color/tool_bar_background</item>-->
     </style>
 
     <style name="DatePickerTheme.ButtonBarButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -92,4 +97,22 @@
         <item name="android:button">@null</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
+
+    <!--    Custom themes-->
+    <style name="Theme.RoutinePlanner.Vasyl" parent="Theme.RoutinePlanner.NoActionBar">
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/vasyl_theme_main</item>
+        <item name="colorOnSecondary">@color/vasyl_theme_secondary</item>
+        <item name="android:colorBackground">@color/vasyl_theme_secondary</item>
+
+        <!-- Status bar color. -->
+        <item name="colorPrimary">@color/vasyl_theme_main</item>
+        <item name="colorPrimaryDark">@color/vasyl_theme_secondary</item>
+        <item name="colorAccent">@color/vasyl_theme_secondary</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:statusBarColor">@color/vasyl_theme_secondary</item>
+    </style>
+
+    <style name="Theme.RoutinePlanner.Standard" parent="Theme.RoutinePlanner.NoActionBar"></style>
+
 </resources>

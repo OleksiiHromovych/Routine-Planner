@@ -1,6 +1,7 @@
 package android.hromovych.com.routineplanner.doings
 
 import android.content.Context
+import android.hromovych.com.routineplanner.MainActivity
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databases.labs.DoingLab
 import android.hromovych.com.routineplanner.databases.labs.WeekDayLab
@@ -13,6 +14,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import java.util.*
 import kotlin.properties.Delegates
@@ -188,6 +190,47 @@ class DoingsFragment : DefaultFragment() {
                     .addToBackStack(null)
                     .commit()
                 return true
+            }
+            R.id.action_dayNight -> {
+                val modesTitle = arrayOf("Day", "Night", "Auto")
+                val modesId = arrayOf(
+                    AppCompatDelegate.MODE_NIGHT_NO,
+                    AppCompatDelegate.MODE_NIGHT_YES,
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                )
+                val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
+                requireContext().showSingleChoiceDialog(
+                    R.string.dayNight_dialog_title,
+                    modesTitle,
+                    modesId.indexOf(sharedPreferencesHelper.dayNightMode)
+                ) { dialog, checked ->
+                    if (sharedPreferencesHelper.dayNightMode != modesId[checked]) {
+                        sharedPreferencesHelper.dayNightMode = modesId[checked]
+                        (requireActivity() as AppCompatActivity).delegate.localNightMode =
+                            modesId[checked]
+                    }
+                    dialog.dismiss()
+                }
+            }
+            R.id.action_theme -> {
+                val themesTitles = arrayOf("Standard", "Vasyl")
+                val themesId = arrayOf(
+                    R.style.Theme_RoutinePlanner_Standard,
+                    R.style.Theme_RoutinePlanner_Vasyl,
+                )
+                val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
+                requireContext().showSingleChoiceDialog(
+                    R.string.theme_dialog_title,
+                    themesTitles,
+                    themesId.indexOf(sharedPreferencesHelper.themeId)
+                ) { dialog, checked ->
+                    val newTheme = themesId[checked]
+                    if (sharedPreferencesHelper.themeId != newTheme) {
+                        sharedPreferencesHelper.themeId = newTheme
+                        (requireActivity() as MainActivity).recreate()
+                    }
+                    dialog.dismiss()
+                }
             }
             else -> context.toast(item.title.toString())
         }

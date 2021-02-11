@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.doings.Doing
 import android.view.LayoutInflater
+import androidx.annotation.StringRes
 import com.google.android.material.textfield.TextInputEditText
 import java.util.*
 
@@ -34,7 +35,7 @@ class DoingEditDialog(
             positiveButtonAction(titleEditText.text.toString())
         }
 
-        setNegativeButton(context.getString(R.string.negative_button_title), null)
+        setNegativeButton(R.string.negative_button_title, null)
 
     }
 }
@@ -70,7 +71,10 @@ fun showDoingsMultiSelectedListDialog(
         val selectedItems = BooleanArray(items.size)
 
         setTitle(messageTitle)
-        setMultiChoiceItems(items.map { it.title }.toTypedArray(), null) { _: DialogInterface, position: Int, isChecked: Boolean ->
+        setMultiChoiceItems(
+            items.map { it.title }.toTypedArray(),
+            null
+        ) { _: DialogInterface, position: Int, isChecked: Boolean ->
             selectedItems[position] = isChecked
         }
         setPositiveButton(context.getString(R.string.dialog_button_ok)) { _, _ ->
@@ -100,4 +104,22 @@ fun showDatePickerDialog(
         calendar.get(Calendar.MONTH),
         calendar.get(Calendar.DAY_OF_MONTH)
     ).show()
+}
+
+fun Context.showSingleChoiceDialog(
+    @StringRes title: Int,
+    items: Array<String>,
+    checkedItem: Int,
+    onDone: (dialog: AlertDialog, checkedItem: Int) -> Unit
+) {
+    val dialog = AlertDialog.Builder(this)
+        .setTitle(title)
+        .setSingleChoiceItems(items, checkedItem, null)
+        .setPositiveButton(R.string.dialog_button_ok, null)
+        .setNegativeButton(R.string.negative_button_title, null)
+        .show()
+
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        onDone(dialog, dialog.listView.checkedItemPosition)
+    }
 }
