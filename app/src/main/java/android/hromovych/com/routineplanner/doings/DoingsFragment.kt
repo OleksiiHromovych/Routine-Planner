@@ -29,7 +29,7 @@ class DoingsFragment : DefaultFragment() {
     private lateinit var doingLab: DoingLab
 
     companion object {
-        private const val ARG_DAY_TIME = "template id"
+        private const val ARG_DAY_TIME = "date long"
         fun newInstance() = DoingsFragment()
         fun newInstance(timeInMillis: Long) = DoingsFragment().apply {
             arguments = Bundle().apply {
@@ -51,8 +51,7 @@ class DoingsFragment : DefaultFragment() {
             getLong(ARG_DAY_TIME, -1).let {
                 date = Calendar.getInstance().apply { this.timeInMillis = it }
             }
-        }
-        updateSubtitle()
+        } ?: updateSubtitle()
     }
 
     override val onFABClickListener: (View) -> Unit = {
@@ -98,10 +97,6 @@ class DoingsFragment : DefaultFragment() {
 
     override fun updateUi() {
         var doings = getDoings()
-        if (doings.isEmpty() && date >= Calendar.getInstance()) {
-            doings = WeekDayLab(requireContext()).getDoings(date.get(Calendar.DAY_OF_WEEK))
-            doings.forEach { doingLab.addNewDailyDoing(date, it) }
-        }
         if (adapter == null) {
             adapter = DoingsAdapter(doings, { view: View, doing: Doing ->
                 showPopupMenu(requireContext(), view, doing)
@@ -156,6 +151,10 @@ class DoingsFragment : DefaultFragment() {
     private fun updateSubtitle() {
         (activity as AppCompatActivity).supportActionBar?.apply {
             subtitle = date.timeInMillis.toDateFormatString()
+        }
+        if (getDoings().isEmpty() && date.toLongPattern() >= Calendar.getInstance().toLongPattern()) {
+            WeekDayLab(requireContext()).getDoings(date.get(Calendar.DAY_OF_WEEK))
+                .forEach { doingLab.addNewDailyDoing(date, it) }
         }
     }
 
