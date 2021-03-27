@@ -31,9 +31,16 @@ class DefaultDoingRecyclerAdapter(
             }
         }
 
-        fun bind(doing: Doing) {
-            this.doing = doing
-            titleView.text = doing.title
+        fun bind(position: Int) {
+            itemView.setBackgroundResource(
+                if (position % 2 == 0)
+                    R.color.application_background_second
+                else
+                    R.color.application_background
+            )
+            doing = doings[position].apply {
+                titleView.text = title
+            }
 
         }
     }
@@ -45,7 +52,7 @@ class DefaultDoingRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(doings[position])
+        holder.bind(position)
     }
 
     override fun getItemCount() = doings.size

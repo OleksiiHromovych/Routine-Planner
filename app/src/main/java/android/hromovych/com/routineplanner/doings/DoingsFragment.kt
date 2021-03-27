@@ -212,28 +212,32 @@ class DoingsFragment : DefaultFragment() {
                 }
             }
             R.id.action_theme -> {
-                val themesTitles = arrayOf("Standard", "Vasyl")
-                val themesId = arrayOf(
-                    R.style.Theme_RoutinePlanner_Standard,
-                    R.style.Theme_RoutinePlanner_Vasyl,
-                )
-                val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
-                requireContext().showSingleChoiceDialog(
-                    R.string.theme_dialog_title,
-                    themesTitles,
-                    themesId.indexOf(sharedPreferencesHelper.themeId)
-                ) { dialog, checked ->
-                    val newTheme = themesId[checked]
-                    if (sharedPreferencesHelper.themeId != newTheme) {
-                        sharedPreferencesHelper.themeId = newTheme
-                        (requireActivity() as MainActivity).recreate()
-                    }
-                    dialog.dismiss()
-                }
+                showThemePicker()
             }
             else -> context.toast(item.title.toString())
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showThemePicker() {
+        val themesTitles = arrayOf("Standard", "Vasyl")
+        val themesId = arrayOf(
+            R.style.Theme_RoutinePlanner_Standard,
+            R.style.Theme_RoutinePlanner_Vasyl,
+        )
+        val sharedPreferencesHelper = SharedPreferencesHelper(requireContext())
+        requireContext().showSingleChoiceDialog(
+            R.string.theme_dialog_title,
+            themesTitles,
+            themesId.indexOf(sharedPreferencesHelper.themeId)
+        ) { dialog, checked ->
+            val newTheme = themesId[checked]
+            if (sharedPreferencesHelper.themeId != newTheme) {
+                sharedPreferencesHelper.themeId = newTheme
+                (requireActivity() as MainActivity).recreate()
+            }
+            dialog.dismiss()
+        }
     }
 
 }

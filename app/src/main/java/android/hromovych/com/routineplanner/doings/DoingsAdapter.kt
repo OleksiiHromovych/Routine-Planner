@@ -35,23 +35,28 @@ class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doin
             }
         }
 
-        fun bind(doing: Doing) {
-            this.doing = doing
-            titleView.text = doing.title
-            statusCheckBox.isChecked = doing.isCompleted
-
+        fun bind(position: Int) {
+            this.doing = doings[position].apply {
+                titleView.text = title
+                statusCheckBox.isChecked = isCompleted
+            }
+            itemView.setBackgroundResource(
+                if (position % 2 == 0)
+                    R.color.application_background_second
+                else
+                    R.color.application_background
+            )
             setStatusUi(statusCheckBox.isChecked)
         }
 
         private fun setStatusUi(status: Boolean) {
             titleView.strike = status
-            val backgroundColor = if (!status)
-                android.R.color.transparent
-            else {
-                R.color.doing_completed_background
-            }
-            itemView.setBackgroundResource(backgroundColor)
-
+//            val backgroundColor = if (!status)
+//                android.R.color.transparent
+//            else {
+//                R.color.doing_completed_background
+//            }
+//            itemView.setBackgroundResource(backgroundColor)
         }
     }
 
@@ -62,7 +67,7 @@ class DoingsAdapter(var doings: List<Doing>, val onTitleClickAction: (View, Doin
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(doings[position])
+        holder.bind(position)
     }
 
     override fun getItemCount() = doings.size

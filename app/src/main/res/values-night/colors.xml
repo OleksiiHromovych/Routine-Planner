@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="application_background">#000125</color>
-    <color name="tool_bar_background">#202020</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <color name="application_background">#222831</color>
+    <color name="application_background_second">#393E46</color>
+    <color name="tool_bar_background">#171C22</color>
     <color name="tool_bar_title">#FFFFFF</color>
-    <color name="status_bar">@color/tool_bar_background</color>
+    <color name="status_bar">#101317</color>
     <color name="doing_completed_background">#9A232323</color>
 
     <color name="edit_dialog_background">@color/tool_bar_background</color>
     <color name="hint">#888888</color>
 
     <color name="text">#CFCFCF</color>
-    <color name="subtext">#AEAEAE</color>
+    <color name="subtext">#BEBEA4</color>
 
 </resources>

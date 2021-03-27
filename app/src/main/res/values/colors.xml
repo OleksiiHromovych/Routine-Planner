@@ -11,8 +11,10 @@
     <color name="dialog_negative_btn">#850000</color>
     <color name="dialog_positive_btn">#045C08</color>
 
+    <color name="colorOnSecondary">#000000</color>
 
     <color name="application_background">#FFFFFF</color>
+    <color name="application_background_second">#EDEDED</color>
     <color name="tool_bar_background">#ADADAD</color>
     <color name="tool_bar_title">#FFFFFF</color>
     <color name="status_bar">#636363</color>

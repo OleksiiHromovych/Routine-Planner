@@ -1,42 +1,8 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.RoutinePlanner" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/hint</item>
-        <item name="colorPrimaryVariant">@color/tool_bar_background</item>
-        <item name="colorOnPrimary">@color/application_background</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/hint</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/status_bar</item>
-        <!-- Customize your theme here. -->
-        <item name="toolbarStyle">@style/ToolBarStyle</item>
-        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-    </style>
-
-    <style name="Theme.RoutinePlanner.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+<resources>
 
     <style name="Theme.RoutinePlanner.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight">
         <item name="android:textColor">@color/tool_bar_title</item>
-        <item name="popupMenuBackground">@color/tool_bar_background</item>
-    </style>
-
-    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
-        <item name="android:textColorHint">@color/hint</item>
-        <item name="android:windowBackground">@color/tool_bar_background</item>
-
-        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
-    </style>
-
-    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/dialog_negative_btn</item>
-    </style>
-
-    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/dialog_positive_btn</item>
+        <item name="popupMenuBackground">?attr/colorPrimary</item>
     </style>
 
     <style name="ToolBarStyle" parent="Widget.MaterialComponents.Toolbar.Primary">
@@ -49,24 +15,5 @@
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <item name="colorPrimary">@color/hint</item>
     </style>
-
-    <style name="ToolbarMenuStyle" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorBackground">@color/tool_bar_background</item>
-        <item name="android:textColor">@color/tool_bar_title</item>
-    </style>
-    
-<!--    Custom themes-->
-    <style name="Theme.RoutinePlanner.Vasyl" parent="Theme.RoutinePlanner.NoActionBar">
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/vasyl_theme_main</item>
-        <!-- Status bar color. -->
-        <item name="colorPrimary">@color/vasyl_theme_main</item>
-        <item name="colorPrimaryDark">@color/vasyl_theme_secondary</item>
-        <item name="colorAccent">@color/vasyl_theme_secondary</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:statusBarColor">@color/vasyl_theme_secondary</item>
-    </style>
-
-    <style name="Theme.RoutinePlanner.Standard" parent="Theme.RoutinePlanner.NoActionBar"></style>
 
 </resources>
