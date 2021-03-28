@@ -18,8 +18,9 @@ class WeekDayLab(val context: Context) {
         db.select(WeekDayDoingsTable.TABLE_NAME)
             .whereArgs(
                 "${WeekDayDoingsTable.COL_WEEK_DAY} = {dayIndex}",
-                "dayIndex" to dayIndex
-            ).exec {
+                "dayIndex" to dayIndex)
+            .orderBy(WeekDayDoingsTable.COL_POSITION)
+            .exec {
                 parseList(rowParser { weekDay: Int, doing_id: Int, position: Int ->
                     Triple(weekDay, doing_id, position)
                 }).forEach {
@@ -27,8 +28,7 @@ class WeekDayLab(val context: Context) {
                     db.select(DoingsTable.TABLE_NAME)
                         .whereArgs(
                             "${DoingsTable.COL_ID} = {doing_id}",
-                            "doing_id" to it.second
-                        )
+                            "doing_id" to it.second)
                         .exec {
                             doings +=
                                 parseSingle(rowParser { id: Long, title: String ->
@@ -63,4 +63,16 @@ class WeekDayLab(val context: Context) {
                     "AND ${WeekDayDoingsTable.COL_WEEK_DAY} = {weekDay}",
             "doing_id" to doing.id, "weekDay" to dayIndex
         )
+
+    fun updateDoing(doing: Doing, dayIndex: Int): Int =
+        db.update(
+            WeekDayDoingsTable.TABLE_NAME,
+            WeekDayDoingsTable.COL_WEEK_DAY to dayIndex,
+            WeekDayDoingsTable.COL_DOING_ID to doing.id,
+            WeekDayDoingsTable.COL_POSITION to doing.position
+        ).whereArgs(
+            "${WeekDayDoingsTable.COL_DOING_ID} = {doing_id} AND ${WeekDayDoingsTable.COL_WEEK_DAY} = {weekDay}",
+            "doing_id" to doing.id,
+            "weekDay" to dayIndex
+        ).exec()
 }

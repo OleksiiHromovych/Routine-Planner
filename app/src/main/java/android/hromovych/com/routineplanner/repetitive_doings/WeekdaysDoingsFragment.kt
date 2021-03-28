@@ -26,6 +26,7 @@ class WeekdaysDoingsFragment : RecyclerWithHeaderFragment() {
     override fun addNewDoing(doing: Doing): Long = weekDayLab.addNewDoing(doing, selectedWeekDay)
 
     override fun deleteDoing(doing: Doing): Int = weekDayLab.deleteDoing(doing, selectedWeekDay)
+    override fun updateDoing(doing: Doing): Int = weekDayLab.updateDoing(doing, selectedWeekDay)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

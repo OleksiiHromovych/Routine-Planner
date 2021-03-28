@@ -89,6 +89,7 @@ class TemplateEditFragment : RecyclerWithHeaderFragment() {
     override fun addNewDoing(doing: Doing): Long = templateLab.addNewDoing(template, doing)
 
     override fun deleteDoing(doing: Doing): Int = templateLab.deleteDoing(template, doing)
+    override fun updateDoing(doing: Doing): Int = templateLab.updateDoing(template, doing)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

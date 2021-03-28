@@ -132,4 +132,16 @@ class TemplateLab(val context: Context) {
             "doing_id" to doing.id, "template_id" to template.id
         )
 
+    fun updateDoing(template: Template, doing: Doing) =
+        db.update(
+            TemplateDoingsTable.TABLE_NAME,
+            TemplateDoingsTable.COL_TEMPLATE_ID to template.id,
+            TemplateDoingsTable.COL_DOING_ID to doing.id,
+            TemplateDoingsTable.COL_POSITION to 0
+        ).whereArgs(
+            "${TemplateDoingsTable.COL_DOING_ID} = {doing_id} " +
+                    "AND ${TemplateDoingsTable.COL_TEMPLATE_ID} = {template_id}",
+            "doing_id" to doing.id, "template_id" to template.id
+        ).exec()
+
 }

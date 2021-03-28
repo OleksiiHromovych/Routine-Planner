@@ -23,6 +23,7 @@ abstract class RecyclerWithHeaderFragment : Fragment() {
 
     abstract fun addNewDoing(doing: Doing): Long
     abstract fun deleteDoing(doing: Doing): Int
+    abstract fun updateDoing(doing: Doing): Int
 
     lateinit var recyclerView: RecyclerView
     var adapter: DefaultDoingRecyclerAdapter? = null
@@ -68,7 +69,13 @@ abstract class RecyclerWithHeaderFragment : Fragment() {
     private fun updateUi() {
         val doings: List<Doing> = getDoings()
         if (adapter == null) {
-            adapter = DefaultDoingRecyclerAdapter(doings) { view: View, doing: Doing ->
+            adapter = DefaultDoingRecyclerAdapter(
+                doings,
+                recyclerView,
+                updateDoing = {doing ->
+                    updateDoing(doing)
+                }
+            ) { view: View, doing: Doing ->
                 showPopupMenu(requireContext(), view, doing)
             }
             recyclerView.adapter = adapter
