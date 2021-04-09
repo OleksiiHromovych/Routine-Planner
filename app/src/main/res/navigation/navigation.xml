@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    app:startDestination="@id/doingsFragment">
+
+    <fragment
+        android:id="@+id/doingsFragment"
+        android:name="android.hromovych.com.routineplanner.presentation.doings.DoingsFragment"
+        android:label="DoingsFragment"
+        >
+        <action
+            android:id="@+id/action_doingsFragment_to_templatesFragment"
+            app:destination="@id/templatesFragment" />
+        <argument
+            android:name="date"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/templatesFragment"
+        android:name="android.hromovych.com.routineplanner.templates.TemplatesFragment"
+        android:label="TemplatesFragment" >
+        <action
+            android:id="@+id/action_templatesFragment_to_doingsFragment"
+            app:destination="@id/doingsFragment" />
+    </fragment>
+</navigation>

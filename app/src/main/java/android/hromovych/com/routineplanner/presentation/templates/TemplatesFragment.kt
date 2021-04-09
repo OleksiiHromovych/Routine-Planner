@@ -1,0 +1,3 @@
+package android.hromovych.com.routineplanner.presentation.templates
+
+class TemplatesFragment
