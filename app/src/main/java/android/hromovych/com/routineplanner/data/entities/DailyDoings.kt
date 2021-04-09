@@ -1,12 +1,10 @@
 package android.hromovych.com.routineplanner.data.entities
 
 import androidx.room.Entity
-import java.util.*
 
-@Entity(tableName = "daily_doings")
+@Entity(tableName = "daily_doings", primaryKeys = ["date", "doingId"])
 data class DailyDoings(
-
-    var date: Date,
+    var date: Long,
     var doingId: Long,
     var position: Int = 0,
     var completed: Boolean = false

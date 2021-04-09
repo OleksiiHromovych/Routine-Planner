@@ -8,12 +8,14 @@ import android.hromovych.com.routineplanner.data.entities.*
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(
     entities = [Doing::class, Template::class, DoingTemplate::class, DailyDoings::class, WeekdayDoing::class],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class PlannerDatabase : RoomDatabase() {
 
     //dao
