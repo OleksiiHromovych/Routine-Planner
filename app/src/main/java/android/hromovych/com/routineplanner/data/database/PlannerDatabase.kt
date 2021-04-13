@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [Doing::class, Template::class, DoingTemplate::class, DailyDoings::class, WeekdayDoing::class],
+    entities = [Doing::class, Template::class, DoingTemplate::class, DailyDoing::class, WeekdayDoing::class],
     version = 1,
     exportSchema = false
 )

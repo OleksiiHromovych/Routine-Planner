@@ -1,3 +1,5 @@
 package android.hromovych.com.routineplanner.presentation.templates
 
-class TemplatesViewModel
+import androidx.lifecycle.ViewModel
+
+class TemplatesViewModel : ViewModel()

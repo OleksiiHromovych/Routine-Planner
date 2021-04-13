@@ -1,6 +1,5 @@
 package android.hromovych.com.routineplanner
 
-import android.hromovych.com.routineplanner.doings.DoingsFragment
 import android.hromovych.com.routineplanner.utils.SharedPreferencesHelper
 import android.os.Bundle
 import android.view.WindowManager
@@ -20,9 +19,9 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         val statusColor = MaterialColors.getColor(this, android.R.attr.statusBarColor, getColor(R.color.status_bar))
         window.statusBarColor = statusColor
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, DoingsFragment.newInstance())
-            .commit()
+//        supportFragmentManager.beginTransaction()
+//            .replace(R.id.container, DoingsFragment.newInstance())
+//            .commit()
     }
 
     override fun onBackPressed() {

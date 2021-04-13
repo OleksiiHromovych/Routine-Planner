@@ -8,17 +8,17 @@
         android:name="android.hromovych.com.routineplanner.presentation.doings.DoingsFragment"
         android:label="DoingsFragment"
         >
+        <argument
+            android:name="date"
+            android:defaultValue="-1"
+            app:argType="integer" />
         <action
             android:id="@+id/action_doingsFragment_to_templatesFragment"
             app:destination="@id/templatesFragment" />
-        <argument
-            android:name="date"
-            android:defaultValue="-1L"
-            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/templatesFragment"
-        android:name="android.hromovych.com.routineplanner.templates.TemplatesFragment"
+        android:name="android.hromovych.com.routineplanner.presentation.templates.TemplatesFragment"
         android:label="TemplatesFragment" >
         <action
             android:id="@+id/action_templatesFragment_to_doingsFragment"
