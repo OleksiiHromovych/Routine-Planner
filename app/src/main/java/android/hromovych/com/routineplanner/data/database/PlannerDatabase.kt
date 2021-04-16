@@ -12,7 +12,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [Doing::class, Template::class, DoingTemplate::class, DailyDoing::class, WeekdayDoing::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

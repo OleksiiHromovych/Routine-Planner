@@ -7,5 +7,6 @@ import androidx.room.PrimaryKey
 data class Doing(
 
     @PrimaryKey(autoGenerate = true) val id: Long = -1,
-    var title: String = ""
+    var title: String = "",
+    var active: Boolean = true
 )

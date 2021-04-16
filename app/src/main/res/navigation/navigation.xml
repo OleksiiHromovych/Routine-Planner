@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
     app:startDestination="@id/doingsFragment">
 
     <fragment
         android:id="@+id/doingsFragment"
         android:name="android.hromovych.com.routineplanner.presentation.doings.DoingsFragment"
         android:label="DoingsFragment"
-        >
+        tools:layout="@layout/fragment_doings">
+
         <argument
             android:name="date"
             android:defaultValue="-1"
             app:argType="integer" />
+
         <action
             android:id="@+id/action_doingsFragment_to_templatesFragment"
-            app:destination="@id/templatesFragment" />
+            app:destination="@id/templatesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/doingsFragment" />
+
     </fragment>
+
     <fragment
         android:id="@+id/templatesFragment"
-        android:name="android.hromovych.com.routineplanner.presentation.templates.TemplatesFragment"
-        android:label="TemplatesFragment" >
-        <action
-            android:id="@+id/action_templatesFragment_to_doingsFragment"
-            app:destination="@id/doingsFragment" />
-    </fragment>
+        android:name="android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesFragment"
+        android:label="TemplatesFragment"
+        tools:layout="@layout/fragment_templates"/>
+
 </navigation>
