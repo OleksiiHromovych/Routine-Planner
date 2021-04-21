@@ -3,8 +3,6 @@ package android.hromovych.com.routineplanner.presentation.doings
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.entities.DailyDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
@@ -15,23 +13,11 @@ class DoingsViewModel(private val date: Int, val dataSource: DoingsDbDao) : View
 
     private val dataBase = dataSource
 
-    private val _dailyDoings = MutableLiveData<List<DailyDoing>>()
-    val dailyDoings: LiveData<List<DailyDoing>>
-        get() = _dailyDoings
+    val dailyDoings = dataBase.getDailyDoingsFull(date)
 
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
-
-    init {
-        initializeDailyDoings()
-    }
-
-    private fun initializeDailyDoings() {
-        viewModelScope.launch {
-            _dailyDoings.value = dataBase.getDailyDoings(date)
-        }
-    }
 
     fun navigateToTemplates() {
         viewModelScope.launch {
@@ -45,9 +31,10 @@ class DoingsViewModel(private val date: Int, val dataSource: DoingsDbDao) : View
         }
     }
 
-    fun addNew(){
+    fun addDailyDoing(doing: Doing) {
         viewModelScope.launch {
-            eventChannel.send(Event.ShowToast("Added new"))
+//            val dailyDoingFull = DailyDoingFull
+//            dataBase.addDailyDoing(doingFull) //TODO: чото з рум relation додаванням
         }
     }
 
@@ -69,8 +56,15 @@ class DoingsViewModel(private val date: Int, val dataSource: DoingsDbDao) : View
         }
     }
 
-    sealed class Event{
-        object NavigateToTemplates: Event()
-        data class ShowToast(val text: String): Event()
+    fun onFabClicked() {
+        viewModelScope.launch {
+            eventChannel.send(Event.OnFabClicked)
+        }
+    }
+
+    sealed class Event {
+        object NavigateToTemplates : Event()
+        data class ShowToast(val text: String) : Event()
+        object OnFabClicked : Event()
     }
 }

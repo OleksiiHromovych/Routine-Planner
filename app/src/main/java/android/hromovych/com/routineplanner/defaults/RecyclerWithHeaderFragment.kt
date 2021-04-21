@@ -91,10 +91,10 @@ abstract class RecyclerWithHeaderFragment : Fragment() {
         showTwoActionDialog(
             requireContext(),
             "You want to create new doing or use yet exist?",
-            DialogButton(R.string.dialog_button_yet_exist) {
+            DialogButton(R.string.yet_exist) {
                 showDoingsMultiSelectedListDialog(
                     requireContext(),
-                    getString(R.string.dialog_title_choice_from_exist),
+                    getString(R.string.choice_from_exist),
                     DoingLab(
                         requireContext()
                     ).getDoings().filterNot {
@@ -107,11 +107,11 @@ abstract class RecyclerWithHeaderFragment : Fragment() {
                     updateUi()
                 }
             },
-            DialogButton(R.string.dialog_button_new) {
+            DialogButton(R.string.add_new) {
                 DoingEditDialog(
                     requireContext(),
                     "",
-                    R.string.dialog_title_create_new_doing
+                    R.string.create_new_doing
                 ) {
                     addNewDoing(Doing()
                         .apply {

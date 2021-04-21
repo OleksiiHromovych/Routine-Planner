@@ -17,24 +17,24 @@ import androidx.recyclerview.widget.ListAdapter
  * @param TBinding the binding type of every single list item
  * @param TData the type of single element
  *
- * @property layoutId the id of layout with [TBinding]
+ * @property itemLayoutId the id of layout with [TBinding]
  * @property checkBoxActive the status of using checkBox in single list item
  * @property onClickListener the list item onClickListener
  */
 abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
-    ListAdapter<TData, BasicHolder<TBinding>>(DoingsDiffCallback<TData>()) {
+    ListAdapter<TData, BasicHolder<TBinding>>(BasicDiffCallback<TData>()) {
 
-    abstract val layoutId: Int
+    abstract val itemLayoutId: Int
 
     open var checkBoxActive: Boolean = false
-    open var onClickListener: DoingClickListener<TData>? = null
+    open var onClickListener: BasicClickListener<TData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasicHolder<TBinding> {
-        return BasicHolder.from(parent, layoutId)
+        return BasicHolder.from(parent, itemLayoutId)
     }
 
     override fun onBindViewHolder(holder: BasicHolder<TBinding>, position: Int) {
-        val doingData = BasicDoingsAdapterModel<TData>(
+        val doingData = BasicAdapterModel<TData>(
             onClickListener,
             null,
             checkBoxActive

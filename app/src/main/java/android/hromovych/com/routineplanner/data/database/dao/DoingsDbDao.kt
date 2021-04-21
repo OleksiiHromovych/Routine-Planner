@@ -1,7 +1,9 @@
 package android.hromovych.com.routineplanner.data.database.dao
 
+import android.hromovych.com.routineplanner.data.embedded.DailyDoingFull
 import android.hromovych.com.routineplanner.data.entities.DailyDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -27,6 +29,12 @@ interface DoingsDbDao {
 
     @Transaction
     @Query("SELECT * FROM daily_doings WHERE date = :date")
-    suspend fun getDailyDoingsFull(date: Int) : List<android.hromovych.com.routineplanner.data.embedded.DailyDoingFull>
+    fun getDailyDoingsFull(date: Int) : LiveData<List<DailyDoingFull>>
 
+    @Insert
+    suspend fun addDoing(doing: Doing): Long
+//
+//    @Transaction
+//    @Insert
+//    suspend fun addDailyDoing(dailyDoingFull: DailyDoingFull)
 }

@@ -31,6 +31,21 @@
         android:id="@+id/templatesFragment"
         android:name="android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesFragment"
         android:label="TemplatesFragment"
-        tools:layout="@layout/fragment_templates"/>
+        tools:layout="@layout/fragment_templates">
+        <action
+            android:id="@+id/action_templatesFragment_to_templateEditFragment"
+            app:destination="@id/templateEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/templateEditFragment"
+        android:name="android.hromovych.com.routineplanner.templates.TemplateEditFragment"
+        android:label="TemplateEditFragment"
+        tools:layout="@layout/fragment_template_edit">
+
+        <argument
+            android:name="template_id"
+            app:argType="long"/>
+    </fragment>
 
 </navigation>

@@ -26,7 +26,7 @@ class TemplatesFragment : DefaultFragment() {
     override val onFABClickListener: (View) -> Unit = {
         DoingEditDialog(
             requireContext(), "",
-            R.string.dialog_title_create_new_template
+            R.string.create_new_template
         ) {
             val id = templateLab.insertNewTemplate(Template(name = it))
             startEditFragment(id)

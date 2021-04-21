@@ -3,11 +3,16 @@ package android.hromovych.com.routineplanner.presentation.doings
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.embedded.DailyDoingFull
+import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
-import android.hromovych.com.routineplanner.presentation.basic.DoingClickListener
+import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
+import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialog
+import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
+import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
 import android.hromovych.com.routineplanner.presentation.utils.toast
+import android.hromovych.com.routineplanner.utils.DialogButton
 import android.hromovych.com.routineplanner.utils.DoingEditDialog
 import android.os.Bundle
 import android.view.*
@@ -52,10 +57,10 @@ class DoingsFragment : Fragment() {
 
         val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoingFull>() {
 
-            override val layoutId: Int = R.layout.item_doing
+            override val itemLayoutId: Int = R.layout.item_doing
 
-            override var onClickListener: DoingClickListener<DailyDoingFull>? =
-                DoingClickListener { view, doing ->
+            override var onClickListener: BasicClickListener<DailyDoingFull>? =
+                BasicClickListener { view, doing ->
                     onItemClickListener(view, doing)
                 }
 
@@ -65,9 +70,6 @@ class DoingsFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
 
-        viewModel.dailyDoings.observe(viewLifecycleOwner, {
-//            it?.
-        })
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
@@ -78,6 +80,9 @@ class DoingsFragment : Fragment() {
 
                     is DoingsViewModel.Event.ShowToast -> {
                         context.toast(it.text)
+                    }
+                    DoingsViewModel.Event.OnFabClicked -> {
+                        onFabClicked()
                     }
                 }
             }
@@ -113,6 +118,40 @@ class DoingsFragment : Fragment() {
             }
             popupMenu.show()
         }
+
+    private fun onFabClicked() {
+        requireContext().showDecisionDialog(
+            R.string.creating_new_doing,
+            DialogButton(R.string.yet_exist) {
+                showYetExistDoingsDialog()
+            },
+            DialogButton(R.string.add_new) {
+                showAddNewDoingDialog()
+            }
+        )
+    }
+
+    private fun showYetExistDoingsDialog() {
+        // TODO: якось це заставити робити, требаж перенести в viewModel, ну а інтерфейс з звідсе. Подумавть кароч
+        // TODO: ну і воно ж має виключати вже наявні, спробувати через бд запит це організувати.
+        val items = listOf<Doing>()
+        requireContext().showMultiChoiceDoingsDialog(
+            R.string.choice_from_exist,
+            items
+        ){
+
+        }
+    }
+
+    private fun showAddNewDoingDialog() {
+        requireContext().showInputDialog(
+            R.string.create_new_doing,
+            ""
+        ) { result ->
+            val doing = Doing(title = result)
+            viewModel.addDailyDoing(doing)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)

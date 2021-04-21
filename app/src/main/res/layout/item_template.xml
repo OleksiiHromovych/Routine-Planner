@@ -5,18 +5,25 @@
 
     <data>
 
+        <variable
+            name="item"
+            type="android.hromovych.com.routineplanner.data.entities.Template" />
+
+        <variable
+            name="itemData"
+            type="android.hromovych.com.routineplanner.presentation.basic.BasicAdapterModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{ (view) -> itemData.clickListener.onClick(view, item)}"
         android:padding="12dp">
 
         <ImageView
             android:id="@+id/template_item_imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:src="@drawable/ic_template_icon"
             app:layout_constraintBottom_toBottomOf="@+id/template_item_title_view"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +34,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
+            android:text="@{item.name}"
             android:textColor="@color/text"
             android:textSize="24sp"
             android:textStyle="bold"

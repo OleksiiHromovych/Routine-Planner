@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="android.hromovych.com.routineplanner.presentation.templates.template_edit.TemplateEditViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -47,7 +49,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-                tools:listitem="@layout/item_doing"
+                tools:listitem="@layout/item_template_doing"
+
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

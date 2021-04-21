@@ -8,6 +8,8 @@ class DoingsViewModelFactory(
     private val data: Int,
     private val dataSource: DoingsDbDao
 ) : ViewModelProvider.Factory {
+
+    @Throws(IllegalArgumentException::class)
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(DoingsViewModel::class.java)) {

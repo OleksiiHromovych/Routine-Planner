@@ -17,16 +17,20 @@
     <string name="menu_action_delete_title">Delete</string>
     <string name="action_templates">Templates</string>
     <string name="template_edit_name_hint">Template name</string>
-    <string name="dialog_button_yet_exist">Yet exist</string>
-    <string name="dialog_button_new">New</string>
-    <string name="dialog_title_create_new_doing">Create new doing note</string>
+    <string name="yet_exist">Yet exist</string>
+    <string name="add_new">New</string>
+    <string name="create_new_doing">Create new doing note</string>
     <string name="dialog_title_edit_doing">Edit doing</string>
     <string name="dialog_button_ok">OK</string>
-    <string name="dialog_title_create_new_template">Create new template</string>
-    <string name="dialog_title_choice_from_exist">Choice from exist</string>
+    <string name="create_new_template">Create new template</string>
+    <string name="choice_from_exist">Choice from exist</string>
     <string name="action_weekdays_doings">Weekdays doings</string>
     <string name="action_dayNight">DayNight</string>
     <string name="action_theme">Themes</string>
     <string name="dayNight_dialog_title">Choice dayNight mode</string>
     <string name="theme_dialog_title">Choice theme</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="creating_new_doing">You want to create new doing or use yet exist?</string>
+    <string name="invalid_name">Invalid Name</string>
 </resources>

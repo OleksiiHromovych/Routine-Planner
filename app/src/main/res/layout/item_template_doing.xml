@@ -13,7 +13,7 @@
 
         <variable
             name="doingData"
-            type="android.hromovych.com.routineplanner.presentation.basic.BasicDoingsAdapterModel" />
+            type="android.hromovych.com.routineplanner.presentation.basic.BasicAdapterModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
