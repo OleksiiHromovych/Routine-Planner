@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "doings")
 data class Doing(
 
-    @PrimaryKey(autoGenerate = true) val id: Long = -1,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     var title: String = "",
     var active: Boolean = true
 )

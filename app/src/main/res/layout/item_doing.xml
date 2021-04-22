@@ -8,26 +8,26 @@
         <import type="android.view.View" />
 
         <variable
-            name="doingItem"
+            name="item"
             type="android.hromovych.com.routineplanner.data.embedded.DailyDoingFull" />
 
         <variable
-            name="doingData"
+            name="itemData"
             type="android.hromovych.com.routineplanner.presentation.basic.BasicAdapterModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> doingData.clickListener.onClick(view, doingItem)}"
+        android:onClick="@{(view) -> itemData.clickListener.onClick(view, item)}"
         android:padding="5dp">
 
         <CheckBox
             android:id="@+id/doing_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:checked="@{doingItem.dailyDoing.completed}"
-            android:visibility="@{doingData.checkBoxActive ? View.VISIBLE : View.GONE}"
+            android:checked="@{item.dailyDoing.completed}"
+            android:visibility="@{itemData.checkBoxActive ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:text="@{doingItem.doing.title}"
+            android:text="@{item.doing.title}"
             android:textColor="@color/text"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -55,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onTouch="@{doingData.touchListener}" />
+            app:onTouch="@{itemData.touchListener}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

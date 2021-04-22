@@ -2,6 +2,7 @@ package android.hromovych.com.routineplanner.presentation.templates.templates_li
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
+import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
 import android.hromovych.com.routineplanner.data.entities.Template
 import android.hromovych.com.routineplanner.databinding.FragmentTemplatesBinding
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
@@ -18,6 +19,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 
 class TemplatesFragment : Fragment() {
@@ -44,18 +46,18 @@ class TemplatesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
+        val adapter = object : BasicAdapter<FragmentTemplatesBinding, TemplateWithFullDoings>() {
 
             override val itemLayoutId: Int = R.layout.item_template
 
-            override var onClickListener: BasicClickListener<Template>? =
+            override var onClickListener: BasicClickListener<TemplateWithFullDoings>? =
                 BasicClickListener { _, template ->
                     viewModel.navigateToTemplateEdit(template)
-
                 }
         }
 
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {

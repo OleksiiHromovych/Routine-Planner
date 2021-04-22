@@ -4,6 +4,7 @@ import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.embedded.DailyDoingFull
 import android.hromovych.com.routineplanner.data.entities.Doing
+import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
@@ -13,7 +14,6 @@ import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
 import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
 import android.hromovych.com.routineplanner.presentation.utils.toast
 import android.hromovych.com.routineplanner.utils.DialogButton
-import android.hromovych.com.routineplanner.utils.DoingEditDialog
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
@@ -23,7 +23,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import java.util.*
 
 //https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
@@ -48,7 +50,8 @@ class DoingsFragment : Fragment() {
 
         val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
-        val viewModelFactory = DoingsViewModelFactory(arguments.date, dataSource)
+        val date = if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
+        val viewModelFactory = DoingsViewModelFactory(date, dataSource)
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(DoingsViewModel::class.java)
 
@@ -69,6 +72,7 @@ class DoingsFragment : Fragment() {
         }
 
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
@@ -98,15 +102,14 @@ class DoingsFragment : Fragment() {
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.menu_action_edit -> {
-                        DoingEditDialog(
-                            requireContext(),
+                        requireContext().showInputDialog(
+                            R.string.dialog_title_edit_doing,
                             dailyDoingFull.doing.title,
-                            R.string.dialog_title_edit_doing
                         ) { editedDoingTitle ->
                             viewModel.updateDoing(dailyDoingFull.doing.apply {
                                 title = editedDoingTitle
                             })
-                        }.show()
+                        }
                         true
                     }
                     R.id.menu_action_delete -> {
@@ -138,7 +141,7 @@ class DoingsFragment : Fragment() {
         requireContext().showMultiChoiceDoingsDialog(
             R.string.choice_from_exist,
             items
-        ){
+        ) {
 
         }
     }
@@ -149,7 +152,7 @@ class DoingsFragment : Fragment() {
             ""
         ) { result ->
             val doing = Doing(title = result)
-            viewModel.addDailyDoing(doing)
+            viewModel.addNewDailyDoing(doing)
         }
     }
 

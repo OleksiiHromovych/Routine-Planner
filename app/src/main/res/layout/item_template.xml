@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="android.hromovych.com.routineplanner.presentation.utils.ExtentionKt" />
+
         <variable
             name="item"
-            type="android.hromovych.com.routineplanner.data.entities.Template" />
+            type="android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings" />
 
         <variable
             name="itemData"
@@ -34,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:text="@{item.name}"
+            android:text="@{item.templateName}"
             android:textColor="@color/text"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -69,6 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:text="@{ExtentionKt.toTemplateDoingsString(item.doings)}"
             android:textColor="@color/subtext"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

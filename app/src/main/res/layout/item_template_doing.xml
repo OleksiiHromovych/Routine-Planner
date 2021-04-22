@@ -8,18 +8,18 @@
         <import type="android.view.View" />
 
         <variable
-            name="templateDoing"
-            type="android.hromovych.com.routineplanner.data.embedded.TemplateDoing" />
+            name="item"
+            type="android.hromovych.com.routineplanner.data.embedded.FullDoingTemplate" />
 
         <variable
-            name="doingData"
+            name="itemData"
             type="android.hromovych.com.routineplanner.presentation.basic.BasicAdapterModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> doingData.clickListener.onClick(view, templateDoing)}"
+        android:onClick="@{(view) -> itemData.clickListener.onClick(view, item)}"
         android:padding="5dp">
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:text="@{templateDoing.title}"
+            android:text="@{item.doingTitle}"
             android:textColor="@color/text"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onTouch="@{doingData.touchListener}" />
+            app:onTouch="@{itemData.touchListener}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

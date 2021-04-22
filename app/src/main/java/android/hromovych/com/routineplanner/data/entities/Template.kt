@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "templates")
 data class Template(
-    @PrimaryKey(autoGenerate = true) var id: Long = -1,
+    @PrimaryKey(autoGenerate = true) var id: Long = 0,
     var name: String = ""
 )

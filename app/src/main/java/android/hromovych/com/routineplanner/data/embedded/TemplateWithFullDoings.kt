@@ -5,11 +5,17 @@ import android.hromovych.com.routineplanner.data.entities.Template
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class TemplateWithDoings(
+data class TemplateWithFullDoings(
     @Embedded var template: Template,
     @Relation(
+        entity = DoingTemplate::class,
         parentColumn = "id",
         entityColumn = "templateId"
     )
-    val doings: List<DoingTemplate>
-)
+    val doings: List<FullDoingTemplate>
+) {
+
+    val templateName: String
+        get() = template.name
+
+}

@@ -9,7 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class DoingsViewModel(private val date: Int, val dataSource: DoingsDbDao) : ViewModel() {
+class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewModel() {
 
     private val dataBase = dataSource
 
@@ -31,8 +31,11 @@ class DoingsViewModel(private val date: Int, val dataSource: DoingsDbDao) : View
         }
     }
 
-    fun addDailyDoing(doing: Doing) {
+    fun addNewDailyDoing(doing: Doing) {
         viewModelScope.launch {
+            val doingId = dataBase.addDoing(doing)
+            val dailyDoing = DailyDoing(date = date, doingId = doingId)
+            dataBase.addDailyDoing(dailyDoing)
 //            val dailyDoingFull = DailyDoingFull
 //            dataBase.addDailyDoing(doingFull) //TODO: чото з рум relation додаванням
         }

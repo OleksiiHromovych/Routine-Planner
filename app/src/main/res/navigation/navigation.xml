@@ -18,12 +18,7 @@
 
         <action
             android:id="@+id/action_doingsFragment_to_templatesFragment"
-            app:destination="@id/templatesFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/doingsFragment" />
+            app:destination="@id/templatesFragment" />
 
     </fragment>
 
@@ -32,20 +27,23 @@
         android:name="android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesFragment"
         android:label="TemplatesFragment"
         tools:layout="@layout/fragment_templates">
+
         <action
             android:id="@+id/action_templatesFragment_to_templateEditFragment"
             app:destination="@id/templateEditFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/templateEditFragment"
-        android:name="android.hromovych.com.routineplanner.templates.TemplateEditFragment"
+        android:name="android.hromovych.com.routineplanner.presentation.templates.template_edit.TemplateEditFragment"
         android:label="TemplateEditFragment"
         tools:layout="@layout/fragment_template_edit">
 
         <argument
             android:name="template_id"
-            app:argType="long"/>
+            app:argType="long" />
+
     </fragment>
 
 </navigation>

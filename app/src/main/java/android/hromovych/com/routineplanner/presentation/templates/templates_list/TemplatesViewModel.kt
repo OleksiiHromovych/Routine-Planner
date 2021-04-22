@@ -1,9 +1,9 @@
 package android.hromovych.com.routineplanner.presentation.templates.templates_list
 
 import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
+import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
 import android.hromovych.com.routineplanner.data.entities.Template
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
@@ -14,16 +14,25 @@ class TemplatesViewModel(dataSource: TemplatesDbDao) : ViewModel() {
 
     private val database = dataSource
 
-    private val _templates = MutableLiveData<List<Template>>()
-    val templates: LiveData<List<Template>>
-        get() = _templates
+//    private lateinit var _templates: MutableLiveData<List<TemplateWithFullDoings>>
+    val templates: LiveData<List<TemplateWithFullDoings>> = database.getTemplatesWithFullDoings()
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
+//
+//    init {
+//        initializeTemplate()
+//    }
+//
+//    private fun initializeTemplate() {
+//        viewModelScope.launch {
+//            _templates = database.getTemplatesWithFullDoings()
+//        }
+//    }
 
-    fun navigateToTemplateEdit(template: Template) {
+    fun navigateToTemplateEdit(template: TemplateWithFullDoings) {
         viewModelScope.launch {
-            eventChannel.send(Event.NavigateToTemplateEdit(template.id))
+            eventChannel.send(Event.NavigateToTemplateEdit(template.template.id))
         }
     }
 
