@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="android.hromovych.com.routineplanner.presentation.doings.DoingsViewModel" />
+            type="android.hromovych.com.routineplanner.presentation.doings.daily_doings.DoingsViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

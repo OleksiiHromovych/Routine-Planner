@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/doingsFragment"
-        android:name="android.hromovych.com.routineplanner.presentation.doings.DoingsFragment"
+        android:name="android.hromovych.com.routineplanner.presentation.doings.daily_doings.DoingsFragment"
         android:label="DoingsFragment"
         tools:layout="@layout/fragment_doings">
 
@@ -19,6 +19,10 @@
         <action
             android:id="@+id/action_doingsFragment_to_templatesFragment"
             app:destination="@id/templatesFragment" />
+
+        <action
+            android:id="@+id/actionDoingsFragmentToWeekdayDoingsFragment"
+            app:destination="@id/repetitiveDoingsFragment" />
 
     </fragment>
 
@@ -45,5 +49,10 @@
             app:argType="long" />
 
     </fragment>
+    <fragment
+        android:id="@+id/repetitiveDoingsFragment"
+        android:name="android.hromovych.com.routineplanner.presentation.doings.weekday_doings.WeekdayDoingsFragment"
+        android:label="RepetitiveDoingsFragment"
+        tools:layout="@layout/fragment_weekday_doings"/>
 
 </navigation>

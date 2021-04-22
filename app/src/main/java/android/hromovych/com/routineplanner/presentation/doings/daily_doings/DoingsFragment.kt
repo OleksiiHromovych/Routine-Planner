@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.doings
+package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
@@ -50,7 +50,8 @@ class DoingsFragment : Fragment() {
 
         val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
-        val date = if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
+        val date =
+            if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
         val viewModelFactory = DoingsViewModelFactory(date, dataSource)
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(DoingsViewModel::class.java)
@@ -78,10 +79,6 @@ class DoingsFragment : Fragment() {
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
                 when (it) {
-                    DoingsViewModel.Event.NavigateToTemplates -> {
-                        findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToTemplatesFragment())
-                    }
-
                     is DoingsViewModel.Event.ShowToast -> {
                         context.toast(it.text)
                     }
@@ -164,7 +161,7 @@ class DoingsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_templates_list -> {
-                viewModel.navigateToTemplates()
+                findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToTemplatesFragment())
                 return true
             }
             R.id.action_date_picker -> {
@@ -172,7 +169,7 @@ class DoingsFragment : Fragment() {
                 return true
             }
             R.id.action_weekdays_doings -> {
-
+                findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToWeekdayDoingsFragment())
                 return true
             }
             R.id.action_dayNight -> {

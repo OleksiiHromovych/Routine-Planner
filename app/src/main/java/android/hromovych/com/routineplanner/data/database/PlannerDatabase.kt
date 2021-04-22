@@ -12,13 +12,12 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [Doing::class, Template::class, DoingTemplate::class, DailyDoing::class, WeekdayDoing::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class PlannerDatabase : RoomDatabase() {
 
-    //dao
     abstract val doingsDbDao: DoingsDbDao
     abstract val templatesDbDao: TemplatesDbDao
     abstract val weekdayDoingsDbDao: WeekdayDoingsDbDao

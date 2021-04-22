@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.doings
+package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import androidx.lifecycle.ViewModel

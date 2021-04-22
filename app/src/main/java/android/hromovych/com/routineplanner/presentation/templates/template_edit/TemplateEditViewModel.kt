@@ -69,7 +69,11 @@ class TemplateEditViewModel(
     fun addNewTemplateDoing(doing: Doing) {
         viewModelScope.launch {
             val doingId = doingsBase.addDoing(doing)
-            val templateDoing = DoingTemplate(templateId = templateId, doingId = doingId)
+            val templateDoing = DoingTemplate(
+                templateId = templateId,
+                doingId = doingId,
+                position = templateDoings.value?.size ?: 0
+            )
             templateBase.addTemplateDoing(templateDoing)
         }
     }

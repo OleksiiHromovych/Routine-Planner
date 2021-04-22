@@ -6,7 +6,7 @@ import androidx.room.TypeConverter
 class Converters {
     @TypeConverter
     fun fromWeekday(weekday: Weekday): String {
-        return weekday.index.toString()
+        return weekday.dayId.toString()
     }
 
     @TypeConverter

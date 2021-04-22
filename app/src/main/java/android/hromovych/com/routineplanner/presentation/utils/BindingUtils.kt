@@ -19,6 +19,7 @@ fun View.setOnTouch(listener: View.OnTouchListener?) {
 @BindingAdapter("listData")
 fun <T> RecyclerView.bindRecyclerView(data: List<T>?) {
     if (adapter is BasicAdapter<*, *>) {
+        @Suppress("UNCHECKED_CAST")
         (adapter as BasicAdapter<*, T>).submitList(data)
     }
 

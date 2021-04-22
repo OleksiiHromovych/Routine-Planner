@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.doings
+package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.entities.DailyDoing
@@ -19,12 +19,6 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    fun navigateToTemplates() {
-        viewModelScope.launch {
-            eventChannel.send(Event.NavigateToTemplates)
-        }
-    }
-
     fun updateDoing(doing: Doing) {
         viewModelScope.launch {
             dataBase.updateDoing(doing)
@@ -34,7 +28,11 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
     fun addNewDailyDoing(doing: Doing) {
         viewModelScope.launch {
             val doingId = dataBase.addDoing(doing)
-            val dailyDoing = DailyDoing(date = date, doingId = doingId)
+            val dailyDoing = DailyDoing(
+                date = date,
+                doingId = doingId,
+                position = dailyDoings.value?.size ?: 0
+            )
             dataBase.addDailyDoing(dailyDoing)
 //            val dailyDoingFull = DailyDoingFull
 //            dataBase.addDailyDoing(doingFull) //TODO: чото з рум relation додаванням
@@ -66,7 +64,8 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
     }
 
     sealed class Event {
-        object NavigateToTemplates : Event()
+        //        object NavigateToTemplates : Event()
+//        object NavigateToWeekdayDoings : Event()
         data class ShowToast(val text: String) : Event()
         object OnFabClicked : Event()
     }
