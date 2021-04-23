@@ -4,15 +4,19 @@ import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
+import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.databinding.FragmentWeekdayDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemWeekdayDoingBinding
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -56,6 +60,8 @@ class WeekdayDoingsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
+
+
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
                 when (it) {
@@ -72,8 +78,30 @@ class WeekdayDoingsFragment : Fragment() {
         return binding.root
     }
 
-    private fun onItemClickListener(view: View, doing: FullWeekdayDoing) {
-
+    private fun onItemClickListener(view: View, fullWeekdayDoing: FullWeekdayDoing) {
+        val popupMenu = PopupMenu(requireContext(), view, Gravity.CENTER_HORIZONTAL)
+        popupMenu.inflate(R.menu.doings_popup_menu)
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_action_edit -> {
+                    requireContext().showInputDialog(
+                        R.string.dialog_title_edit_doing,
+                        fullWeekdayDoing.title,
+                    ) { editedDoingTitle ->
+                        viewModel.updateDoing(fullWeekdayDoing.doing.apply {
+                            title = editedDoingTitle
+                        })
+                    }
+                    true
+                }
+                R.id.menu_action_delete -> {
+                    viewModel.deleteWeekdayDoing(fullWeekdayDoing.weekdayDoing)
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
     }
 
     private fun onFabClicked() {
@@ -108,5 +136,10 @@ class WeekdayDoingsFragment : Fragment() {
             val doing = Doing(title = result)
             viewModel.addNewWeekDoing(doing)
         }
+    }
+
+    // TODO: Look's bad ( Need refactoring
+    private fun initWeekdaysGroup(group: RadioGroup){
+        val days = Weekday.values().drop
     }
 }

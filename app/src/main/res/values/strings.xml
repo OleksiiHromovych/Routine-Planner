@@ -34,4 +34,15 @@
     <string name="creating_new_doing">You want to create new doing or use yet exist?</string>
     <string name="invalid_name">Invalid Name</string>
     <string name="doing_added">Doing %1$s added</string>
+
+    <!--    Weekdays abbreviation-->
+    <string name="none_abb">\??</string>
+    <string name="monday_abb">Mon</string>
+    <string name="tuesday_abb">Tue</string>
+    <string name="wednesday_abb">Wed</string>
+    <string name="thursday_abb">Thu</string>
+    <string name="friday_abb">Fri</string>
+    <string name="saturday_abb">Sat</string>
+    <string name="sunday_abb">Sun</string>
+
 </resources>

@@ -45,6 +45,18 @@ class WeekdayDoingsViewModel(
         }
     }
 
+    fun updateDoing(doing: Doing) {
+        viewModelScope.launch {
+            doingsBase.updateDoing(doing)
+        }
+    }
+
+    fun deleteWeekdayDoing(weekdayDoing: WeekdayDoing) {
+        viewModelScope.launch {
+            weekdayBase.deleteWeekdayDoing(weekdayDoing)
+        }
+    }
+
     sealed class Event {
         data class ShowToast(val text: String) : Event()
         object OnFabClicked : Event()

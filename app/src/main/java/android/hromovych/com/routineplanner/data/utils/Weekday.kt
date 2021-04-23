@@ -20,5 +20,7 @@ enum class Weekday(val dayId: Int) {
 
         val firstChecked: Weekday
             get() = Monday
+
+
     }
 }
