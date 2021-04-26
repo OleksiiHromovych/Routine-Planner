@@ -34,8 +34,6 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
                 position = dailyDoings.value?.size ?: 0
             )
             dataBase.addDailyDoing(dailyDoing)
-//            val dailyDoingFull = DailyDoingFull
-//            dataBase.addDailyDoing(doingFull) //TODO: чото з рум relation додаванням
         }
     }
 

@@ -15,6 +15,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
@@ -60,7 +61,7 @@ class WeekdayDoingsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-
+        initWeekdaysGroup(binding.weekDaysLayout, inflater)
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
@@ -138,8 +139,21 @@ class WeekdayDoingsFragment : Fragment() {
         }
     }
 
-    // TODO: Look's bad ( Need refactoring
-    private fun initWeekdaysGroup(group: RadioGroup){
-        val days = Weekday.values().drop
+    private fun initWeekdaysGroup(group: RadioGroup, inflater: LayoutInflater) {
+        val checkedDay = viewModel.weekday.value
+        val days = Weekday.days
+        days.forEach { day ->
+            val dayView = inflater.inflate(R.layout.weekday_view, group, false) as RadioButton
+            dayView.apply {
+                id = day.dayId
+                text = day.getShortName(context)
+                isChecked = day == checkedDay
+            }
+            group.addView(dayView)
+        }
+        group.setOnCheckedChangeListener { _, checkedId ->
+            viewModel.changeWeekday(Weekday.getById(checkedId))
+        }
+
     }
 }

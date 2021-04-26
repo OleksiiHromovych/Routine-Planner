@@ -1,9 +1,10 @@
 package android.hromovych.com.routineplanner.presentation.utils
 
+import android.graphics.Paint
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
-import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.BindingAdapter
@@ -39,7 +40,14 @@ fun EditText.afterTextChanged(onChange: (String) -> Unit) {
     this.addTextChangedListener {
         doAfterTextChanged {
             onChange(it.toString())
-            Log.d("TAG", "afterTextChanged: ______ $it")
         }
     }
+}
+
+@BindingAdapter("strike")
+fun TextView.setStrike(visible: Boolean) {
+    paintFlags = if (visible)
+        paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+    else
+        paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
 }

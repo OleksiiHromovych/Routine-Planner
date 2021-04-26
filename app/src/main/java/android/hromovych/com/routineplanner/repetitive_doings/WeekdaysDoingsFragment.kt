@@ -56,7 +56,7 @@ class WeekdaysDoingsFragment : RecyclerWithHeaderFragment() {
             .rotate(-1)
             .forEach { indexAndTitle: Pair<Int, String> ->  // index help to compare with current week day
                 val button =
-                    inflater.inflate(R.layout.radio_button, container, false) as RadioButton
+                    inflater.inflate(R.layout.weekday_view, container, false) as RadioButton
                 radioGroupLayout.addView(
                     button.apply {
                         id = indexAndTitle.first

@@ -28,6 +28,7 @@ abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
 
     open var checkBoxActive: Boolean = false
     open var onClickListener: BasicClickListener<TData>? = null
+    open var onCheckBoxClickListener: BasicCheckBoxListener<TData>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasicHolder<TBinding> {
         return BasicHolder.from(parent, itemLayoutId)
@@ -37,7 +38,8 @@ abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
         val doingData = BasicAdapterModel<TData>(
             onClickListener,
             null,
-            checkBoxActive
+            checkBoxActive,
+            onCheckBoxClickListener
         )
         holder.bind(getItem(position), doingData)
     }

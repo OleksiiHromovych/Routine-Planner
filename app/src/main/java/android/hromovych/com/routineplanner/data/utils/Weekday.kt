@@ -11,16 +11,14 @@ enum class Weekday(val dayId: Int) {
     Sunday(7);
 
     companion object {
-        fun getByIndex(dayId: Int): Weekday {
+        fun getById(dayId: Int): Weekday {
             val weekday = values().find {
                 it.dayId == dayId
             }
             return weekday ?: NONE
         }
 
-        val firstChecked: Weekday
-            get() = Monday
-
-
+        val days: List<Weekday>
+            get() = listOf(Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday)
     }
 }

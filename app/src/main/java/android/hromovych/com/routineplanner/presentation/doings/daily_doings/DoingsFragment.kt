@@ -8,6 +8,7 @@ import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
+import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialog
 import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
@@ -70,10 +71,19 @@ class DoingsFragment : Fragment() {
 
             override var checkBoxActive: Boolean = true
 
+            override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoingFull>? =
+                BasicCheckBoxListener {doing, checked ->
+                    val dailyDoing = doing.dailyDoing.apply {
+                        completed = checked
+                    }
+                    viewModel.updateDailyDoing(dailyDoing)
+                }
+
         }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.setHasFixedSize(true)
 
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {

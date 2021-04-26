@@ -91,9 +91,9 @@
     </style>
 
     <style name="RadioButtonCentredText">
-        <item name="android:background">@drawable/button_circle</item>
+        <item name="android:background">@drawable/radio_button</item>
         <item name="android:button">@null</item>
-        <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <!--    Custom themes-->

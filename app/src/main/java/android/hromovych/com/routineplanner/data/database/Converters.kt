@@ -10,7 +10,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun toWeekDay(index: String): Weekday {
-        return Weekday.getByIndex(index.toInt())
+    fun toWeekDay(id: String): Weekday {
+        return Weekday.getById(id.toInt())
     }
 }

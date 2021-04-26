@@ -36,8 +36,6 @@ interface DoingsDbDao {
 
     @Insert
     suspend fun addDailyDoing(dailyDoing: DailyDoing): Long
-//
-//    @Transaction
-//    @Insert
-//    suspend fun addDailyDoing(dailyDoingFull: DailyDoingFull)
+
+//    suspend fun getAlreadyExistDoings()
 }

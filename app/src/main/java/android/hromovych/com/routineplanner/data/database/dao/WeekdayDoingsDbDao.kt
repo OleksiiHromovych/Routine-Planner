@@ -9,7 +9,7 @@ import androidx.room.*
 interface WeekdayDoingsDbDao {
 
     @Transaction
-    @Query("SELECT * FROM weekday_doing WHERE _id = :dayId")
+    @Query("SELECT * FROM weekday_doing WHERE weekday = :dayId")
     fun getWeekdayDoings(dayId: Int): LiveData<List<FullWeekdayDoing>>
 
     @Insert
