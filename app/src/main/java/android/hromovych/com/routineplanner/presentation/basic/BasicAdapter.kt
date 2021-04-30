@@ -1,5 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.basic
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
@@ -23,7 +24,7 @@ import androidx.recyclerview.widget.ListAdapter
  */
 abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
     ListAdapter<TData, BasicHolder<TBinding>>(BasicDiffCallback<TData>()) {
-
+//TODO: возможно проблема просто в діффКалбеку, спробувати винести, щоб отримувати в якості параметру
     abstract val itemLayoutId: Int
 
     open var checkBoxActive: Boolean = false
@@ -43,4 +44,35 @@ abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
         )
         holder.bind(getItem(position), doingData)
     }
+
+    fun updateList(list: List<TData>?) {
+        if (list == null || list.size != currentList.size) {
+            super.submitList(list)
+        } else {
+            val newList = currentList.toMutableList()
+            list.indices.forEach {
+                if (list[it] != newList[it]) {
+                    newList[it] = list[it]
+                    Log.d("TAG", "updateList: $it")
+                }
+            }
+            super.submitList(newList)
+        }
+    }
+
+    /*fun updateList(list: List<TData>?) {
+        if (list == null || list.size != currentList.size) {
+            super.submitList(list)
+        } else {
+            val newList = currentList.toMutableList()
+            newList.mutateIndexed { data, index ->
+                if (data != list[index]){
+                    list[index]
+                } else {
+                    data
+                }
+            }
+            super.submitList(newList)
+        }
+    }*/
 }
