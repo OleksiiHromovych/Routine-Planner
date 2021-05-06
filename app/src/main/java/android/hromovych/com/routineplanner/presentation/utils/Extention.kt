@@ -2,12 +2,12 @@ package android.hromovych.com.routineplanner.presentation.utils
 
 import android.content.Context
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.embedded.FullDoingTemplate
 import android.hromovych.com.routineplanner.data.utils.Weekday
+import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 
-fun List<FullDoingTemplate>.toTemplateDoingsString(): String =
+fun List<DoingTemplate>.toTemplateDoingsString(): String =
     this.joinToString(separator = ";\n") {
-        it.doingTitle
+        it.title
     }
 
 fun Weekday.getShortName(context: Context): String {

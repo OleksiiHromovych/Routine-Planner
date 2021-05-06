@@ -2,19 +2,15 @@ package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.DailyDoingFull
-import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
+import android.hromovych.com.routineplanner.domain.entity.DailyDoing
+import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
-import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialog
-import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
-import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
-import android.hromovych.com.routineplanner.presentation.utils.toast
-import android.hromovych.com.routineplanner.utils.DialogButton
+import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu
@@ -60,23 +56,20 @@ class DoingsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoingFull>() {
+        val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoing>() {
 
             override val itemLayoutId: Int = R.layout.item_doing
 
-            override var onClickListener: BasicClickListener<DailyDoingFull>? =
-                BasicClickListener { view, doing ->
-                    onItemClickListener(view, doing)
+            override var onClickListener: BasicClickListener<DailyDoing>? =
+                BasicClickListener { view, dailyDoing ->
+                    onItemClickListener(view, dailyDoing)
                 }
 
             override var checkBoxActive: Boolean = true
 
-            override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoingFull>? =
-                BasicCheckBoxListener {doing, checked ->
-                    val dailyDoing = doing.dailyDoing.apply {
-                        completed = checked
-                    }
-                    viewModel.updateDailyDoing(dailyDoing)
+            override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoing>? =
+                BasicCheckBoxListener {dailyDoing, checked ->
+                    viewModel.updateDailyDoing(dailyDoing.copy(completed = checked))
                 }
 
         }
@@ -102,8 +95,8 @@ class DoingsFragment : Fragment() {
         return binding.root
     }
 
-    private val onItemClickListener: (View, DailyDoingFull) -> Unit =
-        { view: View, dailyDoingFull: DailyDoingFull ->
+    private val onItemClickListener: (View, DailyDoing) -> Unit =
+        { view: View, dailyDoing: DailyDoing ->
             val popupMenu = PopupMenu(requireContext(), view, Gravity.CENTER_HORIZONTAL)
             popupMenu.inflate(R.menu.doings_popup_menu)
             popupMenu.setOnMenuItemClickListener {
@@ -111,16 +104,15 @@ class DoingsFragment : Fragment() {
                     R.id.menu_action_edit -> {
                         requireContext().showInputDialog(
                             R.string.dialog_title_edit_doing,
-                            dailyDoingFull.doing.title,
+                            dailyDoing.doing.title,
                         ) { editedDoingTitle ->
-                            viewModel.updateDoing(dailyDoingFull.doing.apply {
-                                title = editedDoingTitle
-                            })
+                            val doing = dailyDoing.doing.copy(title = editedDoingTitle)
+                            viewModel.updateDoing(doing)
                         }
                         true
                     }
                     R.id.menu_action_delete -> {
-                        viewModel.deleteDailyDoing(dailyDoingFull.dailyDoing)
+                        viewModel.deleteDailyDoing(dailyDoing)
                         true
                     }
                     else -> false

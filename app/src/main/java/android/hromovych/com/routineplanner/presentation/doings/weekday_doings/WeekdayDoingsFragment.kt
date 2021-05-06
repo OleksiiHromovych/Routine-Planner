@@ -2,11 +2,11 @@ package android.hromovych.com.routineplanner.presentation.doings.weekday_doings
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
-import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.databinding.FragmentWeekdayDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemWeekdayDoingBinding
+import android.hromovych.com.routineplanner.domain.entity.Doing
+import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.*
@@ -48,13 +48,13 @@ class WeekdayDoingsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<ItemWeekdayDoingBinding, FullWeekdayDoing>() {
+        val adapter = object : BasicAdapter<ItemWeekdayDoingBinding, WeekdayDoing>() {
 
             override val itemLayoutId = R.layout.item_weekday_doing
 
-            override var onClickListener: BasicClickListener<FullWeekdayDoing>? =
-                BasicClickListener { view, doing ->
-                    onItemClickListener(view, doing)
+            override var onClickListener: BasicClickListener<WeekdayDoing>? =
+                BasicClickListener { view, weekdayDoing ->
+                    onItemClickListener(view, weekdayDoing)
                 }
         }
 
@@ -79,7 +79,7 @@ class WeekdayDoingsFragment : Fragment() {
         return binding.root
     }
 
-    private fun onItemClickListener(view: View, fullWeekdayDoing: FullWeekdayDoing) {
+    private fun onItemClickListener(view: View, weekdayDoing: WeekdayDoing) {
         val popupMenu = PopupMenu(requireContext(), view, Gravity.CENTER_HORIZONTAL)
         popupMenu.inflate(R.menu.doings_popup_menu)
         popupMenu.setOnMenuItemClickListener {
@@ -87,16 +87,15 @@ class WeekdayDoingsFragment : Fragment() {
                 R.id.menu_action_edit -> {
                     requireContext().showInputDialog(
                         R.string.dialog_title_edit_doing,
-                        fullWeekdayDoing.title,
+                        weekdayDoing.title,
                     ) { editedDoingTitle ->
-                        viewModel.updateDoing(fullWeekdayDoing.doing.apply {
-                            title = editedDoingTitle
-                        })
+                        val doing = weekdayDoing.doing.copy(title = editedDoingTitle)
+                        viewModel.updateDoing(doing)
                     }
                     true
                 }
                 R.id.menu_action_delete -> {
-                    viewModel.deleteWeekdayDoing(fullWeekdayDoing.weekdayDoing)
+                    viewModel.deleteWeekdayDoing(weekdayDoing)
                     true
                 }
                 else -> false

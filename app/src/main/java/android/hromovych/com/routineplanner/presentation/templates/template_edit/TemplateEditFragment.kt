@@ -2,10 +2,10 @@ package android.hromovych.com.routineplanner.presentation.templates.template_edi
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.FullDoingTemplate
-import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.databinding.FragmentTemplateEditBinding
 import android.hromovych.com.routineplanner.databinding.ItemTemplateDoingBinding
+import android.hromovych.com.routineplanner.domain.entity.Doing
+import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.DialogButton
@@ -13,7 +13,6 @@ import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialo
 import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
 import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
 
-import android.hromovych.com.routineplanner.utils.DoingEditDialog
 import android.hromovych.com.routineplanner.utils.toast
 import android.os.Bundle
 import android.view.*
@@ -54,11 +53,11 @@ class TemplateEditFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<ItemTemplateDoingBinding, FullDoingTemplate>() {
+        val adapter = object : BasicAdapter<ItemTemplateDoingBinding, DoingTemplate>() {
 
             override val itemLayoutId = R.layout.item_template_doing
 
-            override var onClickListener: BasicClickListener<FullDoingTemplate>? =
+            override var onClickListener: BasicClickListener<DoingTemplate>? =
                 BasicClickListener { view, doing ->
                     onItemClickListener(view, doing)
                 }
@@ -141,25 +140,22 @@ class TemplateEditFragment : Fragment() {
         }
     }
 
-    private fun onItemClickListener(view: View, doingTemplate: FullDoingTemplate) {
+    private fun onItemClickListener(view: View, doingTemplate: DoingTemplate) {
         val popupMenu = PopupMenu(requireContext(), view, Gravity.CENTER_HORIZONTAL)
         popupMenu.inflate(R.menu.doings_popup_menu)
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_action_edit -> {
-                    DoingEditDialog(
-                        requireContext(),
-                        doingTemplate.doingTitle,
-                        R.string.dialog_title_edit_doing
+                    requireContext().showInputDialog(
+                        R.string.dialog_title_edit_doing,
+                        doingTemplate.title
                     ) { editedDoingTitle ->
-                        viewModel.updateDoing(doingTemplate.doing.apply {
-                            title = editedDoingTitle
-                        })
-                    }.show()
+                        viewModel.updateDoing(doingTemplate.doing.copy(title = editedDoingTitle))
+                    }
                     true
                 }
                 R.id.menu_action_delete -> {
-                    viewModel.deleteTemplateDoing(doingTemplate.doingTemplate)
+                    viewModel.deleteTemplateDoing(doingTemplate)
                     true
                 }
                 else -> false

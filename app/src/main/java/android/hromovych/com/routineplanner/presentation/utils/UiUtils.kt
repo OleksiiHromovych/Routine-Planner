@@ -2,7 +2,7 @@ package android.hromovych.com.routineplanner.presentation.utils
 
 import android.content.Context
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.entities.Doing
+import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.annotation.StringRes

@@ -2,9 +2,8 @@ package android.hromovych.com.routineplanner.presentation.templates.templates_li
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
-import android.hromovych.com.routineplanner.data.entities.Template
 import android.hromovych.com.routineplanner.databinding.FragmentTemplatesBinding
+import android.hromovych.com.routineplanner.domain.entity.Template
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
@@ -46,11 +45,11 @@ class TemplatesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<FragmentTemplatesBinding, TemplateWithFullDoings>() {
+        val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
 
             override val itemLayoutId: Int = R.layout.item_template
 
-            override var onClickListener: BasicClickListener<TemplateWithFullDoings>? =
+            override var onClickListener: BasicClickListener<Template>? =
                 BasicClickListener { _, template ->
                     viewModel.navigateToTemplateEdit(template)
                 }

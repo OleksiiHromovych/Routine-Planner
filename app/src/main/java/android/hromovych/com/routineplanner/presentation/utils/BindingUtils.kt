@@ -1,6 +1,7 @@
 package android.hromovych.com.routineplanner.presentation.utils
 
 import android.graphics.Paint
+import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.view.View
 import android.widget.EditText
@@ -18,7 +19,7 @@ fun View.setOnTouch(listener: View.OnTouchListener?) {
 }
 
 @BindingAdapter("listData")
-fun <T> RecyclerView.bindRecyclerView(data: List<T>?) {
+fun <T: EqualsCheck<T>> RecyclerView.bindRecyclerView(data: List<T>?) {
     if (adapter is BasicAdapter<*, *>) {
         @Suppress("UNCHECKED_CAST")
         (adapter as BasicAdapter<*, T>).updateList(data)

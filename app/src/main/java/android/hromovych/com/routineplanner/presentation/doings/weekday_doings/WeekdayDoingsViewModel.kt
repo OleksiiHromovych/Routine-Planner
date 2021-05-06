@@ -2,10 +2,12 @@ package android.hromovych.com.routineplanner.presentation.doings.weekday_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.database.dao.WeekdayDoingsDbDao
-import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
-import android.hromovych.com.routineplanner.data.entities.Doing
-import android.hromovych.com.routineplanner.data.entities.WeekdayDoing
+import android.hromovych.com.routineplanner.data.mapper.WeekdayDoingToPresentationMapper
 import android.hromovych.com.routineplanner.data.utils.Weekday
+import android.hromovych.com.routineplanner.domain.entity.Doing
+import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
+import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
+import android.hromovych.com.routineplanner.presentation.mappers.WeekdayDoingToEntityMapper
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
 
 class WeekdayDoingsViewModel(
     weekdayDoingsDbDao: WeekdayDoingsDbDao,
-    doingsDbDao: DoingsDbDao
+    doingsDbDao: DoingsDbDao,
 ) : ViewModel() {
 
     private val weekdayBase = weekdayDoingsDbDao
@@ -25,8 +27,10 @@ class WeekdayDoingsViewModel(
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    val doings: LiveData<List<FullWeekdayDoing>> = Transformations.switchMap(_weekday) {
-       weekdayBase.getWeekdayDoings(it.dayId)
+    val doings: LiveData<List<WeekdayDoing>> = Transformations.switchMap(_weekday) { weekday ->
+        weekdayBase.getWeekdayDoings(weekday.dayId).map { list ->
+            list.map { WeekdayDoingToPresentationMapper.convert(it) }
+        }
     }
 
     fun onFabClicked() {
@@ -37,25 +41,29 @@ class WeekdayDoingsViewModel(
 
     fun addNewWeekDoing(doing: Doing) {
         viewModelScope.launch {
-            val doingId = doingsBase.addDoing(doing)
+            val doingEntity = DoingToEntityMapper.convert(doing)
+            doingsBase.addDoing(doingEntity).also { doing.id = it }
             val weekdayDoing = WeekdayDoing(
                 weekday = _weekday.value!!,
-                doingId = doingId,
+                doing = doing,
                 position = doings.value!!.size
             )
-            weekdayBase.addWeekdayDoing(weekdayDoing)
+            val weekdayDoingEntity = WeekdayDoingToEntityMapper.convert(weekdayDoing)
+            weekdayBase.addWeekdayDoing(weekdayDoingEntity)
         }
     }
 
     fun updateDoing(doing: Doing) {
         viewModelScope.launch {
-            doingsBase.updateDoing(doing)
+            val doingEntity = DoingToEntityMapper.convert(doing)
+            doingsBase.updateDoing(doingEntity)
         }
     }
 
     fun deleteWeekdayDoing(weekdayDoing: WeekdayDoing) {
         viewModelScope.launch {
-            weekdayBase.deleteWeekdayDoing(weekdayDoing)
+            val weekdayDoingEntity = WeekdayDoingToEntityMapper.convert(weekdayDoing)
+            weekdayBase.deleteWeekdayDoing(weekdayDoingEntity)
         }
     }
 
