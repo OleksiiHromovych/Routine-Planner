@@ -2,28 +2,37 @@ package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.mapper.DailyDoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.utils.toCalendar
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.mappers.DailyDoingToEntityMapper
 import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
-class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewModel() {
+class DoingsViewModel(private val datePattern: Int, dataSource: DoingsDbDao) : ViewModel() {
 
     private val dataBase = dataSource
 
-    val dailyDoings: LiveData<List<DailyDoing>> = dataBase.getDailyDoingsFull(date).map {  list ->
-        list.map { DailyDoingToPresentationMapper.convert(it) }
+    private val _date = MutableLiveData<Int>(datePattern)
+    val date: LiveData<Int>
+        get() = _date
+
+    val dailyDoings: LiveData<List<DailyDoing>> = date.switchMap { dateValue ->
+        dataBase.getDailyDoingsFull(dateValue).map { list ->
+            list.map { DailyDoingToPresentationMapper.convert(it) }
+        }
     }
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
+
+    val dateString = date.map {
+        SimpleDateFormat.getDateInstance().format(it.toCalendar().time)
+    }
 
     fun updateDoing(doing: Doing) {
         viewModelScope.launch {
@@ -37,7 +46,7 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
             val doingEntity = DoingToEntityMapper.convert(doing)
             dataBase.addDoing(doingEntity).also { doing.id = it }
             val dailyDoing = DailyDoing(
-                date = date,
+                date = date.value!!,
                 doing = doing,
                 position = dailyDoings.value?.size ?: 0
             )
@@ -72,8 +81,12 @@ class DoingsViewModel(private val date: Int, dataSource: DoingsDbDao) : ViewMode
         }
     }
 
+    fun setNewDate(date: Int) {
+        _date.value = date
+    }
+
     sealed class Event {
-//        object NavigateToTemplates : Event()
+        //        object NavigateToTemplates : Event()
 //        object NavigateToWeekdayDoings : Event()
         data class ShowToast(val text: String) : Event()
         object OnFabClicked : Event()

@@ -18,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 
@@ -29,11 +30,6 @@ class TemplatesFragment : Fragment() {
         }
     )
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,6 +40,13 @@ class TemplatesFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+
+        with(binding.toolbar) {
+            setupWithNavController(findNavController())
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
 
         val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
 

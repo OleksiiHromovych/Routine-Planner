@@ -111,4 +111,9 @@
 
     <style name="Theme.RoutinePlanner.Standard" parent="Theme.RoutinePlanner.NoActionBar"></style>
 
+    <style name="Widget.RoutinePlanner.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">@color/tool_bar_background</item>
+        <item name="android:elevation">8dp</item>
+    </style>
+
 </resources>

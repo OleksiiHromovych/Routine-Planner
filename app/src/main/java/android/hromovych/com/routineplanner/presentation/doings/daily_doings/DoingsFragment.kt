@@ -12,14 +12,16 @@ import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxList
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import java.util.*
@@ -27,24 +29,12 @@ import java.util.*
 //https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
 // https://habr.com/ru/post/495762/
-class DoingsFragment : Fragment() {
+class DoingsFragment : Fragment(R.layout.fragment_doings) {
 
     private lateinit var viewModel: DoingsViewModel
+    private val binding by viewBinding(FragmentDoingsBinding::bind)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding: FragmentDoingsBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_doings, container, false
-        )
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
         val date =
@@ -56,6 +46,13 @@ class DoingsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        with(binding.toolbar) {
+            setupWithNavController(findNavController())
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener {
+                onOptionsItemSelected(it)
+            }
+        }
         val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoing>() {
 
             override val itemLayoutId: Int = R.layout.item_doing
@@ -68,7 +65,7 @@ class DoingsFragment : Fragment() {
             override var checkBoxActive: Boolean = true
 
             override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoing>? =
-                BasicCheckBoxListener {dailyDoing, checked ->
+                BasicCheckBoxListener { dailyDoing, checked ->
                     viewModel.updateDailyDoing(dailyDoing.copy(completed = checked))
                 }
 
@@ -91,8 +88,6 @@ class DoingsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
     private val onItemClickListener: (View, DailyDoing) -> Unit =
@@ -155,10 +150,6 @@ class DoingsFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_main, menu)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -167,7 +158,11 @@ class DoingsFragment : Fragment() {
                 return true
             }
             R.id.action_date_picker -> {
-
+                requireContext().showDatePickerDialog(
+                    viewModel.date.value!!
+                ){
+                    viewModel.setNewDate(it)
+                }
                 return true
             }
             R.id.action_weekdays_doings -> {
