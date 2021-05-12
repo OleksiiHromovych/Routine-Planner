@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing" />
+            type="android.hromovych.com.routineplanner.domain.entity.WeekdayDoing" />
 
         <variable
             name="itemData"

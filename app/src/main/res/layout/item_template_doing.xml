@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="android.hromovych.com.routineplanner.data.embedded.FullDoingTemplate" />
+            type="android.hromovych.com.routineplanner.domain.entity.DoingTemplate" />
 
         <variable
             name="itemData"
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="5dp"
-            android:text="@{item.doingTitle}"
+            android:text="@{item.title}"
             android:textColor="@color/text"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"

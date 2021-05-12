@@ -1,10 +1,12 @@
 package android.hromovych.com.routineplanner.presentation.templates.templates_list
 
 import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
-import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
-import android.hromovych.com.routineplanner.data.entities.Template
+import android.hromovych.com.routineplanner.data.mapper.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.domain.entity.Template
+import android.hromovych.com.routineplanner.presentation.mappers.TemplateToEntityMapper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -14,25 +16,16 @@ class TemplatesViewModel(dataSource: TemplatesDbDao) : ViewModel() {
 
     private val database = dataSource
 
-//    private lateinit var _templates: MutableLiveData<List<TemplateWithFullDoings>>
-    val templates: LiveData<List<TemplateWithFullDoings>> = database.getTemplatesWithFullDoings()
+    val templates: LiveData<List<Template>> = database.getTemplatesWithFullDoings().map { list ->
+        list.map { TemplateToPresentationMapper.convert(it) }
+    }
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
-//
-//    init {
-//        initializeTemplate()
-//    }
-//
-//    private fun initializeTemplate() {
-//        viewModelScope.launch {
-//            _templates = database.getTemplatesWithFullDoings()
-//        }
-//    }
 
-    fun navigateToTemplateEdit(template: TemplateWithFullDoings) {
+    fun navigateToTemplateEdit(template: Template) {
         viewModelScope.launch {
-            eventChannel.send(Event.NavigateToTemplateEdit(template.template.id))
+            eventChannel.send(Event.NavigateToTemplateEdit(template.id))
         }
     }
 
@@ -44,7 +37,8 @@ class TemplatesViewModel(dataSource: TemplatesDbDao) : ViewModel() {
 
     fun addTemplate(template: Template) {
         viewModelScope.launch {
-            database.addTemplate(template)
+            val templateEntity = TemplateToEntityMapper.convert(template)
+            database.addTemplate(templateEntity)
         }
     }
 

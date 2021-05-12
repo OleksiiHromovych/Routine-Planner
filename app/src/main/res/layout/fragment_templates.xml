@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesViewModel" />
@@ -13,21 +14,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:listData="@{viewModel.templates}"
-            tools:listitem="@layout/item_template"
-            />
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:theme="@style/Theme.RoutinePlanner.AppBarOverlay"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:title="@string/app_name" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                app:listData="@{viewModel.templates}"
+                tools:listitem="@layout/item_template" />
+
+        </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:onClick="@{() -> viewModel.onFabClicked()}"
             android:layout_margin="@dimen/fab_margin"
+            android:onClick="@{() -> viewModel.onFabClicked()}"
             app:srcCompat="@android:drawable/ic_input_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

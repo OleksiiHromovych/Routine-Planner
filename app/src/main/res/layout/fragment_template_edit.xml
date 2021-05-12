@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="android.hromovych.com.routineplanner.presentation.templates.template_edit.TemplateEditViewModel" />
@@ -13,32 +14,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:theme="@style/Theme.RoutinePlanner.AppBarOverlay"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:title="@string/app_name" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/template_edit_name_hint"
+                android:layout_below="@id/toolbar"
                 android:theme="@style/TextInputLayoutAppearance"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Template name"
-                >
+                tools:text="Template name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/template_edit_input_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.templateName}"
-                    app:afterTextChanged="@{viewModel.updateTemplateName}"
                     android:background="@android:color/transparent"
                     android:inputType="textCapSentences"
+                    android:text="@{viewModel.templateName}"
                     android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:afterTextChanged="@{viewModel.updateTemplateName}" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,16 +53,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-                tools:listitem="@layout/item_template_doing"
+                android:layout_height="match_parent"
+                android:layout_below="@id/textInputLayout"
                 app:listData="@{viewModel.templateDoings}"
-                />
+                tools:listitem="@layout/item_template_doing" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"

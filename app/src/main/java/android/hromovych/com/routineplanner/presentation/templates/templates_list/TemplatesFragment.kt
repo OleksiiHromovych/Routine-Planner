@@ -2,9 +2,8 @@ package android.hromovych.com.routineplanner.presentation.templates.templates_li
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
-import android.hromovych.com.routineplanner.data.entities.Template
 import android.hromovych.com.routineplanner.databinding.FragmentTemplatesBinding
+import android.hromovych.com.routineplanner.domain.entity.Template
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
@@ -19,6 +18,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 
@@ -29,11 +29,6 @@ class TemplatesFragment : Fragment() {
             TemplatesViewModelFactory(PlannerDatabase.getInstance(requireContext()).templatesDbDao)
         }
     )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,11 +41,18 @@ class TemplatesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<FragmentTemplatesBinding, TemplateWithFullDoings>() {
+        with(binding.toolbar) {
+            setupWithNavController(findNavController())
+            setNavigationOnClickListener {
+                findNavController().navigateUp()
+            }
+        }
+
+        val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
 
             override val itemLayoutId: Int = R.layout.item_template
 
-            override var onClickListener: BasicClickListener<TemplateWithFullDoings>? =
+            override var onClickListener: BasicClickListener<Template>? =
                 BasicClickListener { _, template ->
                     viewModel.navigateToTemplateEdit(template)
                 }

@@ -1,18 +1,22 @@
 package android.hromovych.com.routineplanner.presentation.utils
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.entities.Doing
+import android.hromovych.com.routineplanner.data.utils.toCalendar
+import android.hromovych.com.routineplanner.data.utils.toDatePattern
+import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.dialog_edit_view.view.*
+import java.util.*
 
 fun Context.showInputDialog(
     @StringRes title: Int,
     currentValue: String,
-    onResult: (result: String) -> Unit
+    onResult: (result: String) -> Unit,
 ) {
     val view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_view, null)
     val edit = view.dialog_input_edit_text
@@ -35,7 +39,7 @@ typealias DialogButton = Pair<Int, () -> Unit>
 fun Context.showDecisionDialog(
     @StringRes title: Int,
     leftBtn: DialogButton,
-    rightBtn: DialogButton
+    rightBtn: DialogButton,
 ) {
     AlertDialog.Builder(this)
         .setTitle(title)
@@ -51,7 +55,7 @@ fun Context.showDecisionDialog(
 fun Context.showMultiChoiceDoingsDialog(
     @StringRes title: Int,
     items: List<Doing>,
-    positiveButtonAction: (List<Doing>) -> Unit
+    positiveButtonAction: (List<Doing>) -> Unit,
 ) {
     val dialog = AlertDialog.Builder(this)
         .setTitle(title)
@@ -75,3 +79,39 @@ fun Context.showMultiChoiceDoingsDialog(
 
 val AlertDialog.positiveButton: Button
     get() = this.getButton(AlertDialog.BUTTON_POSITIVE)
+
+fun Context.showDatePickerDialog(
+    calendar: Calendar,
+    callback: (Calendar) -> Unit,
+) {
+    DatePickerDialog(
+        this,
+        R.style.DatePickerDialog,
+        { _, year, monthOfYear, dayOfMonth ->
+            callback(
+                Calendar.getInstance().apply { set(year, monthOfYear, dayOfMonth) }
+            )
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).show()
+}
+
+fun Context.showDatePickerDialog(
+    date: Int,
+    onResult: (newDate: Int) -> Unit,
+) {
+    val calendar = date.toCalendar()
+    DatePickerDialog(
+        this,
+        R.style.DatePickerDialog,
+        { _, year, monthOfYear, dayOfMonth ->
+            onResult(Calendar.getInstance().apply { set(year, monthOfYear, dayOfMonth) }
+                .toDatePattern())
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).show()
+}

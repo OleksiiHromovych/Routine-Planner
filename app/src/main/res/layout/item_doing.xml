@@ -9,7 +9,7 @@
 
         <variable
             name="item"
-            type="android.hromovych.com.routineplanner.data.embedded.DailyDoingFull" />
+            type="android.hromovych.com.routineplanner.domain.entity.DailyDoing" />
 
         <variable
             name="itemData"
@@ -26,8 +26,8 @@
             android:id="@+id/doing_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:checked="@{item.dailyDoing.completed}"
-            android:onClick="@{() -> itemData.checkBoxClickListener.onClick(item, !item.dailyDoing.completed)}"
+            android:checked="@{item.completed}"
+            android:onClick="@{() -> itemData.checkBoxClickListener.onClick(item, !item.completed)}"
             android:visibility="@{itemData.checkBoxActive ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
             android:text="@{item.doing.title}"
             android:textColor="@color/text"
             android:textSize="24sp"
-            app:strike="@{item.dailyDoing.completed}"
+            app:strike="@{item.completed}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/doing_move_image_view"
             app:layout_constraintStart_toEndOf="@id/doing_checkbox"

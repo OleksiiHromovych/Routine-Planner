@@ -2,20 +2,25 @@ package android.hromovych.com.routineplanner.presentation.templates.template_edi
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
-import android.hromovych.com.routineplanner.data.entities.Doing
-import android.hromovych.com.routineplanner.data.entities.DoingTemplate
-import android.hromovych.com.routineplanner.data.entities.Template
-import androidx.lifecycle.Transformations
+import android.hromovych.com.routineplanner.data.mapper.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.domain.entity.Doing
+import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
+import android.hromovych.com.routineplanner.domain.entity.Template
+import android.hromovych.com.routineplanner.presentation.mappers.DoingTemplateToEntityMapper
+import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
+import android.hromovych.com.routineplanner.presentation.mappers.TemplateToEntityMapper
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TemplateEditViewModel(
-    val templateId: Long,
+    private val templateId: Long,
     templateDao: TemplatesDbDao,
-    doingsDbDao: DoingsDbDao
+    doingsDbDao: DoingsDbDao,
 ) : ViewModel() {
 
     private val templateBase = templateDao
@@ -24,25 +29,30 @@ class TemplateEditViewModel(
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val templateWithFullDoings = templateBase.getTemplateWithFullDoings(templateId)
+    private val template: LiveData<Template> =
+        templateBase.getTemplateWithFullDoings(templateId).map {
+            TemplateToPresentationMapper.convert(it)
+        }
 
-    val templateName = Transformations.map(templateWithFullDoings) {
-        it.template.name
+    val templateName = template.map {
+        it.name
     }
 
-    val templateDoings = Transformations.map(templateWithFullDoings) {
+    val templateDoings = template.map {
         it.doings
     }
 
     fun updateDoing(doing: Doing) {
         viewModelScope.launch {
-            doingsBase.updateDoing(doing)
+            val doingEntity = DoingToEntityMapper.convert(doing)
+            doingsBase.updateDoing(doingEntity)
         }
     }
 
     fun deleteTemplateDoing(doingTemplate: DoingTemplate) {
         viewModelScope.launch {
-            templateBase.deleteDoingTemplate(doingTemplate)
+            val doingTemplateEntity = DoingTemplateToEntityMapper.convert(doingTemplate)
+            templateBase.deleteDoingTemplate(doingTemplateEntity)
         }
     }
 
@@ -62,19 +72,23 @@ class TemplateEditViewModel(
     val updateTemplateName: (String) -> Unit = { newName: String ->
         viewModelScope.launch {
             val template = Template(templateId, newName)
-            templateBase.updateTemplate(template)
+            val templateEntity = TemplateToEntityMapper.convert(template)
+            templateBase.updateTemplate(templateEntity)
         }
     }
 
     fun addNewTemplateDoing(doing: Doing) {
         viewModelScope.launch {
-            val doingId = doingsBase.addDoing(doing)
+            val doingEntity = DoingToEntityMapper.convert(doing)
+            doingsBase.addDoing(doingEntity).also { doing.id = it }
+
             val templateDoing = DoingTemplate(
                 templateId = templateId,
-                doingId = doingId,
+                doing = doing,
                 position = templateDoings.value?.size ?: 0
             )
-            templateBase.addTemplateDoing(templateDoing)
+            val templateDoingEntity = DoingTemplateToEntityMapper.convert(templateDoing)
+            templateBase.addTemplateDoing(templateDoingEntity)
         }
     }
 

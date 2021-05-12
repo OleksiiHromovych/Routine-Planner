@@ -2,28 +2,26 @@ package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.embedded.DailyDoingFull
-import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
+import android.hromovych.com.routineplanner.domain.entity.DailyDoing
+import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
-import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialog
-import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
-import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
-import android.hromovych.com.routineplanner.presentation.utils.toast
-import android.hromovych.com.routineplanner.utils.DialogButton
+import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import java.util.*
@@ -31,24 +29,12 @@ import java.util.*
 //https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
 // https://habr.com/ru/post/495762/
-class DoingsFragment : Fragment() {
+class DoingsFragment : Fragment(R.layout.fragment_doings) {
 
     private lateinit var viewModel: DoingsViewModel
+    private val binding by viewBinding(FragmentDoingsBinding::bind)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding: FragmentDoingsBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_doings, container, false
-        )
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
         val date =
@@ -60,23 +46,27 @@ class DoingsFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoingFull>() {
+        with(binding.toolbar) {
+            setupWithNavController(findNavController())
+            inflateMenu(R.menu.menu_main)
+            setOnMenuItemClickListener {
+                onOptionsItemSelected(it)
+            }
+        }
+        val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoing>() {
 
             override val itemLayoutId: Int = R.layout.item_doing
 
-            override var onClickListener: BasicClickListener<DailyDoingFull>? =
-                BasicClickListener { view, doing ->
-                    onItemClickListener(view, doing)
+            override var onClickListener: BasicClickListener<DailyDoing>? =
+                BasicClickListener { view, dailyDoing ->
+                    onItemClickListener(view, dailyDoing)
                 }
 
             override var checkBoxActive: Boolean = true
 
-            override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoingFull>? =
-                BasicCheckBoxListener {doing, checked ->
-                    val dailyDoing = doing.dailyDoing.apply {
-                        completed = checked
-                    }
-                    viewModel.updateDailyDoing(dailyDoing)
+            override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoing>? =
+                BasicCheckBoxListener { dailyDoing, checked ->
+                    viewModel.updateDailyDoing(dailyDoing.copy(completed = checked))
                 }
 
         }
@@ -98,12 +88,10 @@ class DoingsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
-    private val onItemClickListener: (View, DailyDoingFull) -> Unit =
-        { view: View, dailyDoingFull: DailyDoingFull ->
+    private val onItemClickListener: (View, DailyDoing) -> Unit =
+        { view: View, dailyDoing: DailyDoing ->
             val popupMenu = PopupMenu(requireContext(), view, Gravity.CENTER_HORIZONTAL)
             popupMenu.inflate(R.menu.doings_popup_menu)
             popupMenu.setOnMenuItemClickListener {
@@ -111,16 +99,15 @@ class DoingsFragment : Fragment() {
                     R.id.menu_action_edit -> {
                         requireContext().showInputDialog(
                             R.string.dialog_title_edit_doing,
-                            dailyDoingFull.doing.title,
+                            dailyDoing.doing.title,
                         ) { editedDoingTitle ->
-                            viewModel.updateDoing(dailyDoingFull.doing.apply {
-                                title = editedDoingTitle
-                            })
+                            val doing = dailyDoing.doing.copy(title = editedDoingTitle)
+                            viewModel.updateDoing(doing)
                         }
                         true
                     }
                     R.id.menu_action_delete -> {
-                        viewModel.deleteDailyDoing(dailyDoingFull.dailyDoing)
+                        viewModel.deleteDailyDoing(dailyDoing)
                         true
                     }
                     else -> false
@@ -163,10 +150,6 @@ class DoingsFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_main, menu)
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -175,7 +158,11 @@ class DoingsFragment : Fragment() {
                 return true
             }
             R.id.action_date_picker -> {
-
+                requireContext().showDatePickerDialog(
+                    viewModel.date.value!!
+                ){
+                    viewModel.setNewDate(it)
+                }
                 return true
             }
             R.id.action_weekdays_doings -> {

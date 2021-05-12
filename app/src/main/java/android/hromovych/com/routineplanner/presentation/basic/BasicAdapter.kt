@@ -1,5 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.basic
 
+import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
 import android.util.Log
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -22,9 +23,8 @@ import androidx.recyclerview.widget.ListAdapter
  * @property checkBoxActive the status of using checkBox in single list item
  * @property onClickListener the list item onClickListener
  */
-abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
+abstract class BasicAdapter<TBinding : ViewDataBinding, TData: EqualsCheck<TData>> :
     ListAdapter<TData, BasicHolder<TBinding>>(BasicDiffCallback<TData>()) {
-//TODO: возможно проблема просто в діффКалбеку, спробувати винести, щоб отримувати в якості параметру
     abstract val itemLayoutId: Int
 
     open var checkBoxActive: Boolean = false
@@ -45,20 +45,26 @@ abstract class BasicAdapter<TBinding : ViewDataBinding, TData> :
         holder.bind(getItem(position), doingData)
     }
 
-    fun updateList(list: List<TData>?) {
-        if (list == null || list.size != currentList.size) {
-            super.submitList(list)
-        } else {
-            val newList = currentList.toMutableList()
-            list.indices.forEach {
-                if (list[it] != newList[it]) {
-                    newList[it] = list[it]
-                    Log.d("TAG", "updateList: $it")
-                }
-            }
-            super.submitList(newList)
-        }
+    fun updateList(list: List<TData>?){
+        Log.d("TAG", "updateList old: $currentList")
+        Log.d("TAG", "updateList: $list")
+        super.submitList(list)
     }
+
+//    fun updateList(list: List<TData>?) {
+//        if (list == null || list.size != currentList.size) {
+//            super.submitList(list)
+//        } else {
+//            val newList = currentList.toMutableList()
+//            list.indices.forEach {
+//                if (list[it] != newList[it]) {
+//                    newList[it] = list[it]
+//                    Log.d("TAG", "updateList: $it")
+//                }
+//            }
+//            super.submitList(newList)
+//        }
+//    }
 
     /*fun updateList(list: List<TData>?) {
         if (list == null || list.size != currentList.size) {
