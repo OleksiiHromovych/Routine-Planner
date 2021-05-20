@@ -2,13 +2,14 @@ package android.hromovych.com.routineplanner.presentation.templates.template_edi
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
-import android.hromovych.com.routineplanner.data.mapper.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.DoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingTemplateToEntityMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingToEntityMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.TemplateToEntityMapper
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
-import android.hromovych.com.routineplanner.presentation.mappers.DoingTemplateToEntityMapper
-import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
-import android.hromovych.com.routineplanner.presentation.mappers.TemplateToEntityMapper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -89,6 +90,31 @@ class TemplateEditViewModel(
             )
             val templateDoingEntity = DoingTemplateToEntityMapper.convert(templateDoing)
             templateBase.addTemplateDoing(templateDoingEntity)
+        }
+    }
+
+    fun receiveNotUsedDoings(onReceive: (List<Doing>) -> Unit) {
+        viewModelScope.launch {
+            val newDoings = templateBase.getNewTemplateDoingsForTemplate(templateId)
+                .map(DoingToPresentationMapper::convert)
+            onReceive(newDoings)
+        }
+    }
+
+    fun addTemplateDoings(newDoings: List<Doing>) {
+        viewModelScope.launch {
+            val currentListSize = templateDoings.value?.size ?: 0
+
+            val newTemplateDoings = newDoings.mapIndexed { index, doing ->
+                val item = DoingTemplate(
+                    templateId = templateId,
+                    doing = doing,
+                    position = currentListSize + index
+                )
+                DoingTemplateToEntityMapper.convert(item)
+            }
+
+            templateBase.addAllTemplateDoings(*newTemplateDoings.toTypedArray())
         }
     }
 

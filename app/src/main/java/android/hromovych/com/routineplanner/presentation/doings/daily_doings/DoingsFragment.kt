@@ -6,7 +6,6 @@ import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
-import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
@@ -30,6 +29,10 @@ import java.util.*
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
 // https://habr.com/ru/post/495762/
 class DoingsFragment : Fragment(R.layout.fragment_doings) {
+
+    companion object {
+        const val TAG = "doings_fragment"
+    }
 
     private lateinit var viewModel: DoingsViewModel
     private val binding by viewBinding(FragmentDoingsBinding::bind)
@@ -97,11 +100,9 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
             popupMenu.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.menu_action_edit -> {
-                        requireContext().showInputDialog(
-                            R.string.dialog_title_edit_doing,
-                            dailyDoing.doing.title,
-                        ) { editedDoingTitle ->
-                            val doing = dailyDoing.doing.copy(title = editedDoingTitle)
+                        requireContext().showDoingEditDialog(
+                            dailyDoing.doing,
+                        ) { doing ->
                             viewModel.updateDoing(doing)
                         }
                         true
@@ -129,23 +130,21 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
     }
 
     private fun showYetExistDoingsDialog() {
-        // TODO: якось це заставити робити, требаж перенести в viewModel, ну а інтерфейс з звідсе. Подумавть кароч
-        // TODO: ну і воно ж має виключати вже наявні, спробувати через бд запит це організувати.
-        val items = listOf<Doing>()
-        requireContext().showMultiChoiceDoingsDialog(
-            R.string.choice_from_exist,
-            items
-        ) {
-
+        viewModel.receiveNotUsedDoings { items ->
+            requireContext().showMultiChoiceDoingsDialog(
+                R.string.choice_from_exist,
+                items
+            ) {
+                if (it.isEmpty()) {
+                    return@showMultiChoiceDoingsDialog
+                }
+                viewModel.addDailyDoings(it)
+            }
         }
     }
 
     private fun showAddNewDoingDialog() {
-        requireContext().showInputDialog(
-            R.string.create_new_doing,
-            ""
-        ) { result ->
-            val doing = Doing(title = result)
+        requireContext().showDoingCreationDialog { doing ->
             viewModel.addNewDailyDoing(doing)
         }
     }
@@ -160,7 +159,7 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
             R.id.action_date_picker -> {
                 requireContext().showDatePickerDialog(
                     viewModel.date.value!!
-                ){
+                ) {
                     viewModel.setNewDate(it)
                 }
                 return true

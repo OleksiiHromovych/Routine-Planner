@@ -1,12 +1,13 @@
 package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
-import android.hromovych.com.routineplanner.data.mapper.DailyDoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.DailyDoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.DoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.DailyDoingToEntityMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingToEntityMapper
 import android.hromovych.com.routineplanner.data.utils.toCalendar
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
-import android.hromovych.com.routineplanner.presentation.mappers.DailyDoingToEntityMapper
-import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -83,6 +84,30 @@ class DoingsViewModel(private val datePattern: Int, dataSource: DoingsDbDao) : V
 
     fun setNewDate(date: Int) {
         _date.value = date
+    }
+
+    fun receiveNotUsedDoings(onReceive: (List<Doing>) -> Unit) {
+        viewModelScope.launch {
+            val newDoings = dataBase.getNewDoingsForDay(date.value!!)
+                .map(DoingToPresentationMapper::convert)
+            onReceive(newDoings)
+        }
+    }
+
+    fun addDailyDoings(doings: List<Doing>) {
+        viewModelScope.launch {
+            val currentListSize = dailyDoings.value?.size ?: 0
+            val dailyDoings = doings.mapIndexed { index, doing ->
+                val dailyDoing = DailyDoing(
+                    date = date.value!!,
+                    doing = doing,
+                    position = currentListSize + index
+                )
+                DailyDoingToEntityMapper.convert(dailyDoing)
+            }
+
+            dataBase.addAllDailyDoing(*dailyDoings.toTypedArray())
+        }
     }
 
     sealed class Event {

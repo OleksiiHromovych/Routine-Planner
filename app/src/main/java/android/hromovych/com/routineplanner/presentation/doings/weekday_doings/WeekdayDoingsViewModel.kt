@@ -2,12 +2,13 @@ package android.hromovych.com.routineplanner.presentation.doings.weekday_doings
 
 import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
 import android.hromovych.com.routineplanner.data.database.dao.WeekdayDoingsDbDao
-import android.hromovych.com.routineplanner.data.mapper.WeekdayDoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.DoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.WeekdayDoingToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingToEntityMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.WeekdayDoingToEntityMapper
 import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
-import android.hromovych.com.routineplanner.presentation.mappers.DoingToEntityMapper
-import android.hromovych.com.routineplanner.presentation.mappers.WeekdayDoingToEntityMapper
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -69,6 +70,31 @@ class WeekdayDoingsViewModel(
 
     fun changeWeekday(weekday: Weekday) {
         _weekday.value = weekday
+    }
+
+    fun receiveNotUsedDoings(onReceive: (List<Doing>) -> Unit) {
+        viewModelScope.launch {
+            val newDoings = weekdayBase.getNewDoingsForDay(weekday.value!!)
+                .map(DoingToPresentationMapper::convert)
+            onReceive(newDoings)
+        }
+    }
+
+    fun addWeekdayDoings(newDoings: List<Doing>) {
+        viewModelScope.launch {
+            val currentListSize = doings.value?.size ?: 0
+
+            val newWeekdayDoings = newDoings.mapIndexed { index, doing ->
+                val item = WeekdayDoing(
+                    weekday = weekday.value!!,
+                    doing = doing,
+                    position = currentListSize + index
+                )
+                WeekdayDoingToEntityMapper.convert(item)
+            }
+
+            weekdayBase.addAllWeekdayDoings(*newWeekdayDoings.toTypedArray())
+        }
     }
 
     sealed class Event {
