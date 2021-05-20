@@ -5,7 +5,6 @@ import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.databinding.FragmentWeekdayDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemWeekdayDoingBinding
-import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
@@ -93,11 +92,9 @@ class WeekdayDoingsFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_action_edit -> {
-                    requireContext().showInputDialog(
-                        R.string.dialog_title_edit_doing,
-                        weekdayDoing.title,
-                    ) { editedDoingTitle ->
-                        val doing = weekdayDoing.doing.copy(title = editedDoingTitle)
+                    requireContext().showDoingEditDialog(
+                        weekdayDoing.doing,
+                    ) { doing ->
                         viewModel.updateDoing(doing)
                     }
                     true
@@ -125,23 +122,21 @@ class WeekdayDoingsFragment : Fragment() {
     }
 
     private fun showYetExistDoingsDialog() {
-        // TODO: якось це заставити робити, требаж перенести в viewModel, ну а інтерфейс з звідсе. Подумавть кароч
-        // TODO: ну і воно ж має виключати вже наявні, спробувати через бд запит це організувати.
-        val items = listOf<Doing>()
-        requireContext().showMultiChoiceDoingsDialog(
-            R.string.choice_from_exist,
-            items
-        ) {
-
+        viewModel.receiveNotUsedDoings { items ->
+            requireContext().showMultiChoiceDoingsDialog(
+                R.string.choice_from_exist,
+                items
+            ) {
+                if (it.isEmpty()) {
+                    return@showMultiChoiceDoingsDialog
+                }
+                viewModel.addWeekdayDoings(it)
+            }
         }
     }
 
     private fun showAddNewDoingDialog() {
-        requireContext().showInputDialog(
-            R.string.create_new_doing,
-            ""
-        ) { result ->
-            val doing = Doing(title = result)
+        requireContext().showDoingCreationDialog { doing ->
             viewModel.addNewWeekDoing(doing)
         }
     }

@@ -8,5 +8,5 @@ data class Doing(
 
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     var title: String = "",
-    var active: Boolean = true
+    var active: Boolean = true  // can be reused
 )

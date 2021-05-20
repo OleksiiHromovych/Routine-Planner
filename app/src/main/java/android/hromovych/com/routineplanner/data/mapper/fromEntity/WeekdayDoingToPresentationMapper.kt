@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.data.mapper
+package android.hromovych.com.routineplanner.data.mapper.fromEntity
 
 import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
 import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing

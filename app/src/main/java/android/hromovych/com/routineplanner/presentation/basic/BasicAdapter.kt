@@ -1,7 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.basic
 
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
-import android.util.Log
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
@@ -46,39 +45,7 @@ abstract class BasicAdapter<TBinding : ViewDataBinding, TData: EqualsCheck<TData
     }
 
     fun updateList(list: List<TData>?){
-        Log.d("TAG", "updateList old: $currentList")
-        Log.d("TAG", "updateList: $list")
         super.submitList(list)
     }
 
-//    fun updateList(list: List<TData>?) {
-//        if (list == null || list.size != currentList.size) {
-//            super.submitList(list)
-//        } else {
-//            val newList = currentList.toMutableList()
-//            list.indices.forEach {
-//                if (list[it] != newList[it]) {
-//                    newList[it] = list[it]
-//                    Log.d("TAG", "updateList: $it")
-//                }
-//            }
-//            super.submitList(newList)
-//        }
-//    }
-
-    /*fun updateList(list: List<TData>?) {
-        if (list == null || list.size != currentList.size) {
-            super.submitList(list)
-        } else {
-            val newList = currentList.toMutableList()
-            newList.mutateIndexed { data, index ->
-                if (data != list[index]){
-                    list[index]
-                } else {
-                    data
-                }
-            }
-            super.submitList(newList)
-        }
-    }*/
 }

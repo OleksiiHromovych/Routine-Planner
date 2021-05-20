@@ -4,15 +4,10 @@ import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.databinding.FragmentTemplateEditBinding
 import android.hromovych.com.routineplanner.databinding.ItemTemplateDoingBinding
-import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
-import android.hromovych.com.routineplanner.presentation.utils.DialogButton
-import android.hromovych.com.routineplanner.presentation.utils.showDecisionDialog
-import android.hromovych.com.routineplanner.presentation.utils.showInputDialog
-import android.hromovych.com.routineplanner.presentation.utils.showMultiChoiceDoingsDialog
-
+import android.hromovych.com.routineplanner.presentation.utils.*
 import android.hromovych.com.routineplanner.utils.toast
 import android.os.Bundle
 import android.view.*
@@ -34,7 +29,7 @@ class TemplateEditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
 
         val binding: FragmentTemplateEditBinding = DataBindingUtil.inflate(
@@ -43,7 +38,9 @@ class TemplateEditFragment : Fragment() {
 
         val database = PlannerDatabase.getInstance(requireActivity())
         val arguments = TemplateEditFragmentArgs.fromBundle(requireArguments())
-        val viewModelFactory = TemplateEditViewModelFactory(arguments.templateId, database.templatesDbDao, database.doingsDbDao)
+        val viewModelFactory = TemplateEditViewModelFactory(arguments.templateId,
+            database.templatesDbDao,
+            database.doingsDbDao)
         viewModel = ViewModelProvider(this, viewModelFactory).get(TemplateEditViewModel::class.java)
 
         binding.lifecycleOwner = this
@@ -73,7 +70,7 @@ class TemplateEditFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED){
+        viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
                 when (it) {
                     TemplateEditViewModel.Event.OnFabClicked -> {
@@ -120,25 +117,22 @@ class TemplateEditFragment : Fragment() {
     }
 
     private fun showYetExistDoingsDialog() {
-        // TODO: якось це заставити робити, требаж перенести в viewModel, ну а інтерфейс з звідсе. Подумавть кароч
-        // TODO: ну і воно ж має виключати вже наявні, спробувати через бд запит це організувати.
-        val items = listOf<Doing>()
-        requireContext().showMultiChoiceDoingsDialog(
-            R.string.choice_from_exist,
-            items
-        ) {
-
+        viewModel.receiveNotUsedDoings { items ->
+            requireContext().showMultiChoiceDoingsDialog(
+                R.string.choice_from_exist,
+                items
+            ) {
+                if (it.isEmpty()) {
+                    return@showMultiChoiceDoingsDialog
+                }
+                viewModel.addTemplateDoings(it)
+            }
         }
     }
 
     private fun showAddNewDoingDialog() {
-        requireContext().showInputDialog(
-            R.string.create_new_doing,
-            ""
-        ) { result ->
-            val doing = Doing(title = result)
+        requireContext().showDoingCreationDialog { doing ->
             viewModel.addNewTemplateDoing(doing)
-            context.toast(getString(R.string.doing_added, result))
         }
     }
 
@@ -148,11 +142,10 @@ class TemplateEditFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_action_edit -> {
-                    requireContext().showInputDialog(
-                        R.string.dialog_title_edit_doing,
-                        doingTemplate.title
-                    ) { editedDoingTitle ->
-                        viewModel.updateDoing(doingTemplate.doing.copy(title = editedDoingTitle))
+                    requireContext().showDoingEditDialog(
+                        doingTemplate.doing
+                    ) { doing ->
+                        viewModel.updateDoing(doing)
                     }
                     true
                 }

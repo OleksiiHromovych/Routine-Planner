@@ -10,7 +10,8 @@ import android.view.LayoutInflater
 import android.widget.Button
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import kotlinx.android.synthetic.main.dialog_edit_view.view.*
+import androidx.core.util.forEach
+import kotlinx.android.synthetic.main.dialog_input_view.view.*
 import java.util.*
 
 fun Context.showInputDialog(
@@ -18,7 +19,7 @@ fun Context.showInputDialog(
     currentValue: String,
     onResult: (result: String) -> Unit,
 ) {
-    val view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_view, null)
+    val view = LayoutInflater.from(this).inflate(R.layout.dialog_input_view, null)
     val edit = view.dialog_input_edit_text
 
     edit.setText(currentValue)
@@ -68,12 +69,15 @@ fun Context.showMultiChoiceDoingsDialog(
         .show()
 
     dialog.positiveButton.setOnClickListener {
-        val checkedItems = dialog.listView.checkedItemIds
+        val checkedItems = dialog.listView.checkedItemPositions
         val result = mutableListOf<Doing>()
-        checkedItems.forEach { id ->
-            result.add(items[id.toInt()])
+        checkedItems.forEach { key, value ->
+            if (value) {
+                result.add(items[key])
+            }
         }
         positiveButtonAction(result)
+        dialog.cancel()
     }
 }
 

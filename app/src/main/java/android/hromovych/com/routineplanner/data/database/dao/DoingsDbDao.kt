@@ -37,5 +37,9 @@ interface DoingsDbDao {
     @Insert
     suspend fun addDailyDoing(dailyDoing: DailyDoing): Long
 
-//    suspend fun getAlreadyExistDoings()
+    @Insert
+    suspend fun addAllDailyDoing(vararg doings: DailyDoing)
+
+    @Query("SELECT * FROM doings WHERE active = 1 AND id NOT IN (SELECT doingId FROM daily_doings WHERE date = :date)")
+    suspend fun getNewDoingsForDay(date: Int) : List<Doing>
 }

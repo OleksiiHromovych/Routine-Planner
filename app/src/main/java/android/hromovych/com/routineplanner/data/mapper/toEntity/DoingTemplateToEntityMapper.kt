@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.mappers
+package android.hromovych.com.routineplanner.data.mapper.toEntity
 
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.mapper.Mapper

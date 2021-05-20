@@ -1,9 +1,9 @@
 package android.hromovych.com.routineplanner.presentation.templates.templates_list
 
 import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
-import android.hromovych.com.routineplanner.data.mapper.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.fromEntity.TemplateToPresentationMapper
+import android.hromovych.com.routineplanner.data.mapper.toEntity.TemplateToEntityMapper
 import android.hromovych.com.routineplanner.domain.entity.Template
-import android.hromovych.com.routineplanner.presentation.mappers.TemplateToEntityMapper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
