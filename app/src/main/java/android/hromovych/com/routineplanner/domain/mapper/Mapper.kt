@@ -1,6 +1,6 @@
 package android.hromovych.com.routineplanner.domain.mapper
 
-interface Mapper<F, T> {
+interface Mapper<in F, out T> {
 
     fun convert(obj: F): T
 

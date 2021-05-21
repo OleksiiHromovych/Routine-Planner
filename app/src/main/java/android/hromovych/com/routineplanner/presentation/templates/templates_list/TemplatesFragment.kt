@@ -1,7 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.templates.templates_list
 
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.databinding.FragmentTemplatesBinding
 import android.hromovych.com.routineplanner.domain.entity.Template
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
@@ -14,21 +13,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TemplatesFragment : Fragment() {
 
-    private val viewModel by viewModels<TemplatesViewModel>(
-        factoryProducer = {
-            TemplatesViewModelFactory(PlannerDatabase.getInstance(requireContext()).templatesDbDao)
-        }
-    )
+    private val viewModel: TemplatesViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
