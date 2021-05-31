@@ -1,7 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
@@ -17,13 +16,15 @@ import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
+import kotlin.properties.Delegates
 
 //https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
@@ -34,17 +35,13 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
         const val TAG = "doings_fragment"
     }
 
-    private lateinit var viewModel: DoingsViewModel
+    private var date by Delegates.notNull<Int>()
+    private val viewModel: DoingsViewModel by viewModel { parametersOf(date) }
     private val binding by viewBinding(FragmentDoingsBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
-        val date =
-            if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
-        val viewModelFactory = DoingsViewModelFactory(date, dataSource)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(DoingsViewModel::class.java)
+        date = if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel

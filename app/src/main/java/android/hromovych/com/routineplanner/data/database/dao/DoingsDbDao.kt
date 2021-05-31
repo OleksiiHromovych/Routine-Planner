@@ -12,9 +12,6 @@ interface DoingsDbDao {
     @Query("SELECT * FROM doings")
     suspend fun getDoings(): List<Doing>
 
-    @Query("SELECT title from doings where id = :doingId")
-    suspend fun getDoingTitle(doingId: Long): String
-
     @Query("SELECT * FROM daily_doings WHERE date = :date")
     suspend fun getDailyDoings(date: Int): List<DailyDoing>
 

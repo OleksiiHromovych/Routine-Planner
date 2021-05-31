@@ -12,16 +12,4 @@ data class FullDoingTemplate(
         entityColumn = "id"
     )
     val doing: Doing
-) {
-//    val title: String
-//        get() = doing.title
-//
-//    val templateName: String
-//        get() = template.name
-//
-//    val position: Int
-//        get() = doingTemplate.position
-
-    val doingTitle: String
-        get() = doing.title
-}
+)
