@@ -1,50 +1,34 @@
 package android.hromovych.com.routineplanner.presentation.doings.weekday_doings
 
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.database.PlannerDatabase
-import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.databinding.FragmentWeekdayDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemWeekdayDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
+import android.hromovych.com.routineplanner.domain.utils.Weekday
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WeekdayDoingsFragment : Fragment() {
+class WeekdayDoingsFragment : Fragment(R.layout.fragment_weekday_doings) {
 
-    private lateinit var viewModel: WeekdayDoingsViewModel
+    private val viewModel: WeekdayDoingsViewModel by viewModel()
+    private val binding by viewBinding(FragmentWeekdayDoingsBinding::bind)
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val binding: FragmentWeekdayDoingsBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_weekday_doings, container, false
-        )
-
-        val database = PlannerDatabase.getInstance(requireActivity())
-        val viewModelFactory =
-            WeekdayDoingsViewModelFactory(database.weekdayDoingsDbDao, database.doingsDbDao)
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(WeekdayDoingsViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
@@ -68,7 +52,7 @@ class WeekdayDoingsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        initWeekdaysGroup(binding.weekDaysLayout, inflater)
+        initWeekdaysGroup(binding.weekDaysLayout)
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
@@ -82,8 +66,6 @@ class WeekdayDoingsFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
     private fun onItemClickListener(view: View, weekdayDoing: WeekdayDoing) {
@@ -141,11 +123,11 @@ class WeekdayDoingsFragment : Fragment() {
         }
     }
 
-    private fun initWeekdaysGroup(group: RadioGroup, inflater: LayoutInflater) {
+    private fun initWeekdaysGroup(group: RadioGroup) {
         val checkedDay = viewModel.weekday.value
         val days = Weekday.days
         days.forEach { day ->
-            val dayView = inflater.inflate(R.layout.weekday_view, group, false) as RadioButton
+            val dayView = layoutInflater.inflate(R.layout.weekday_view, group, false) as RadioButton
             dayView.apply {
                 id = day.dayId
                 text = day.getShortName(context)

@@ -10,7 +10,10 @@ import androidx.room.*
 interface DoingsDbDao {
 
     @Query("SELECT * FROM doings")
-    suspend fun getDoings(): List<Doing>
+    fun getDoings(): LiveData<List<Doing>>
+
+    @Query("SELECT * FROM doings WHERE active = 1")
+    suspend fun getActiveDoings(): List<Doing>
 
     @Query("SELECT * FROM daily_doings WHERE date = :date")
     suspend fun getDailyDoings(date: Int): List<DailyDoing>

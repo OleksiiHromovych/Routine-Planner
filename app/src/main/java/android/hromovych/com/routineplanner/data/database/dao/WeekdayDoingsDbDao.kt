@@ -3,7 +3,7 @@ package android.hromovych.com.routineplanner.data.database.dao
 import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.entities.WeekdayDoing
-import android.hromovych.com.routineplanner.data.utils.Weekday
+import android.hromovych.com.routineplanner.domain.utils.Weekday
 import androidx.lifecycle.LiveData
 import androidx.room.*
 

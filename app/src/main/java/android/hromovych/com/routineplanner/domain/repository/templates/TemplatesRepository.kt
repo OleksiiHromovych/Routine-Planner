@@ -8,4 +8,8 @@ interface TemplatesRepository {
     suspend fun addTemplate(template: Template): Long
 
     fun getTemplatesWithFullDoings(): LiveData<List<Template>>
+
+    suspend fun deleteTemplate(template: Template)
+
+    suspend fun updateTemplate(template: Template)
 }

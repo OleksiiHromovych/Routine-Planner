@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.data.utils
+package android.hromovych.com.routineplanner.domain.utils
 
 enum class Weekday(val dayId: Int) {
     NONE(-1),

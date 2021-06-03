@@ -1,6 +1,6 @@
 package android.hromovych.com.routineplanner.data.entities
 
-import android.hromovych.com.routineplanner.data.utils.Weekday
+import android.hromovych.com.routineplanner.domain.utils.Weekday
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey

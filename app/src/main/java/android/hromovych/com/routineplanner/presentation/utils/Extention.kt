@@ -2,8 +2,8 @@ package android.hromovych.com.routineplanner.presentation.utils
 
 import android.content.Context
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
+import android.hromovych.com.routineplanner.domain.utils.Weekday
 
 fun List<DoingTemplate>.toTemplateDoingsString(): String =
     this.joinToString(separator = ";\n") {

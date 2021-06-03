@@ -1,7 +1,7 @@
 package android.hromovych.com.routineplanner.domain.entity
 
-import android.hromovych.com.routineplanner.data.utils.Weekday
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
+import android.hromovych.com.routineplanner.domain.utils.Weekday
 
 data class WeekdayDoing(
     var id: Long = 0,

@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.data.repository.templates
+package android.hromovych.com.routineplanner.data.repository
 
 import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
@@ -26,4 +26,13 @@ class TemplatesRepositoryImpl(
             list.map(entityToPresentationMapper::convert)
         }
     }
+
+    override suspend fun deleteTemplate(template: PresentationTemplate) {
+        db.templatesDbDao.deleteTemplate(presentationToEntityMapper.convert(template))
+    }
+
+    override suspend fun updateTemplate(template: android.hromovych.com.routineplanner.domain.entity.Template) {
+        db.templatesDbDao.updateTemplate(presentationToEntityMapper.convert(template))
+    }
+
 }
