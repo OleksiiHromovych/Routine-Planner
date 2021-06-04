@@ -1,5 +1,6 @@
 package android.hromovych.com.routineplanner.domain.di
 
+import android.hromovych.com.routineplanner.domain.repository.daily_doings.AddDailyDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetActiveDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetDoingsUseCase
@@ -90,5 +91,9 @@ object DomainLayerDI {
             UpdateWeekdayDoingUseCase(get())
         }
 
+        //DailyDoing
+        single {
+            AddDailyDoingsUseCase(get())
+        }
     }
 }

@@ -16,12 +16,13 @@ object PresentationLayerDI {
 
         // use in fragment -- by viewModel{ parametersOf(date) }
         viewModel {
-            DoingsViewModel(get(), get(), get(), get())
+            DoingsViewModel(get(), get(), get(), get(), get())
         }
 
         // by viewModel{ parametersOf(templateId) }
         viewModel {
             TemplateEditViewModel(get(),
+                get(),
                 get(),
                 get(),
                 get(),

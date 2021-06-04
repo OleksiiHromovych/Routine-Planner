@@ -1,6 +1,7 @@
 package android.hromovych.com.routineplanner.presentation.templates.template_edit
 
 import android.hromovych.com.routineplanner.R
+import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentTemplateEditBinding
 import android.hromovych.com.routineplanner.databinding.ItemTemplateDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 import kotlin.properties.Delegates
 
 class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
@@ -77,7 +79,14 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
         when (item.itemId) {
 
             R.id.menu_action_use_this -> {
-                //todo this
+                requireContext().showDatePickerDialog(Calendar.getInstance()){ calendar ->
+                    viewModel.addTemplateDoingsToDay(calendar.toDatePattern())
+
+                    findNavController().navigate(R.id.action_templateEditFragment_to_doingsFragment, Bundle().apply {
+                        putInt("date", calendar.toDatePattern())
+                    })
+//                    findNavController().navigate(TemplateEditFragmentDirections.actionTemplateEditFragmentToDoingsFragment(calendar.toLongPattern()))
+                }
             }
 
             R.id.menu_action_delete -> {

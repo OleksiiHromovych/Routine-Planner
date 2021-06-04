@@ -4,6 +4,7 @@ import android.content.Context
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.utils.Weekday
+import java.util.*
 
 fun List<DoingTemplate>.toTemplateDoingsString(): String =
     this.joinToString(separator = ";\n") {
@@ -22,4 +23,15 @@ fun Weekday.getShortName(context: Context): String {
         Weekday.Sunday -> R.string.sunday_abb
     }
     return context.getString(stringId)
+}
+
+fun Calendar.getWeekday(): Weekday = when (get(Calendar.DAY_OF_WEEK)) {
+    Calendar.SUNDAY -> Weekday.Sunday
+    Calendar.MONDAY -> Weekday.Monday
+    Calendar.TUESDAY -> Weekday.Tuesday
+    Calendar.WEDNESDAY -> Weekday.Wednesday
+    Calendar.THURSDAY -> Weekday.Thursday
+    Calendar.FRIDAY -> Weekday.Friday
+    Calendar.SATURDAY -> Weekday.Saturday
+    else -> Weekday.NONE
 }

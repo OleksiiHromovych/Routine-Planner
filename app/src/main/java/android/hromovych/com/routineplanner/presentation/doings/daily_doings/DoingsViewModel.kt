@@ -6,6 +6,7 @@ import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.repository.daily_doings.DailyDoingsRepository
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.weekday_doings.GetWeekdayDoingsUseCase
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -16,7 +17,8 @@ class DoingsViewModel(
     private val datePattern: Int,
     private val dailyDoingsRepository: DailyDoingsRepository,
     private val addDoingUseCase: AddDoingUseCase,
-    private val updateDoingUseCase: UpdateDoingUseCase
+    private val updateDoingUseCase: UpdateDoingUseCase,
+    private val getWeekdayDoingsUseCase: GetWeekdayDoingsUseCase,
 ) : ViewModel() {
 
     private val _date = MutableLiveData<Int>(datePattern)
@@ -93,6 +95,30 @@ class DoingsViewModel(
             }
             dailyDoingsRepository.addDailyDoings(*dailyDoings.toTypedArray())
         }
+    }
+
+    fun addWeekdayDoingIfNeed(data: Int) {
+//        val currentListSize = dailyDoings.value?.size ?: 0
+//        val list: LiveData<List<DailyDoing>>  = dailyDoings.switchMap {
+//            if (it.isNotEmpty()) return@switchMap emptyList()
+//            getWeekdayDoingsUseCase(data.toCalendar().getWeekday()).map {
+//
+//            }
+//        }
+//        if (currentListSize > 0) return
+//        viewModelScope.launch {
+//            val existDoingsIds = dailyDoings.value?.map { it.doing.id } ?: emptyList()
+//            getWeekdayDoingsUseCase().asFlow().collect {
+//
+//                dailyDoingsRepository.addDailyDoings(*it.mapIndexed { index, weekdayDoing ->
+//                    DailyDoing(
+//                        date = data,
+//                        doing = weekdayDoing.doing,
+//                        position = currentListSize + index
+//                    )
+//                }.toTypedArray())
+//            }
+//        }
     }
 
     sealed class Event {

@@ -107,15 +107,7 @@ fun Context.showDatePickerDialog(
     onResult: (newDate: Int) -> Unit,
 ) {
     val calendar = date.toCalendar()
-    DatePickerDialog(
-        this,
-        R.style.DatePickerDialog,
-        { _, year, monthOfYear, dayOfMonth ->
-            onResult(Calendar.getInstance().apply { set(year, monthOfYear, dayOfMonth) }
-                .toDatePattern())
-        },
-        calendar.get(Calendar.YEAR),
-        calendar.get(Calendar.MONTH),
-        calendar.get(Calendar.DAY_OF_MONTH)
-    ).show()
+    showDatePickerDialog(calendar) {
+        onResult(it.toDatePattern())
+    }
 }

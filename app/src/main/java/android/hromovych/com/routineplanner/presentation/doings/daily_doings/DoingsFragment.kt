@@ -75,6 +75,9 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
 
+        viewModel.date.observe(viewLifecycleOwner) {
+            viewModel.addWeekdayDoingIfNeed(it)
+        }
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {

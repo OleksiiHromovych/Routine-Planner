@@ -1,8 +1,10 @@
 package android.hromovych.com.routineplanner.presentation.templates.template_edit
 
+import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
+import android.hromovych.com.routineplanner.domain.repository.daily_doings.AddDailyDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetActiveDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
@@ -31,6 +33,7 @@ class TemplateEditViewModel(
     private val updateTemplateUseCase: UpdateTemplateUseCase,
     private val addDoingUseCase: AddDoingUseCase,
     private val getActiveDoingsUseCase: GetActiveDoingsUseCase,
+    private val addDailyDoingsUseCase: AddDailyDoingsUseCase
 ) : ViewModel() {
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
@@ -115,6 +118,21 @@ class TemplateEditViewModel(
             }
 
             addTemplateDoingsUseCase(newTemplateDoings.toTypedArray())
+        }
+    }
+
+    fun addTemplateDoingsToDay(datePattern: Int) {
+        viewModelScope.launch {
+
+            val dailyDoings: List<DailyDoing> = templateDoings.value?.map {
+                DailyDoing(
+                    date = datePattern,
+                    doing = it.doing,
+                    position = it.position
+                )
+            } ?: return@launch
+
+            addDailyDoingsUseCase(dailyDoings.toTypedArray())
         }
     }
 
