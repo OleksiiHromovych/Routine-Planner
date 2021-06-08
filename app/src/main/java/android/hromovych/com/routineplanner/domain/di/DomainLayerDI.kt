@@ -17,6 +17,7 @@ import android.hromovych.com.routineplanner.domain.repository.weekday_doings.Add
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.DeleteWeekdayDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.GetWeekdayDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.UpdateWeekdayDoingUseCase
+import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 
 object DomainLayerDI {
@@ -84,7 +85,7 @@ object DomainLayerDI {
         }
 
         single {
-            GetWeekdayDoingsUseCase(get())
+            GetWeekdayDoingsUseCase(get(), Dispatchers.IO)
         }
 
         single {

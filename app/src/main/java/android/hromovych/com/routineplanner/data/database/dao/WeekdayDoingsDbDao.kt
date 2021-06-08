@@ -4,15 +4,15 @@ import android.hromovych.com.routineplanner.data.embedded.FullWeekdayDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.entities.WeekdayDoing
 import android.hromovych.com.routineplanner.domain.utils.Weekday
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeekdayDoingsDbDao {
 
     @Transaction
     @Query("SELECT * FROM weekday_doing WHERE weekday = :dayId")
-    fun getWeekdayDoings(dayId: Int): LiveData<List<FullWeekdayDoing>>
+    fun getWeekdayDoings(dayId: Int): Flow<List<FullWeekdayDoing>>
 
     @Insert
     suspend fun addWeekdayDoing(weekdayDoing: WeekdayDoing): Long

@@ -7,8 +7,11 @@ import android.hromovych.com.routineplanner.domain.repository.daily_doings.Daily
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.GetWeekdayDoingsUseCase
+import android.hromovych.com.routineplanner.presentation.utils.getWeekday
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,7 +29,7 @@ class DoingsViewModel(
         get() = _date
 
     val dailyDoings: LiveData<List<DailyDoing>> = date.switchMap { dateValue ->
-        dailyDoingsRepository.getDailyDoings(dateValue)
+        dailyDoingsRepository.getDailyDoings(dateValue).asLiveData()
     }
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
@@ -97,32 +100,36 @@ class DoingsViewModel(
         }
     }
 
-    fun addWeekdayDoingIfNeed(data: Int) {
-//        val currentListSize = dailyDoings.value?.size ?: 0
-//        val list: LiveData<List<DailyDoing>>  = dailyDoings.switchMap {
-//            if (it.isNotEmpty()) return@switchMap emptyList()
-//            getWeekdayDoingsUseCase(data.toCalendar().getWeekday()).map {
-//
-//            }
-//        }
-//        if (currentListSize > 0) return
-//        viewModelScope.launch {
-//            val existDoingsIds = dailyDoings.value?.map { it.doing.id } ?: emptyList()
-//            getWeekdayDoingsUseCase().asFlow().collect {
-//
-//                dailyDoingsRepository.addDailyDoings(*it.mapIndexed { index, weekdayDoing ->
-//                    DailyDoing(
-//                        date = data,
-//                        doing = weekdayDoing.doing,
-//                        position = currentListSize + index
-//                    )
-//                }.toTypedArray())
-//            }
-//        }
+    fun addWeekdayDoingIfNeed(date: Int) {
+        val weekday = date.toCalendar().getWeekday()
+
+        viewModelScope.launch {
+
+            dailyDoingsRepository.getDailyDoings(date)
+                .combine(getWeekdayDoingsUseCase(weekday)) { dailyDoings, weekdayDoings ->
+                    if (dailyDoings.isNotEmpty()) return@combine emptyList()
+
+                    val dailyDoingsId = dailyDoings.map { it.doing.id }
+
+                    weekdayDoings.filterNot { it.doing.id in dailyDoingsId }
+                        .mapIndexed { index, weekdayDoing ->
+                            DailyDoing(
+                                date = date,
+                                doing = weekdayDoing.doing,
+                                position = dailyDoings.size + index
+                            )
+                        }
+                }
+                .collectLatest {
+                    if (it.isNotEmpty()) {
+                        dailyDoingsRepository.addDailyDoings(*it.toTypedArray())
+                    }
+                }
+        }
     }
 
     sealed class Event {
-        //        object NavigateToTemplates : Event()
+//        object NavigateToTemplates : Event()
 //        object NavigateToWeekdayDoings : Event()
         data class ShowToast(val text: String) : Event()
         object OnFabClicked : Event()

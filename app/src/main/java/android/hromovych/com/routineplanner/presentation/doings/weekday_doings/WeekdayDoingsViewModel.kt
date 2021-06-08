@@ -33,7 +33,7 @@ class WeekdayDoingsViewModel(
     val eventsFlow = eventChannel.receiveAsFlow()
 
     val doings: LiveData<List<WeekdayDoing>> = Transformations.switchMap(_weekday) { weekday ->
-        getWeekdayDoingsUseCase(weekday)
+        getWeekdayDoingsUseCase(weekday).asLiveData()
     }
 
     fun onFabClicked() {

@@ -6,8 +6,8 @@ import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.mapper.Mapper
 import android.hromovych.com.routineplanner.domain.repository.daily_doings.DailyDoingsRepository
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class DailyDoingsRepositoryImp(
     private val db: PlannerDatabase,
@@ -16,7 +16,7 @@ class DailyDoingsRepositoryImp(
     private val doingToPresentationMapper: Mapper<android.hromovych.com.routineplanner.data.entities.Doing, Doing>
 ) : DailyDoingsRepository {
 
-    override fun getDailyDoings(date: Int): LiveData<List<DailyDoing>> {
+    override fun getDailyDoings(date: Int): Flow<List<DailyDoing>> {
         return db.doingsDbDao.getDailyDoingsFull(date).map { list ->
             list.map(dailyDoingToPresentationMapper::convert)
         }

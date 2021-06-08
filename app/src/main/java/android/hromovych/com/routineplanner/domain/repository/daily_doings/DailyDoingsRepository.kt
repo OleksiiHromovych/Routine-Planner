@@ -2,11 +2,11 @@ package android.hromovych.com.routineplanner.domain.repository.daily_doings
 
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
-import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 
 interface DailyDoingsRepository {
 
-    fun getDailyDoings(date: Int): LiveData<List<DailyDoing>>
+    fun getDailyDoings(date: Int): Flow<List<DailyDoing>>
 
     suspend fun updateDailyDoing(dailyDoing: DailyDoing)
 
