@@ -10,7 +10,7 @@ interface WeekdayDoingsRepository {
 
     suspend fun addWeekdayDoings(vararg doings: WeekdayDoing)
 
-    suspend fun updateWeekdayDoing(doing: WeekdayDoing)
+    suspend fun updateWeekdayDoings(doings: List<WeekdayDoing>)
 
     suspend fun deleteWeekdayDoing(doing: WeekdayDoing)
 

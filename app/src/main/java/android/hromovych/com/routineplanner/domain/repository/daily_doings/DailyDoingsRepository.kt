@@ -8,7 +8,7 @@ interface DailyDoingsRepository {
 
     fun getDailyDoings(date: Int): Flow<List<DailyDoing>>
 
-    suspend fun updateDailyDoing(dailyDoing: DailyDoing)
+    suspend fun updateDailyDoings(vararg dailyDoing: DailyDoing)
 
     suspend fun addDailyDoings(vararg dailyDoings: DailyDoing)
 

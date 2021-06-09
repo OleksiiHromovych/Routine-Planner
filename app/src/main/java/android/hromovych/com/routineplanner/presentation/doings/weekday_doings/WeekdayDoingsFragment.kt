@@ -7,6 +7,7 @@ import android.hromovych.com.routineplanner.domain.entity.WeekdayDoing
 import android.hromovych.com.routineplanner.domain.utils.Weekday
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
+import android.hromovych.com.routineplanner.presentation.basic.getItemTouchHelper
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
 import android.view.Gravity
@@ -19,6 +20,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,6 +49,10 @@ class WeekdayDoingsFragment : Fragment(R.layout.fragment_weekday_doings) {
                 BasicClickListener { view, weekdayDoing ->
                     onItemClickListener(view, weekdayDoing)
                 }
+
+            override var onItemTouchHelper: ItemTouchHelper? = getItemTouchHelper<WeekdayDoing> {
+                viewModel.updateWeekdayDoings(it)
+            }
         }
 
         binding.recyclerView.adapter = adapter

@@ -29,8 +29,8 @@ class TemplateEditRepositoryImp(
         db.templatesDbDao.deleteDoingTemplate(presentationToEntityMapper.convert(templateDoing))
     }
 
-    override suspend fun updateTemplateDoing(templateDoing: DoingTemplate) {
-        db.templatesDbDao.updateDoingTemplate(presentationToEntityMapper.convert(templateDoing))
+    override suspend fun updateTemplateDoings(templateDoings: List<DoingTemplate>) {
+        db.templatesDbDao.updateDoingsTemplate(templateDoings.map(presentationToEntityMapper::convert))
     }
 
 }

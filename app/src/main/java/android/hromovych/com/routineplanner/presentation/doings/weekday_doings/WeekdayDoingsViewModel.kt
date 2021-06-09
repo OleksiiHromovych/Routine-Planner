@@ -75,7 +75,7 @@ class WeekdayDoingsViewModel(
     fun receiveNotUsedDoings(onReceive: (List<Doing>) -> Unit) {
         val usedDoingsIds = doings.value?.map { it.doing.id } ?: emptyList()
         viewModelScope.launch {
-            val result = getActiveDoingsUseCase(Unit).filterNot { it.id in usedDoingsIds}
+            val result = getActiveDoingsUseCase(Unit).filterNot { it.id in usedDoingsIds }
 
             onReceive(result)
         }
@@ -94,6 +94,12 @@ class WeekdayDoingsViewModel(
             }
 
             addWeekdayDoingsUseCase(newWeekdayDoings.toTypedArray())
+        }
+    }
+
+    fun updateWeekdayDoings(weekdayDoings: List<WeekdayDoing>) {
+        viewModelScope.launch {
+            updateWeekdayDoingUseCase(weekdayDoings)
         }
     }
 

@@ -57,9 +57,9 @@ class DoingsViewModel(
         }
     }
 
-    fun updateDailyDoing(dailyDoing: DailyDoing) {
+    fun updateDailyDoings(vararg dailyDoing: DailyDoing) {
         viewModelScope.launch {
-            dailyDoingsRepository.updateDailyDoing(dailyDoing)
+            dailyDoingsRepository.updateDailyDoings(*dailyDoing)
         }
     }
 

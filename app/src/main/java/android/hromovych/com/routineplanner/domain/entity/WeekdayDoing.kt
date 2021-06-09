@@ -1,14 +1,15 @@
 package android.hromovych.com.routineplanner.domain.entity
 
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
+import android.hromovych.com.routineplanner.domain.utils.Positionable
 import android.hromovych.com.routineplanner.domain.utils.Weekday
 
 data class WeekdayDoing(
     var id: Long = 0,
     var weekday: Weekday,
     var doing: Doing,
-    var position: Int
-) : EqualsCheck<WeekdayDoing> {
+    override var position: Int
+) : EqualsCheck<WeekdayDoing>, Positionable {
 
     val title: String
         get() = doing.title

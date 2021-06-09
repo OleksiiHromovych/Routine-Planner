@@ -22,7 +22,7 @@ interface TemplatesDbDao {
     fun getTemplateWithFullDoings(templateId: Long): LiveData<TemplateWithFullDoings>
 
     @Transaction
-    @Query("SELECT * FROM templates")
+    @Query("SELECT * FROM templates ")
     fun getTemplatesWithFullDoings(): LiveData<List<TemplateWithFullDoings>>
 
     @Delete
@@ -41,7 +41,7 @@ interface TemplatesDbDao {
     suspend fun addAllTemplateDoings(vararg templateDoing: DoingTemplate)
 
     @Update
-    suspend fun updateDoingTemplate(templateDoing: DoingTemplate)
+    suspend fun updateDoingsTemplate(templateDoing: List<DoingTemplate>)
 //
 //    @Query("SELECT * FROM doings WHERE active = 1 AND id NOT IN (SELECT doingId FROM doings_templates WHERE templateId = :templateId)")
 //    suspend fun getNewTemplateDoingsForTemplate(templateId: Long) : List<Doing>

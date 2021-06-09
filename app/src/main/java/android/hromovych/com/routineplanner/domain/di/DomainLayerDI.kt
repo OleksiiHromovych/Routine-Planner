@@ -8,7 +8,7 @@ import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoing
 import android.hromovych.com.routineplanner.domain.repository.template_edit.AddTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.template_edit.DeleteTemplateDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.template_edit.GetTemplateWithDoingsUseCase
-import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.AddTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.DeleteTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.GetTemplatesWithFullDoingsUseCase
@@ -72,7 +72,7 @@ object DomainLayerDI {
         }
 
         single {
-            UpdateTemplateDoingUseCase(get())
+            UpdateTemplateDoingsUseCase(get())
         }
 
         // WeekdayDoings

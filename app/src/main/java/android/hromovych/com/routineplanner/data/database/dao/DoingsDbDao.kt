@@ -23,13 +23,13 @@ interface DoingsDbDao {
     suspend fun deleteDailyDoing(doing: DailyDoing): Int
 
     @Update
-    suspend fun updateDailyDoing(doing: DailyDoing)
+    suspend fun updateDailyDoing(vararg doing: DailyDoing)
 
     @Update
     suspend fun updateDoing(doing: Doing)
 
     @Transaction
-    @Query("SELECT * FROM daily_doings WHERE date = :date")
+    @Query("SELECT * FROM daily_doings WHERE date = :date ORDER BY position")
     fun getDailyDoingsFull(date: Int) : Flow<List<DailyDoingFull>>
 
     @Insert

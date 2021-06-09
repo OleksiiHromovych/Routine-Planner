@@ -12,6 +12,6 @@ interface TemplateEditRepository {
 
     suspend fun deleteTemplateDoing(templateDoing: DoingTemplate)
 
-    suspend fun updateTemplateDoing(templateDoing: DoingTemplate)
+    suspend fun updateTemplateDoings(templateDoing: List<DoingTemplate>)
 
 }

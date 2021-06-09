@@ -11,7 +11,7 @@ import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoing
 import android.hromovych.com.routineplanner.domain.repository.template_edit.AddTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.template_edit.DeleteTemplateDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.template_edit.GetTemplateWithDoingsUseCase
-import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.DeleteTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.UpdateTemplateUseCase
 import androidx.lifecycle.LiveData
@@ -27,7 +27,7 @@ class TemplateEditViewModel(
     private val addTemplateDoingsUseCase: AddTemplateDoingsUseCase,
     private val deleteTemplateDoingUseCase: DeleteTemplateDoingUseCase,
     private val getTemplateWithDoingsUseCase: GetTemplateWithDoingsUseCase,
-    private val updateTemplateDoingUseCase: UpdateTemplateDoingUseCase,
+    private val updateTemplateDoingsUseCase: UpdateTemplateDoingsUseCase,
     private val updateDoingUseCase: UpdateDoingUseCase,
     private val deleteTemplateUseCase: DeleteTemplateUseCase,
     private val updateTemplateUseCase: UpdateTemplateUseCase,
@@ -133,6 +133,12 @@ class TemplateEditViewModel(
             } ?: return@launch
 
             addDailyDoingsUseCase(dailyDoings.toTypedArray())
+        }
+    }
+
+    fun updateTemplateDoings(doings: List<DoingTemplate>) {
+        viewModelScope.launch {
+            updateTemplateDoingsUseCase(doings)
         }
     }
 

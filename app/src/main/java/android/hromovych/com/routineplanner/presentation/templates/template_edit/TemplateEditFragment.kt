@@ -7,6 +7,7 @@ import android.hromovych.com.routineplanner.databinding.ItemTemplateDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
+import android.hromovych.com.routineplanner.presentation.basic.getItemTouchHelper
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.hromovych.com.routineplanner.utils.toast
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,7 +29,7 @@ import kotlin.properties.Delegates
 class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
 
     private var templateId by Delegates.notNull<Long>()
-    private val viewModel: TemplateEditViewModel by viewModel { parametersOf(templateId)}
+    private val viewModel: TemplateEditViewModel by viewModel { parametersOf(templateId) }
     private val binding by viewBinding(FragmentTemplateEditBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,6 +57,10 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
                 BasicClickListener { view, doing ->
                     onItemClickListener(view, doing)
                 }
+
+            override var onItemTouchHelper: ItemTouchHelper? = getItemTouchHelper<DoingTemplate> {
+                viewModel.updateTemplateDoings(it)
+            }
         }
 
         binding.recyclerView.adapter = adapter
@@ -79,12 +85,13 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
         when (item.itemId) {
 
             R.id.menu_action_use_this -> {
-                requireContext().showDatePickerDialog(Calendar.getInstance()){ calendar ->
+                requireContext().showDatePickerDialog(Calendar.getInstance()) { calendar ->
                     viewModel.addTemplateDoingsToDay(calendar.toDatePattern())
 
-                    findNavController().navigate(R.id.action_templateEditFragment_to_doingsFragment, Bundle().apply {
-                        putInt("date", calendar.toDatePattern())
-                    })
+                    findNavController().navigate(R.id.action_templateEditFragment_to_doingsFragment,
+                        Bundle().apply {
+                            putInt("date", calendar.toDatePattern())
+                        })
 //                    findNavController().navigate(TemplateEditFragmentDirections.actionTemplateEditFragmentToDoingsFragment(calendar.toLongPattern()))
                 }
             }

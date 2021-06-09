@@ -5,9 +5,7 @@ import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
-import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
-import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
-import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
+import android.hromovych.com.routineplanner.presentation.basic.*
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
 import android.view.Gravity
@@ -19,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -66,9 +65,16 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
 
             override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoing>? =
                 BasicCheckBoxListener { dailyDoing, checked ->
-                    viewModel.updateDailyDoing(dailyDoing.copy(completed = checked))
+                    viewModel.updateDailyDoings(dailyDoing.copy(completed = checked))
                 }
 
+            override var onItemTouchHelper: ItemTouchHelper? =
+                getItemTouchHelper<DailyDoing>(
+                    updateAfterMoved = {
+                        viewModel.updateDailyDoings(*it.toTypedArray())
+                    }
+                )
+//                "https://yfujiki.medium.com/drag-and-reorder-recyclerview-items-in-a-user-friendly-manner-1282335141e9"
         }
 
         binding.recyclerView.adapter = adapter

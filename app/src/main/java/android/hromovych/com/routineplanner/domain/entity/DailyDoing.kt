@@ -1,14 +1,15 @@
 package android.hromovych.com.routineplanner.domain.entity
 
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
+import android.hromovych.com.routineplanner.domain.utils.Positionable
 
 data class DailyDoing(
     var id: Long = 0,
     var date: Int,
     var doing: Doing,
-    var position: Int = 0,
+    override var position: Int = 0,
     var completed: Boolean = false
-): EqualsCheck<DailyDoing> {
+): EqualsCheck<DailyDoing>, Positionable {
     override fun areItemsTheSame(item: DailyDoing): Boolean {
         return id == item.id
     }

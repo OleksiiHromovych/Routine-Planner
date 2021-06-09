@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface WeekdayDoingsDbDao {
 
     @Transaction
-    @Query("SELECT * FROM weekday_doing WHERE weekday = :dayId")
+    @Query("SELECT * FROM weekday_doing WHERE weekday = :dayId ORDER BY position")
     fun getWeekdayDoings(dayId: Int): Flow<List<FullWeekdayDoing>>
 
     @Insert
@@ -21,7 +21,7 @@ interface WeekdayDoingsDbDao {
     suspend fun deleteWeekdayDoing(weekdayDoing: WeekdayDoing)
 
     @Update
-    suspend fun updateWeekdayDoing(weekdayDoing: WeekdayDoing)
+    suspend fun updateWeekdayDoings(weekdayDoings: List<WeekdayDoing>)
 
     @Query("SELECT * FROM doings WHERE active = 1 AND id NOT IN (SELECT doingId FROM weekday_doing WHERE weekday = :dayId)")
     suspend fun getNewDoingsForDay(dayId: Int): List<Doing>

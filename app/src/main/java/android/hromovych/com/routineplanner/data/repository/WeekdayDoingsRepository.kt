@@ -25,8 +25,8 @@ class WeekdayDoingsRepositoryIml(
             .toTypedArray())
     }
 
-    override suspend fun updateWeekdayDoing(doing: WeekdayDoing) {
-        db.weekdayDoingsDbDao.updateWeekdayDoing(toEntityMapper.convert(doing))
+    override suspend fun updateWeekdayDoings(doings: List<WeekdayDoing>) {
+        db.weekdayDoingsDbDao.updateWeekdayDoings(doings.map(toEntityMapper::convert))
     }
 
     override suspend fun deleteWeekdayDoing(doing: WeekdayDoing) {

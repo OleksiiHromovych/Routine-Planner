@@ -22,8 +22,8 @@ class DailyDoingsRepositoryImp(
         }
     }
 
-    override suspend fun updateDailyDoing(dailyDoing: DailyDoing) {
-        db.doingsDbDao.updateDailyDoing(dailyDoingToEntityMapper.convert(dailyDoing))
+    override suspend fun updateDailyDoings(vararg dailyDoings: DailyDoing) {
+        db.doingsDbDao.updateDailyDoing(*dailyDoings.map(dailyDoingToEntityMapper::convert).toTypedArray())
     }
 
     override suspend fun addDailyDoings(vararg dailyDoings: DailyDoing) {

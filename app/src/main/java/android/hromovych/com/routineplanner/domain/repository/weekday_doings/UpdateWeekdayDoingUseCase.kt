@@ -5,10 +5,10 @@ import android.hromovych.com.routineplanner.domain.usecase.CoroutineUseCase
 
 class UpdateWeekdayDoingUseCase(
     private val weekdayDoingsRepository: WeekdayDoingsRepository,
-) : CoroutineUseCase<WeekdayDoing, Unit>() {
+) : CoroutineUseCase<List<WeekdayDoing>, Unit>() {
 
-    override suspend fun execute(parameters: WeekdayDoing) {
-        weekdayDoingsRepository.updateWeekdayDoing(parameters)
+    override suspend fun execute(parameters: List<WeekdayDoing>) {
+        weekdayDoingsRepository.updateWeekdayDoings(parameters)
     }
 
 }
