@@ -7,7 +7,9 @@ import android.hromovych.com.routineplanner.domain.repository.daily_doings.Daily
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.GetWeekdayDoingsUseCase
+import android.hromovych.com.routineplanner.presentation.doings.tasks.CopyDailyDoingsToDayTask
 import android.hromovych.com.routineplanner.presentation.utils.getWeekday
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +24,7 @@ class DoingsViewModel(
     private val addDoingUseCase: AddDoingUseCase,
     private val updateDoingUseCase: UpdateDoingUseCase,
     private val getWeekdayDoingsUseCase: GetWeekdayDoingsUseCase,
+    private val copyDailyDoingsToDayTask: CopyDailyDoingsToDayTask,
 ) : ViewModel() {
 
     private val _date = MutableLiveData<Int>(datePattern)
@@ -100,6 +103,7 @@ class DoingsViewModel(
         }
     }
 
+    // if day doings not empty
     fun addWeekdayDoingIfNeed(date: Int) {
         val weekday = date.toCalendar().getWeekday()
 
@@ -128,10 +132,20 @@ class DoingsViewModel(
         }
     }
 
+    fun copyCurrentDoingsToDay(date: Int) {
+        val fromDay = this.date.value!!
+        viewModelScope.launch {
+            copyDailyDoingsToDayTask.start(
+                CopyDailyDoingsToDayTask.Param(
+                    fromDay,
+                    date
+                )
+            )
+        }
+    }
+
     sealed class Event {
-//        object NavigateToTemplates : Event()
-//        object NavigateToWeekdayDoings : Event()
-        data class ShowToast(val text: String) : Event()
+        data class ShowToast(@StringRes val text: Int) : Event()
         object OnFabClicked : Event()
     }
 }

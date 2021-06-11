@@ -169,6 +169,18 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
                 }
                 return true
             }
+            R.id.action_copy_day -> {
+                requireContext().showDatePickerDialog(
+                    viewModel.date.value!!
+                ) {
+                    if (it == viewModel.date.value) {
+                        return@showDatePickerDialog
+                    }
+
+                    viewModel.copyCurrentDoingsToDay(it)
+                    viewModel.setNewDate(it)
+                }
+            }
             R.id.action_weekdays_doings -> {
                 findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToWeekdayDoingsFragment())
                 return true

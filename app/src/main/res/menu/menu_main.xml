@@ -2,6 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="android.hromovych.com.routineplanner.MainActivity">
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
@@ -12,6 +13,12 @@
         android:icon="@drawable/ic_date_picker"
         android:title="@string/action_date_picker"
         app:showAsAction="ifRoom|collapseActionView" />
+
+    <item
+        android:id="@+id/action_copy_day"
+        android:icon="@drawable/ic_copy_day"
+        android:title="@string/copy_day"
+        app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_templates_list"

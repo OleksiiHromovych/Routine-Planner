@@ -46,5 +46,7 @@
     <string name="sunday_abb">Sun</string>
     <string name="can_reuse">can reuse</string>
     <string name="incorrect_doing_name">Incorrect doing name. Name can\'t be empty</string>
+    <string name="copy_day">Copy day</string>
+    <string name="selected_day_not_empty">Selected day not empty</string>
 
 </resources>
