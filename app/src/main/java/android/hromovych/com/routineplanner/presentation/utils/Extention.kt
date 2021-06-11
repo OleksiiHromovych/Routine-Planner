@@ -3,6 +3,7 @@ package android.hromovych.com.routineplanner.presentation.utils
 import android.content.Context
 import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
+import android.hromovych.com.routineplanner.domain.utils.Positionable
 import android.hromovych.com.routineplanner.domain.utils.Weekday
 import java.util.*
 
@@ -34,4 +35,12 @@ fun Calendar.getWeekday(): Weekday = when (get(Calendar.DAY_OF_WEEK)) {
     Calendar.FRIDAY -> Weekday.Friday
     Calendar.SATURDAY -> Weekday.Saturday
     else -> Weekday.NONE
+}
+
+fun List<Positionable>.normalizePositions() {
+    this.mutateIndexed { item, index ->
+        item.apply {
+            position = index
+        }
+    }
 }

@@ -1,10 +1,8 @@
 package android.hromovych.com.routineplanner.presentation.templates.template_edit
 
-import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
-import android.hromovych.com.routineplanner.domain.repository.daily_doings.AddDailyDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetActiveDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
@@ -14,10 +12,8 @@ import android.hromovych.com.routineplanner.domain.repository.template_edit.GetT
 import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.DeleteTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.UpdateTemplateUseCase
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import android.hromovych.com.routineplanner.presentation.doings.tasks.AddTemplateDoingsToDayTask
+import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -33,13 +29,13 @@ class TemplateEditViewModel(
     private val updateTemplateUseCase: UpdateTemplateUseCase,
     private val addDoingUseCase: AddDoingUseCase,
     private val getActiveDoingsUseCase: GetActiveDoingsUseCase,
-    private val addDailyDoingsUseCase: AddDailyDoingsUseCase
+    private val addTemplateDoingsToDayTask: AddTemplateDoingsToDayTask,
 ) : ViewModel() {
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val template: LiveData<Template> = getTemplateWithDoingsUseCase(templateId)
+    private val template: LiveData<Template> = getTemplateWithDoingsUseCase(templateId).asLiveData()
 
     val templateName = template.map {
         it.name
@@ -123,16 +119,8 @@ class TemplateEditViewModel(
 
     fun addTemplateDoingsToDay(datePattern: Int) {
         viewModelScope.launch {
-
-            val dailyDoings: List<DailyDoing> = templateDoings.value?.map {
-                DailyDoing(
-                    date = datePattern,
-                    doing = it.doing,
-                    position = it.position
-                )
-            } ?: return@launch
-
-            addDailyDoingsUseCase(dailyDoings.toTypedArray())
+            addTemplateDoingsToDayTask.start(
+                AddTemplateDoingsToDayTask.Param(templateId, datePattern))
         }
     }
 

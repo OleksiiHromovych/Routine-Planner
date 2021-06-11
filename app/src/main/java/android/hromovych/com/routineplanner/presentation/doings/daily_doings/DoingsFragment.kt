@@ -74,7 +74,6 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
                         viewModel.updateDailyDoings(*it.toTypedArray())
                     }
                 )
-//                "https://yfujiki.medium.com/drag-and-reorder-recyclerview-items-in-a-user-friendly-manner-1282335141e9"
         }
 
         binding.recyclerView.adapter = adapter

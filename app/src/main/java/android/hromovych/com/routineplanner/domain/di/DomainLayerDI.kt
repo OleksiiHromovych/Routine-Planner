@@ -1,6 +1,7 @@
 package android.hromovych.com.routineplanner.domain.di
 
 import android.hromovych.com.routineplanner.domain.repository.daily_doings.AddDailyDoingsUseCase
+import android.hromovych.com.routineplanner.domain.repository.daily_doings.GetDailyDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetActiveDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.GetDoingsUseCase
@@ -68,7 +69,7 @@ object DomainLayerDI {
         }
 
         single {
-            GetTemplateWithDoingsUseCase(get())
+            GetTemplateWithDoingsUseCase(get(), Dispatchers.IO)
         }
 
         single {
@@ -95,6 +96,10 @@ object DomainLayerDI {
         //DailyDoing
         single {
             AddDailyDoingsUseCase(get())
+        }
+
+        single {
+            GetDailyDoingsUseCase(get(), Dispatchers.IO)
         }
     }
 }

@@ -6,8 +6,8 @@ import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
 import android.hromovych.com.routineplanner.domain.mapper.Mapper
 import android.hromovych.com.routineplanner.domain.repository.template_edit.TemplateEditRepository
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class TemplateEditRepositoryImp(
     private val db: PlannerDatabase,
@@ -15,7 +15,7 @@ class TemplateEditRepositoryImp(
     private val presentationToEntityMapper: Mapper<DoingTemplate, android.hromovych.com.routineplanner.data.entities.DoingTemplate>,
 ) : TemplateEditRepository {
 
-    override fun getTemplateWithDoings(templateId: Long): LiveData<Template> {
+    override fun getTemplateWithDoings(templateId: Long): Flow<Template> {
         return db.templatesDbDao.getTemplateWithFullDoings(templateId)
             .map(templateToPresentationMapper::convert)
     }

@@ -6,6 +6,7 @@ import android.hromovych.com.routineplanner.data.entities.DoingTemplate
 import android.hromovych.com.routineplanner.data.entities.Template
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TemplatesDbDao {
@@ -19,7 +20,7 @@ interface TemplatesDbDao {
 
     @Transaction
     @Query("SELECT * FROM templates WHERE id = :templateId")
-    fun getTemplateWithFullDoings(templateId: Long): LiveData<TemplateWithFullDoings>
+    fun getTemplateWithFullDoings(templateId: Long): Flow<TemplateWithFullDoings>
 
     @Transaction
     @Query("SELECT * FROM templates ")

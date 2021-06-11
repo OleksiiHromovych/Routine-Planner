@@ -22,7 +22,8 @@ class RoutinePlannerApp : Application() {
 
                 DomainLayerDI.useCaseModule,
 
-                PresentationLayerDI.viewModelModule
+                PresentationLayerDI.viewModelModule,
+                PresentationLayerDI.tasks
             )
         }
     }

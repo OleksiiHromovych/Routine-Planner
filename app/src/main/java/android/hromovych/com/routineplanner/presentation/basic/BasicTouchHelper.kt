@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 @Suppress("UNCHECKED_CAST")
 fun <T> getItemTouchHelper(
     updateAfterMoved: (List<T>) -> Unit,
-): ItemTouchHelper where T: EqualsCheck<T>, T: Positionable =
+): ItemTouchHelper where T : EqualsCheck<T>, T : Positionable =
     ItemTouchHelper(
         object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
 
@@ -31,9 +31,7 @@ fun <T> getItemTouchHelper(
 
                 val list = adapter.currentList.toMutableList()
 
-                list[from].position =
-                    list[to].position.also { list[to].position = list[from].position }
-                list[from] = list[to].also { list[to] = list[from] }
+                list.moveItem(from, to)
 
                 adapter.submitList(list)
 
@@ -72,6 +70,28 @@ fun <T> getItemTouchHelper(
                 dragFrom = -1
                 dragTo = -1
 
+            }
+
+            private fun MutableList<T>.moveItem(from: Int, to: Int) {
+                val fromDoing = removeAt(from)
+                add(to, fromDoing)
+                updatePositions(this, from, to)
+//                if (to < from) {
+//                    add(to, fromDoing)
+//                } else {
+//                    add(to -1, fromDoing)
+//                }
+                //                list[from].position =
+//                    list[to].position.also { list[to].position = list[from].position }
+//                list[from] = list[to].also { list[to] = list[from] }
+
+            }
+
+            private fun updatePositions(list: List<T>, from: Int, to: Int) {
+                val range = if (to < from) to..from else from..to
+                range.forEach {
+                    list[it].position = it
+                }
             }
         }
     )

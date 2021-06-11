@@ -1,6 +1,7 @@
 package android.hromovych.com.routineplanner.presentation.di
 
 import android.hromovych.com.routineplanner.presentation.doings.daily_doings.DoingsViewModel
+import android.hromovych.com.routineplanner.presentation.doings.tasks.AddTemplateDoingsToDayTask
 import android.hromovych.com.routineplanner.presentation.doings.weekday_doings.WeekdayDoingsViewModel
 import android.hromovych.com.routineplanner.presentation.templates.template_edit.TemplateEditViewModel
 import android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesViewModel
@@ -37,6 +38,14 @@ object PresentationLayerDI {
         viewModel {
             WeekdayDoingsViewModel(get(), get(), get(), get(), get(), get(), get())
         }
+    }
+
+    val tasks = module {
+
+        single {
+            AddTemplateDoingsToDayTask(get(), get(), get())
+        }
+
     }
 
 }
