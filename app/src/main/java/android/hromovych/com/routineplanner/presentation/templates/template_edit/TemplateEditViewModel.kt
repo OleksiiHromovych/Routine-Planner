@@ -12,7 +12,7 @@ import android.hromovych.com.routineplanner.domain.repository.template_edit.GetT
 import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingsUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.DeleteTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.UpdateTemplateUseCase
-import android.hromovych.com.routineplanner.presentation.doings.tasks.AddTemplateDoingsToDayTask
+import android.hromovych.com.routineplanner.presentation.tasks.AddTemplateDoingsToDayTask
 import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

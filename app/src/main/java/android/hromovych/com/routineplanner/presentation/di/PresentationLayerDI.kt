@@ -1,9 +1,9 @@
 package android.hromovych.com.routineplanner.presentation.di
 
 import android.hromovych.com.routineplanner.presentation.doings.daily_doings.DoingsViewModel
-import android.hromovych.com.routineplanner.presentation.doings.tasks.AddTemplateDoingsToDayTask
-import android.hromovych.com.routineplanner.presentation.doings.tasks.CopyDailyDoingsToDayTask
 import android.hromovych.com.routineplanner.presentation.doings.weekday_doings.WeekdayDoingsViewModel
+import android.hromovych.com.routineplanner.presentation.tasks.AddTemplateDoingsToDayTask
+import android.hromovych.com.routineplanner.presentation.tasks.CopyDailyDoingsToDayTask
 import android.hromovych.com.routineplanner.presentation.templates.template_edit.TemplateEditViewModel
 import android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel

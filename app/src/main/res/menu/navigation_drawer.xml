@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/fragments"
+            android:title="@string/fragments_subtitle">
+
+            <menu>
+                <item
+                    android:id="@+id/doingsFragment"
+                    android:icon="@drawable/ic_daily_doings"
+                    android:title="DailyDoing" />
+                <item
+                    android:id="@+id/templatesFragment"
+                    android:icon="@drawable/ic_template_icon"
+                    android:title="Templates" />
+
+                <item
+                    android:id="@+id/weekdayDoingsFragment"
+                    android:icon="@drawable/ic_weekday_doings"
+                    android:title="Weekday doings" />
+            </menu>
+
+        </item>
+
+        <item
+            android:id="@+id/settings"
+            android:title="@string/settings">
+            <menu>
+                <item
+                    android:id="@+id/dayNight"
+                    android:title="@string/action_dayNight" />
+
+                <item
+                    android:id="@+id/theme"
+                    android:title="@string/action_theme" />
+            </menu>
+        </item>
+
+    </group>
+
+</menu>

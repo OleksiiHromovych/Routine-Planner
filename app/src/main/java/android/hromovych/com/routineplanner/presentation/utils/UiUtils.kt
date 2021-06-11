@@ -111,3 +111,14 @@ fun Context.showDatePickerDialog(
         onResult(it.toDatePattern())
     }
 }
+
+fun Context.showInfoDialog(
+    @StringRes title: Int,
+    @StringRes message: Int,
+) {
+    AlertDialog.Builder(this)
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(R.string.dialog_button_ok, null)
+        .show()
+}

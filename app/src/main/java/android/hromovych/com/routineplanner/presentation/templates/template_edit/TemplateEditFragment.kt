@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
@@ -32,22 +31,16 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
     private val viewModel: TemplateEditViewModel by viewModel { parametersOf(templateId) }
     private val binding by viewBinding(FragmentTemplateEditBinding::bind)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         templateId = TemplateEditFragmentArgs.fromBundle(requireArguments()).templateId
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        with(binding.toolbar) {
-            setupWithNavController(findNavController())
-            inflateMenu(R.menu.menu_template_edit)
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-            setOnMenuItemClickListener {
-                onOptionsItemSelected(it)
-            }
-        }
 
         val adapter = object : BasicAdapter<ItemTemplateDoingBinding, DoingTemplate>() {
 
@@ -79,6 +72,12 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_template_edit, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

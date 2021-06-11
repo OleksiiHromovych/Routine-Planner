@@ -18,8 +18,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
@@ -34,12 +32,6 @@ class WeekdayDoingsFragment : Fragment(R.layout.fragment_weekday_doings) {
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        with(binding.toolbar) {
-            setupWithNavController(findNavController())
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
 
         val adapter = object : BasicAdapter<ItemWeekdayDoingBinding, WeekdayDoing>() {
 

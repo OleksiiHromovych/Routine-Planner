@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.doings.tasks
+package android.hromovych.com.routineplanner.presentation.tasks
 
 interface CoroutineBasicTask<P> {
 

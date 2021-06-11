@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.presentation.doings.tasks
+package android.hromovych.com.routineplanner.presentation.tasks
 
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
 import android.hromovych.com.routineplanner.domain.repository.daily_doings.AddDailyDoingsUseCase

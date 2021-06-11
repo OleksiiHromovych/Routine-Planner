@@ -7,7 +7,7 @@ import android.hromovych.com.routineplanner.domain.repository.daily_doings.Daily
 import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
 import android.hromovych.com.routineplanner.domain.repository.weekday_doings.GetWeekdayDoingsUseCase
-import android.hromovych.com.routineplanner.presentation.doings.tasks.CopyDailyDoingsToDayTask
+import android.hromovych.com.routineplanner.presentation.tasks.CopyDailyDoingsToDayTask
 import android.hromovych.com.routineplanner.presentation.utils.getWeekday
 import androidx.annotation.StringRes
 import androidx.lifecycle.*

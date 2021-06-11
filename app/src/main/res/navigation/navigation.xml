@@ -22,7 +22,7 @@
 
         <action
             android:id="@+id/actionDoingsFragmentToWeekdayDoingsFragment"
-            app:destination="@id/repetitiveDoingsFragment" />
+            app:destination="@id/weekdayDoingsFragment" />
 
     </fragment>
 
@@ -57,7 +57,7 @@
 
     </fragment>
     <fragment
-        android:id="@+id/repetitiveDoingsFragment"
+        android:id="@+id/weekdayDoingsFragment"
         android:name="android.hromovych.com.routineplanner.presentation.doings.weekday_doings.WeekdayDoingsFragment"
         android:label="Weekday doings"
         tools:layout="@layout/fragment_weekday_doings"/>

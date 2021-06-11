@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_date_picker"
@@ -19,14 +19,6 @@
         android:icon="@drawable/ic_copy_day"
         android:title="@string/copy_day"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_templates_list"
-        android:title="@string/action_templates"/>
-
-    <item
-        android:id="@+id/action_weekdays_doings"
-        android:title="@string/action_weekdays_doings"/>
 
     <item
         android:id="@+id/action_dayNight"
