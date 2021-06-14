@@ -16,14 +16,6 @@
             android:defaultValue="-1"
             app:argType="integer" />
 
-        <action
-            android:id="@+id/action_doingsFragment_to_templatesFragment"
-            app:destination="@id/templatesFragment" />
-
-        <action
-            android:id="@+id/actionDoingsFragmentToWeekdayDoingsFragment"
-            app:destination="@id/weekdayDoingsFragment" />
-
     </fragment>
 
     <fragment

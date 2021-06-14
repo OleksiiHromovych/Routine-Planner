@@ -51,5 +51,8 @@
     <string name="fragments_subtitle">Fragments</string>
     <string name="attention">Attention</string>
     <string name="not_implemented_yet">Not yet implemented</string>
+    <string name="day">Day</string>
+    <string name="night">Night</string>
+    <string name="auto">Auto</string>
 
 </resources>

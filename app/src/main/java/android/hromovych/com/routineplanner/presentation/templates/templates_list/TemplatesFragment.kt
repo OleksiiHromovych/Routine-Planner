@@ -35,13 +35,6 @@ class TemplatesFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-//        with(binding.toolbar) {
-//            setupWithNavController(findNavController())
-////            setNavigationOnClickListener {
-////                findNavController().navigateUp()
-////            }
-//        }
-
         val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
 
             override val itemLayoutId: Int = R.layout.item_template

@@ -5,6 +5,8 @@ import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.utils.Positionable
 import android.hromovych.com.routineplanner.domain.utils.Weekday
+import androidx.annotation.IdRes
+import androidx.navigation.NavController
 import java.util.*
 
 fun List<DoingTemplate>.toTemplateDoingsString(): String =
@@ -43,4 +45,11 @@ fun List<Positionable>.normalizePositions() {
             position = index
         }
     }
+}
+
+fun NavController.safeNavigate(@IdRes resId: Int): Boolean = try {
+    navigate(resId)
+    true
+} catch (e: IllegalArgumentException) {
+    false
 }

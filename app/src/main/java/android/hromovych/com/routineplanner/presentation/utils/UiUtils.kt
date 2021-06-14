@@ -6,10 +6,14 @@ import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.data.utils.toCalendar
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.domain.entity.Doing
+import android.hromovych.com.routineplanner.presentation.basic.BasicItem
+import android.hromovych.com.routineplanner.utils.SharedPreferencesHelper
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.util.forEach
 import kotlinx.android.synthetic.main.dialog_input_view.view.*
 import java.util.*
@@ -121,4 +125,30 @@ fun Context.showInfoDialog(
         .setMessage(message)
         .setPositiveButton(R.string.dialog_button_ok, null)
         .show()
+}
+
+fun AppCompatActivity.showDayNightDialog() {
+    val items = listOf(
+        BasicItem(getString(R.string.day), AppCompatDelegate.MODE_NIGHT_NO),
+        BasicItem(getString(R.string.night), AppCompatDelegate.MODE_NIGHT_YES),
+        BasicItem(getString(R.string.auto), AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM),
+    )
+
+    val sharedPreferencesHelper = SharedPreferencesHelper(this)
+    val checkedPos = items.indexOfFirst { it.value == sharedPreferencesHelper.dayNightMode }
+    val dialog = AlertDialog.Builder(this)
+        .setTitle(R.string.dayNight_dialog_title)
+        .setSingleChoiceItems(items.map { it.title }.toTypedArray(), checkedPos, null)
+        .setPositiveButton(R.string.dialog_button_ok, null)
+        .setNegativeButton(R.string.cancel, null)
+        .show()
+
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        val resultMode = items[dialog.listView.checkedItemPosition].value
+        if (sharedPreferencesHelper.dayNightMode != resultMode) {
+            sharedPreferencesHelper.dayNightMode = resultMode
+            delegate.localNightMode = resultMode
+        }
+        dialog.dismiss()
+    }
 }

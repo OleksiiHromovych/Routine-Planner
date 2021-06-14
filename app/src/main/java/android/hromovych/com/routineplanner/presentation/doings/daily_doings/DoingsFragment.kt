@@ -174,12 +174,7 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
                     viewModel.copyCurrentDoingsToDay(it)
                     viewModel.setNewDate(it)
                 }
-            }
-            R.id.action_dayNight -> {
-
-            }
-            R.id.action_theme -> {
-
+                return true
             }
 //            else -> context.toast(item.itemId.toString())
         }

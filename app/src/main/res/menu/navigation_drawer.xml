@@ -5,27 +5,22 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/fragments"
-            android:title="@string/fragments_subtitle">
+            android:id="@+id/doingsFragment"
+            android:icon="@drawable/ic_daily_doings"
+            android:title="DailyDoing" />
+        <item
+            android:id="@+id/templatesFragment"
+            android:icon="@drawable/ic_template_icon"
+            android:title="Templates" />
 
-            <menu>
-                <item
-                    android:id="@+id/doingsFragment"
-                    android:icon="@drawable/ic_daily_doings"
-                    android:title="DailyDoing" />
-                <item
-                    android:id="@+id/templatesFragment"
-                    android:icon="@drawable/ic_template_icon"
-                    android:title="Templates" />
+        <item
+            android:id="@+id/weekdayDoingsFragment"
+            android:icon="@drawable/ic_weekday_doings"
+            android:title="Weekday doings" />
 
-                <item
-                    android:id="@+id/weekdayDoingsFragment"
-                    android:icon="@drawable/ic_weekday_doings"
-                    android:title="Weekday doings" />
-            </menu>
+    </group>
 
-        </item>
-
+    <group android:checkableBehavior="none">
         <item
             android:id="@+id/settings"
             android:title="@string/settings">
@@ -39,7 +34,7 @@
                     android:title="@string/action_theme" />
             </menu>
         </item>
-
     </group>
+
 
 </menu>

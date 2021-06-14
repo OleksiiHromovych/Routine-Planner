@@ -101,7 +101,7 @@ class TemplateEditFragment : Fragment(R.layout.fragment_template_edit) {
             }
         }
 
-        return true
+        return super.onOptionsItemSelected(item)
     }
 
     private fun onFabClicked() {

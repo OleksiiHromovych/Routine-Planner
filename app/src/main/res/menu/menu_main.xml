@@ -4,11 +4,6 @@
     tools:context="android.hromovych.com.routineplanner.MainActivity">
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/settings"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_date_picker"
         android:icon="@drawable/ic_date_picker"
         android:title="@string/action_date_picker"
@@ -20,11 +15,4 @@
         android:title="@string/copy_day"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/action_dayNight"
-        android:title="@string/action_dayNight"/>
-
-    <item
-        android:id="@+id/action_theme"
-        android:title="@string/action_theme"/>
 </menu>
