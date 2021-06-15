@@ -44,6 +44,7 @@
     <string name="friday_abb">Fri</string>
     <string name="saturday_abb">Sat</string>
     <string name="sunday_abb">Sun</string>
+
     <string name="can_reuse">can reuse</string>
     <string name="incorrect_doing_name">Incorrect doing name. Name can\'t be empty</string>
     <string name="copy_day">Copy day</string>
@@ -54,5 +55,17 @@
     <string name="day">Day</string>
     <string name="night">Night</string>
     <string name="auto">Auto</string>
+    <string name="about_app">About application</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="dailydoing">DailyDoing</string>
+    <string name="templates">Templates</string>
+    <string name="weekday_doings">Weekday doings</string>
+    <string name="rate_us">Rate us</string>
+    <string name="rate_app_message">We will be grateful for your evaluation and feedback. Thank you!</string>
+    <string name="review_success">Thanks for your feedback</string>
+    <string name="review_failed">Oops, something goes wrong</string>
+    <string name="standard">Standard</string>
+    <string name="vasyl">Vasyl</string>
 
 </resources>

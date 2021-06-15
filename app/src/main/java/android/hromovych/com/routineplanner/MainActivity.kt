@@ -1,24 +1,25 @@
 package android.hromovych.com.routineplanner
 
 import android.hromovych.com.routineplanner.databinding.ActivityMainBinding
-import android.hromovych.com.routineplanner.presentation.utils.safeNavigate
-import android.hromovych.com.routineplanner.presentation.utils.showDayNightDialog
-import android.hromovych.com.routineplanner.presentation.utils.showInfoDialog
-import android.hromovych.com.routineplanner.utils.SharedPreferencesHelper
+import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.*
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var navController: NavController
 
@@ -31,18 +32,24 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
 
+        initTheme()
         delegate.localNightMode = SharedPreferencesHelper(this).dayNightMode
-//        setTheme(SharedPreferencesHelper(this).themeId)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-//        val statusColor = MaterialColors.getColor(this, android.R.attr.statusBarColor, getColor(R.color.status_bar))
-//        window.statusBarColor = statusColor
 
         setupNavigation()
+    }
+
+    private fun initTheme() {
+        setTheme(SharedPreferencesHelper(this).themeId)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        val statusColor = MaterialColors.getColor(this,
+            android.R.attr.statusBarColor,
+            getColor(R.color.status_bar))
+        window.statusBarColor = statusColor
     }
 
     //
@@ -69,7 +76,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun initMenuItems() {
-        navigationView.setNavigationItemClickedListener()
+        setNavigationItemClickedListener(navigationView)
+        with(navigationView) {
+            menu.findItem(R.id.about_app)?.apply {
+                subMenu.findItem(R.id.version).apply {
+                    title = getString(R.string.app_name) + " " + BuildConfig.VERSION_NAME
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -94,8 +108,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun NavigationView.setNavigationItemClickedListener() {
-        val items = menu.children.flatMap {
+    private fun setNavigationItemClickedListener(navView: NavigationView) {
+        val items = navView.menu.children.flatMap {
             if (it.hasSubMenu())
                 it.subMenu.children.toList()
             else
@@ -106,6 +120,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 R.id.dayNight -> {
                     item.setOnMenuItemClickListener {
                         this@MainActivity.showDayNightDialog()
+                        true
+                    }
+                }
+
+                R.id.theme -> {
+                    item.setOnMenuItemClickListener {
+                        this.showThemeDialog {
+                            recreate()
+                        }
+                        true
+                    }
+                }
+
+                R.id.grade -> {
+                    item.setOnMenuItemClickListener {
+                        viewModel.requestReviewFlow(this)
                         true
                     }
                 }

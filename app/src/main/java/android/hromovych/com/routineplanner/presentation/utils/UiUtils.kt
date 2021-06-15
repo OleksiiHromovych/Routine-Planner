@@ -7,8 +7,8 @@ import android.hromovych.com.routineplanner.data.utils.toCalendar
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.basic.BasicItem
-import android.hromovych.com.routineplanner.utils.SharedPreferencesHelper
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.util.forEach
 import kotlinx.android.synthetic.main.dialog_input_view.view.*
+import kotlinx.android.synthetic.main.rate_layout.view.*
 import java.util.*
 
 fun Context.showInputDialog(
@@ -151,4 +152,50 @@ fun AppCompatActivity.showDayNightDialog() {
         }
         dialog.dismiss()
     }
+}
+
+fun Context.showThemeDialog(
+    onChanged: () -> Unit
+) {
+    val items = listOf(
+        BasicItem(getString(R.string.standard), R.style.Theme_RoutinePlanner_Standard),
+        BasicItem(getString(R.string.vasyl), R.style.Theme_RoutinePlanner_Vasyl),
+    )
+
+    val sharedPreferencesHelper = SharedPreferencesHelper(this)
+    val checkedPos = items.indexOfFirst { it.value == sharedPreferencesHelper.themeId }
+    val dialog = AlertDialog.Builder(this)
+        .setTitle(R.string.theme_dialog_title)
+        .setSingleChoiceItems(items.map { it.title }.toTypedArray(), checkedPos, null)
+        .setPositiveButton(R.string.dialog_button_ok, null)
+        .setNegativeButton(R.string.cancel, null)
+        .show()
+
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        val resultMode = items[dialog.listView.checkedItemPosition].value
+        if (sharedPreferencesHelper.themeId != resultMode) {
+            sharedPreferencesHelper.themeId = resultMode
+            onChanged()
+        }
+        dialog.dismiss()
+    }
+}
+
+fun Context.showAppRateDialog() {
+    val view = LayoutInflater.from(this).inflate(R.layout.rate_layout, null)
+    view.message.setText(R.string.rate_app_message)
+    view.ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
+
+        when (rating.toInt()) {
+            in 1..4 -> {
+                view.extra_info_text.visibility = View.VISIBLE
+            }
+            5 -> toast("5!!!")
+        }
+    }
+
+    AlertDialog.Builder(this)
+        .setView(view)
+        .setNegativeButton(R.string.cancel, null)
+        .show()
 }

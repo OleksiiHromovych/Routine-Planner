@@ -1,4 +1,4 @@
-package android.hromovych.com.routineplanner.utils
+package android.hromovych.com.routineplanner.presentation.utils
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -22,7 +22,7 @@ class SharedPreferencesHelper(val context: Context) {
         }
 
     var themeId: Int
-        get() = sharedPreferences.getInt(THEME_ID_KEY, R.style.Theme_RoutinePlanner_NoActionBar)
+        get() = sharedPreferences.getInt(THEME_ID_KEY, R.style.Theme_RoutinePlanner_Standard)
         set(value) {
             sharedPreferences.edit().putInt(THEME_ID_KEY, value).apply()
         }
