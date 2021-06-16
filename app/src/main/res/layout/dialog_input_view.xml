@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="@string/doing_dialog_title_field_hint"
+    android:theme="@style/TextInputLayoutAppearance">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/dialog_input_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:inputType="textCapSentences" />
+
+</com.google.android.material.textfield.TextInputLayout>

@@ -91,9 +91,9 @@
     </style>
 
     <style name="RadioButtonCentredText">
-        <item name="android:background">@drawable/button_circle</item>
+        <item name="android:background">@drawable/radio_button</item>
         <item name="android:button">@null</item>
-        <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <!--    Custom themes-->
@@ -110,5 +110,10 @@
     </style>
 
     <style name="Theme.RoutinePlanner.Standard" parent="Theme.RoutinePlanner.NoActionBar"></style>
+
+    <style name="Widget.RoutinePlanner.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">@color/tool_bar_background</item>
+        <item name="android:elevation">8dp</item>
+    </style>
 
 </resources>
