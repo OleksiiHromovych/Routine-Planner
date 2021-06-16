@@ -13,9 +13,4 @@ data class TemplateWithFullDoings(
         entityColumn = "templateId"
     )
     val doings: List<FullDoingTemplate>
-) {
-
-    val templateName: String
-        get() = template.name
-
-}
+)

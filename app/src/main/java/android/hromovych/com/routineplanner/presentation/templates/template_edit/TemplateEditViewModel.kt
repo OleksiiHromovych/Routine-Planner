@@ -1,39 +1,41 @@
 package android.hromovych.com.routineplanner.presentation.templates.template_edit
 
-import android.hromovych.com.routineplanner.data.database.dao.DoingsDbDao
-import android.hromovych.com.routineplanner.data.database.dao.TemplatesDbDao
-import android.hromovych.com.routineplanner.data.mapper.fromEntity.DoingToPresentationMapper
-import android.hromovych.com.routineplanner.data.mapper.fromEntity.TemplateToPresentationMapper
-import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingTemplateToEntityMapper
-import android.hromovych.com.routineplanner.data.mapper.toEntity.DoingToEntityMapper
-import android.hromovych.com.routineplanner.data.mapper.toEntity.TemplateToEntityMapper
 import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import android.hromovych.com.routineplanner.domain.repository.doings.AddDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.doings.GetActiveDoingsUseCase
+import android.hromovych.com.routineplanner.domain.repository.doings.UpdateDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.AddTemplateDoingsUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.DeleteTemplateDoingUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.GetTemplateWithDoingsUseCase
+import android.hromovych.com.routineplanner.domain.repository.template_edit.UpdateTemplateDoingsUseCase
+import android.hromovych.com.routineplanner.domain.repository.templates.DeleteTemplateUseCase
+import android.hromovych.com.routineplanner.domain.repository.templates.UpdateTemplateUseCase
+import android.hromovych.com.routineplanner.presentation.tasks.AddTemplateDoingsToDayTask
+import androidx.lifecycle.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TemplateEditViewModel(
     private val templateId: Long,
-    templateDao: TemplatesDbDao,
-    doingsDbDao: DoingsDbDao,
+    private val addTemplateDoingsUseCase: AddTemplateDoingsUseCase,
+    private val deleteTemplateDoingUseCase: DeleteTemplateDoingUseCase,
+    private val getTemplateWithDoingsUseCase: GetTemplateWithDoingsUseCase,
+    private val updateTemplateDoingsUseCase: UpdateTemplateDoingsUseCase,
+    private val updateDoingUseCase: UpdateDoingUseCase,
+    private val deleteTemplateUseCase: DeleteTemplateUseCase,
+    private val updateTemplateUseCase: UpdateTemplateUseCase,
+    private val addDoingUseCase: AddDoingUseCase,
+    private val getActiveDoingsUseCase: GetActiveDoingsUseCase,
+    private val addTemplateDoingsToDayTask: AddTemplateDoingsToDayTask,
 ) : ViewModel() {
-
-    private val templateBase = templateDao
-    private val doingsBase = doingsDbDao
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    private val template: LiveData<Template> =
-        templateBase.getTemplateWithFullDoings(templateId).map {
-            TemplateToPresentationMapper.convert(it)
-        }
+    private val template: LiveData<Template> = getTemplateWithDoingsUseCase(templateId).asLiveData()
 
     val templateName = template.map {
         it.name
@@ -45,15 +47,13 @@ class TemplateEditViewModel(
 
     fun updateDoing(doing: Doing) {
         viewModelScope.launch {
-            val doingEntity = DoingToEntityMapper.convert(doing)
-            doingsBase.updateDoing(doingEntity)
+            updateDoingUseCase(doing)
         }
     }
 
     fun deleteTemplateDoing(doingTemplate: DoingTemplate) {
         viewModelScope.launch {
-            val doingTemplateEntity = DoingTemplateToEntityMapper.convert(doingTemplate)
-            templateBase.deleteDoingTemplate(doingTemplateEntity)
+            deleteTemplateDoingUseCase(doingTemplate)
         }
     }
 
@@ -66,38 +66,38 @@ class TemplateEditViewModel(
 
     fun deleteCurrentTemplate() {
         viewModelScope.launch {
-            templateBase.deleteTemplate(templateId)
+            deleteTemplateUseCase(template.value!!)
         }
     }
 
     val updateTemplateName: (String) -> Unit = { newName: String ->
         viewModelScope.launch {
             val template = Template(templateId, newName)
-            val templateEntity = TemplateToEntityMapper.convert(template)
-            templateBase.updateTemplate(templateEntity)
+            updateTemplateUseCase(template)
         }
     }
 
     fun addNewTemplateDoing(doing: Doing) {
         viewModelScope.launch {
-            val doingEntity = DoingToEntityMapper.convert(doing)
-            doingsBase.addDoing(doingEntity).also { doing.id = it }
+            addDoingUseCase(doing).also { doing.id = it }
 
             val templateDoing = DoingTemplate(
                 templateId = templateId,
                 doing = doing,
                 position = templateDoings.value?.size ?: 0
             )
-            val templateDoingEntity = DoingTemplateToEntityMapper.convert(templateDoing)
-            templateBase.addTemplateDoing(templateDoingEntity)
+
+            addTemplateDoingsUseCase(arrayOf(templateDoing))
         }
     }
 
     fun receiveNotUsedDoings(onReceive: (List<Doing>) -> Unit) {
+        val usedDoingsIds = templateDoings.value?.map { it.doing.id } ?: emptyList()
         viewModelScope.launch {
-            val newDoings = templateBase.getNewTemplateDoingsForTemplate(templateId)
-                .map(DoingToPresentationMapper::convert)
-            onReceive(newDoings)
+
+            val result = getActiveDoingsUseCase(Unit).filterNot { it.id in usedDoingsIds }
+
+            onReceive(result)
         }
     }
 
@@ -106,15 +106,27 @@ class TemplateEditViewModel(
             val currentListSize = templateDoings.value?.size ?: 0
 
             val newTemplateDoings = newDoings.mapIndexed { index, doing ->
-                val item = DoingTemplate(
+                DoingTemplate(
                     templateId = templateId,
                     doing = doing,
                     position = currentListSize + index
                 )
-                DoingTemplateToEntityMapper.convert(item)
             }
 
-            templateBase.addAllTemplateDoings(*newTemplateDoings.toTypedArray())
+            addTemplateDoingsUseCase(newTemplateDoings.toTypedArray())
+        }
+    }
+
+    fun addTemplateDoingsToDay(datePattern: Int) {
+        viewModelScope.launch {
+            addTemplateDoingsToDayTask.start(
+                AddTemplateDoingsToDayTask.Param(templateId, datePattern))
+        }
+    }
+
+    fun updateTemplateDoings(doings: List<DoingTemplate>) {
+        viewModelScope.launch {
+            updateTemplateDoingsUseCase(doings)
         }
     }
 

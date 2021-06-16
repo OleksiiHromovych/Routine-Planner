@@ -1,9 +1,14 @@
 package android.hromovych.com.routineplanner.presentation.basic
 
+import android.annotation.SuppressLint
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 
 /**
  * Basic adapt recycler view adapter. Used with bindings layouts
@@ -22,30 +27,55 @@ import androidx.recyclerview.widget.ListAdapter
  * @property checkBoxActive the status of using checkBox in single list item
  * @property onClickListener the list item onClickListener
  */
-abstract class BasicAdapter<TBinding : ViewDataBinding, TData: EqualsCheck<TData>> :
+abstract class BasicAdapter<TBinding : ViewDataBinding, TData : EqualsCheck<TData>> :
     ListAdapter<TData, BasicHolder<TBinding>>(BasicDiffCallback<TData>()) {
     abstract val itemLayoutId: Int
 
     open var checkBoxActive: Boolean = false
     open var onClickListener: BasicClickListener<TData>? = null
     open var onCheckBoxClickListener: BasicCheckBoxListener<TData>? = null
+    open var onItemTouchHelper: ItemTouchHelper? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        onItemTouchHelper?.attachToRecyclerView(recyclerView)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BasicHolder<TBinding> {
         return BasicHolder.from(parent, itemLayoutId)
     }
 
     override fun onBindViewHolder(holder: BasicHolder<TBinding>, position: Int) {
+
         val doingData = BasicAdapterModel<TData>(
             onClickListener,
-            null,
+            onItemTouchHelper?.let { createTouchListener(it, holder) },
             checkBoxActive,
             onCheckBoxClickListener
         )
+
         holder.bind(getItem(position), doingData)
     }
 
-    fun updateList(list: List<TData>?){
+    fun updateList(list: List<TData>?) {
         super.submitList(list)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun createTouchListener(
+        onTouchHelper: ItemTouchHelper,
+        viewHolder: RecyclerView.ViewHolder,
+    ): View.OnTouchListener {
+        return View.OnTouchListener { _, event ->
+
+            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                onTouchHelper.startDrag(viewHolder)
+            } /*else {
+                v.performClick()
+            }*/
+
+            return@OnTouchListener true
+        }
     }
 
 }

@@ -18,21 +18,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:theme="@style/Theme.RoutinePlanner.AppBarOverlay"
-                app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_arrow_back"
-                app:title="@string/app_name" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/template_edit_name_hint"
-                android:layout_below="@id/toolbar"
                 android:theme="@style/TextInputLayoutAppearance"
                 tools:text="Template name">
 

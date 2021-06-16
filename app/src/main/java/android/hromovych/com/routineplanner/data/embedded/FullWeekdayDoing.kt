@@ -12,7 +12,4 @@ data class FullWeekdayDoing(
         entityColumn = "id"
     )
     val doing: Doing
-) {
-    val title: String
-        get() = doing.title
-}
+)

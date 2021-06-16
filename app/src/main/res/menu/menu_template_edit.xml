@@ -5,13 +5,13 @@
 
     <item
         android:id="@+id/menu_action_use_this"
-        android:icon="@android:drawable/stat_sys_download"
+        android:icon="@drawable/ic_load"
         android:title="@string/action_date_picker"
         app:showAsAction="ifRoom|collapseActionView" />
 
     <item
         android:id="@+id/menu_action_delete"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/ic_delete"
         android:title="@string/action_date_picker"
         app:showAsAction="ifRoom|collapseActionView" />
 

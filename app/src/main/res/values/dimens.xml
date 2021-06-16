@@ -3,4 +3,6 @@
 
 <!--    Text dimens-->
     <dimen name="dialog_title_size">25sp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">162dp</dimen>
 </resources>

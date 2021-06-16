@@ -1,14 +1,15 @@
 package android.hromovych.com.routineplanner.domain.entity
 
 import android.hromovych.com.routineplanner.domain.utils.EqualsCheck
+import android.hromovych.com.routineplanner.domain.utils.Positionable
 
 
 data class DoingTemplate(
     var id: Long = 0,
     var doing: Doing,
     var templateId: Long,
-    var position: Int = 0,
-) : EqualsCheck<DoingTemplate> {
+    override var position: Int = 0,
+) : EqualsCheck<DoingTemplate>, Positionable {
 
     val title: String
         get() = doing.title

@@ -1,29 +1,25 @@
 package android.hromovych.com.routineplanner.presentation.doings.daily_doings
 
 import android.hromovych.com.routineplanner.R
-import android.hromovych.com.routineplanner.data.database.PlannerDatabase
 import android.hromovych.com.routineplanner.data.utils.toDatePattern
 import android.hromovych.com.routineplanner.databinding.FragmentDoingsBinding
 import android.hromovych.com.routineplanner.databinding.ItemDoingBinding
 import android.hromovych.com.routineplanner.domain.entity.DailyDoing
-import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
-import android.hromovych.com.routineplanner.presentation.basic.BasicCheckBoxListener
-import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
+import android.hromovych.com.routineplanner.presentation.basic.*
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle
-import android.view.Gravity
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.addRepeatingJob
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.util.*
+import kotlin.properties.Delegates
 
 //https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
 // https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
@@ -34,28 +30,22 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
         const val TAG = "doings_fragment"
     }
 
-    private lateinit var viewModel: DoingsViewModel
+    private var date by Delegates.notNull<Int>()
+    private val viewModel: DoingsViewModel by viewModel { parametersOf(date) }
     private val binding by viewBinding(FragmentDoingsBinding::bind)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val dataSource = PlannerDatabase.getInstance(requireActivity()).doingsDbDao
         val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
-        val date =
-            if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
-        val viewModelFactory = DoingsViewModelFactory(date, dataSource)
-        viewModel = ViewModelProvider(this, viewModelFactory)
-            .get(DoingsViewModel::class.java)
+        date = if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        with(binding.toolbar) {
-            setupWithNavController(findNavController())
-            inflateMenu(R.menu.menu_main)
-            setOnMenuItemClickListener {
-                onOptionsItemSelected(it)
-            }
-        }
         val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoing>() {
 
             override val itemLayoutId: Int = R.layout.item_doing
@@ -69,15 +59,24 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
 
             override var onCheckBoxClickListener: BasicCheckBoxListener<DailyDoing>? =
                 BasicCheckBoxListener { dailyDoing, checked ->
-                    viewModel.updateDailyDoing(dailyDoing.copy(completed = checked))
+                    viewModel.updateDailyDoings(dailyDoing.copy(completed = checked))
                 }
 
+            override var onItemTouchHelper: ItemTouchHelper? =
+                getItemTouchHelper<DailyDoing>(
+                    updateAfterMoved = {
+                        viewModel.updateDailyDoings(*it.toTypedArray())
+                    }
+                )
         }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
 
+        viewModel.date.observe(viewLifecycleOwner) {
+            viewModel.addWeekdayDoingIfNeed(it)
+        }
 
         viewLifecycleOwner.addRepeatingJob(Lifecycle.State.STARTED) {
             viewModel.eventsFlow.collect {
@@ -149,13 +148,13 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_templates_list -> {
-                findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToTemplatesFragment())
-                return true
-            }
             R.id.action_date_picker -> {
                 requireContext().showDatePickerDialog(
                     viewModel.date.value!!
@@ -164,17 +163,20 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
                 }
                 return true
             }
-            R.id.action_weekdays_doings -> {
-                findNavController().navigate(DoingsFragmentDirections.actionDoingsFragmentToWeekdayDoingsFragment())
+            R.id.action_copy_day -> {
+                requireContext().showDatePickerDialog(
+                    viewModel.date.value!!
+                ) {
+                    if (it == viewModel.date.value) {
+                        return@showDatePickerDialog
+                    }
+
+                    viewModel.copyCurrentDoingsToDay(it)
+                    viewModel.setNewDate(it)
+                }
                 return true
             }
-            R.id.action_dayNight -> {
-
-            }
-            R.id.action_theme -> {
-
-            }
-            else -> context.toast(item.title.toString())
+//            else -> context.toast(item.itemId.toString())
         }
         return super.onOptionsItemSelected(item)
     }

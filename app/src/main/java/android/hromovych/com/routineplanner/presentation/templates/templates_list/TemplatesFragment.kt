@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.addRepeatingJob
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,13 +34,6 @@ class TemplatesFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-
-        with(binding.toolbar) {
-            setupWithNavController(findNavController())
-            setNavigationOnClickListener {
-                findNavController().navigateUp()
-            }
-        }
 
         val adapter = object : BasicAdapter<FragmentTemplatesBinding, Template>() {
 

@@ -2,11 +2,11 @@ package android.hromovych.com.routineplanner.data.database.dao
 
 import android.hromovych.com.routineplanner.data.embedded.FullDoingTemplate
 import android.hromovych.com.routineplanner.data.embedded.TemplateWithFullDoings
-import android.hromovych.com.routineplanner.data.entities.Doing
 import android.hromovych.com.routineplanner.data.entities.DoingTemplate
 import android.hromovych.com.routineplanner.data.entities.Template
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TemplatesDbDao {
@@ -20,17 +20,17 @@ interface TemplatesDbDao {
 
     @Transaction
     @Query("SELECT * FROM templates WHERE id = :templateId")
-    fun getTemplateWithFullDoings(templateId: Long): LiveData<TemplateWithFullDoings>
+    fun getTemplateWithFullDoings(templateId: Long): Flow<TemplateWithFullDoings>
 
     @Transaction
-    @Query("SELECT * FROM templates")
+    @Query("SELECT * FROM templates ")
     fun getTemplatesWithFullDoings(): LiveData<List<TemplateWithFullDoings>>
 
     @Delete
     suspend fun deleteDoingTemplate(doingTemplate: DoingTemplate)
 
-    @Query("DELETE FROM templates WHERE id = :templateId")
-    suspend fun deleteTemplate(templateId: Long)
+   @Delete
+    suspend fun deleteTemplate(template: Template)
 
     @Update
     suspend fun updateTemplate(template: Template)
@@ -41,6 +41,9 @@ interface TemplatesDbDao {
     @Insert
     suspend fun addAllTemplateDoings(vararg templateDoing: DoingTemplate)
 
-    @Query("SELECT * FROM doings WHERE active = 1 AND id NOT IN (SELECT doingId FROM doings_templates WHERE templateId = :templateId)")
-    suspend fun getNewTemplateDoingsForTemplate(templateId: Long) : List<Doing>
+    @Update
+    suspend fun updateDoingsTemplate(templateDoing: List<DoingTemplate>)
+//
+//    @Query("SELECT * FROM doings WHERE active = 1 AND id NOT IN (SELECT doingId FROM doings_templates WHERE templateId = :templateId)")
+//    suspend fun getNewTemplateDoingsForTemplate(templateId: Long) : List<Doing>
 }

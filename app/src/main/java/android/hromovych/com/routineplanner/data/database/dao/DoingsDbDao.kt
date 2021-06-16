@@ -5,15 +5,16 @@ import android.hromovych.com.routineplanner.data.entities.DailyDoing
 import android.hromovych.com.routineplanner.data.entities.Doing
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DoingsDbDao {
 
     @Query("SELECT * FROM doings")
-    suspend fun getDoings(): List<Doing>
+    fun getDoings(): LiveData<List<Doing>>
 
-    @Query("SELECT title from doings where id = :doingId")
-    suspend fun getDoingTitle(doingId: Long): String
+    @Query("SELECT * FROM doings WHERE active = 1")
+    suspend fun getActiveDoings(): List<Doing>
 
     @Query("SELECT * FROM daily_doings WHERE date = :date")
     suspend fun getDailyDoings(date: Int): List<DailyDoing>
@@ -22,14 +23,14 @@ interface DoingsDbDao {
     suspend fun deleteDailyDoing(doing: DailyDoing): Int
 
     @Update
-    suspend fun updateDailyDoing(doing: DailyDoing)
+    suspend fun updateDailyDoing(vararg doing: DailyDoing)
 
     @Update
     suspend fun updateDoing(doing: Doing)
 
     @Transaction
-    @Query("SELECT * FROM daily_doings WHERE date = :date")
-    fun getDailyDoingsFull(date: Int) : LiveData<List<DailyDoingFull>>
+    @Query("SELECT * FROM daily_doings WHERE date = :date ORDER BY position")
+    fun getDailyDoingsFull(date: Int) : Flow<List<DailyDoingFull>>
 
     @Insert
     suspend fun addDoing(doing: Doing): Long

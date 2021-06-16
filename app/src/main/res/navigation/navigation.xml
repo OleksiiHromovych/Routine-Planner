@@ -16,14 +16,6 @@
             android:defaultValue="-1"
             app:argType="integer" />
 
-        <action
-            android:id="@+id/action_doingsFragment_to_templatesFragment"
-            app:destination="@id/templatesFragment" />
-
-        <action
-            android:id="@+id/actionDoingsFragmentToWeekdayDoingsFragment"
-            app:destination="@id/repetitiveDoingsFragment" />
-
     </fragment>
 
     <fragment
@@ -48,9 +40,16 @@
             android:name="template_id"
             app:argType="long" />
 
+        <action
+            android:id="@+id/action_templateEditFragment_to_doingsFragment"
+            app:destination="@id/doingsFragment"
+            app:popUpTo="@id/doingsFragment"
+            app:popUpToInclusive="true"
+            />
+
     </fragment>
     <fragment
-        android:id="@+id/repetitiveDoingsFragment"
+        android:id="@+id/weekdayDoingsFragment"
         android:name="android.hromovych.com.routineplanner.presentation.doings.weekday_doings.WeekdayDoingsFragment"
         android:label="Weekday doings"
         tools:layout="@layout/fragment_weekday_doings"/>
