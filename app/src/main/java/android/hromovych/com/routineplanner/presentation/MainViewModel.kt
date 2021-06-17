@@ -1,6 +1,7 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.presentation
 
 import android.app.Activity
+import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.presentation.utils.toast
 import androidx.lifecycle.ViewModel
 import com.google.android.play.core.review.ReviewManagerFactory

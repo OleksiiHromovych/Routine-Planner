@@ -1,5 +1,7 @@
-package android.hromovych.com.routineplanner
+package android.hromovych.com.routineplanner.presentation
 
+import android.hromovych.com.routineplanner.BuildConfig
+import android.hromovych.com.routineplanner.R
 import android.hromovych.com.routineplanner.databinding.ActivityMainBinding
 import android.hromovych.com.routineplanner.presentation.utils.*
 import android.os.Bundle

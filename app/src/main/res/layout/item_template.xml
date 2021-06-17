@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.hromovych.com.routineplanner.presentation.utils.ExtentionKt" />
+        <import type="android.hromovych.com.routineplanner.presentation.templates.templates_list.TemplatesViewModel" />
 
         <variable
             name="item"
@@ -71,7 +71,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:text="@{ExtentionKt.toTemplateDoingsString(item.doings)}"
+            android:text="@{TemplatesViewModel.toTemplateDoingsString(item.doings)}"
             android:textColor="@color/subtext"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"

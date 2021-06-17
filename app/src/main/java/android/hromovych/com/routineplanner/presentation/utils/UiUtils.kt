@@ -9,7 +9,9 @@ import android.hromovych.com.routineplanner.domain.entity.Doing
 import android.hromovych.com.routineplanner.presentation.basic.BasicItem
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -199,3 +201,12 @@ fun Context.showAppRateDialog() {
         .setNegativeButton(R.string.cancel, null)
         .show()
 }
+
+fun EditText.onActionDone(block: EditText.() -> Unit) =
+    setOnEditorActionListener { _, actionId, _ ->
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            block()
+            return@setOnEditorActionListener true
+        }
+        false
+    }

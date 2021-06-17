@@ -9,7 +9,6 @@ import android.hromovych.com.routineplanner.presentation.basic.BasicAdapter
 import android.hromovych.com.routineplanner.presentation.basic.BasicClickListener
 import android.hromovych.com.routineplanner.presentation.basic.getItemTouchHelper
 import android.hromovych.com.routineplanner.presentation.utils.*
-import android.hromovych.com.routineplanner.utils.toast
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.PopupMenu

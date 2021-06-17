@@ -1,5 +1,6 @@
 package android.hromovych.com.routineplanner.presentation.templates.templates_list
 
+import android.hromovych.com.routineplanner.domain.entity.DoingTemplate
 import android.hromovych.com.routineplanner.domain.entity.Template
 import android.hromovych.com.routineplanner.domain.repository.templates.AddTemplateUseCase
 import android.hromovych.com.routineplanner.domain.repository.templates.GetTemplatesWithFullDoingsUseCase
@@ -11,8 +12,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class TemplatesViewModel(
-     private val addTemplateUseCase: AddTemplateUseCase,
-     private val getTemplatesWithFullDoingsUseCase: GetTemplatesWithFullDoingsUseCase
+    private val addTemplateUseCase: AddTemplateUseCase,
+    private val getTemplatesWithFullDoingsUseCase: GetTemplatesWithFullDoingsUseCase,
 ) : ViewModel() {
 
     val templates: LiveData<List<Template>> = getTemplatesWithFullDoingsUseCase(Unit)
@@ -38,9 +39,18 @@ class TemplatesViewModel(
         }
     }
 
-    sealed class Event{
-        data class NavigateToTemplateEdit(val templateID: Long): Event()
-        data class ShowToast(val text: String): Event()
+    sealed class Event {
+        data class NavigateToTemplateEdit(val templateID: Long) : Event()
+        data class ShowToast(val text: String) : Event()
         object OnFabClicked : Event()
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun toTemplateDoingsString(doings: List<DoingTemplate>): String =
+            doings.joinToString(separator = ";\n") {
+                it.title
+            }
     }
 }

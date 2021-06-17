@@ -21,9 +21,7 @@ import org.koin.core.parameter.parametersOf
 import java.util.*
 import kotlin.properties.Delegates
 
-//https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals#4
-// https://proandroiddev.com/android-singleliveevent-redux-with-kotlin-flow-b755c70bb055
-// https://habr.com/ru/post/495762/
+
 class DoingsFragment : Fragment(R.layout.fragment_doings) {
 
     companion object {
