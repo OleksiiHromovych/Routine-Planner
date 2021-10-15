@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/doingsFragment">
+
+    <fragment
+        android:id="@+id/doingsFragment"
+        android:name="android.hromovych.com.routineplanner.doings.daily_doings.DoingsFragment"
+        android:label="DailyDoing"
+        tools:layout="@layout/fragment_doings">
+
+        <argument
+            android:name="date"
+            android:defaultValue="-1"
+            app:argType="integer" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/templatesFragment"
+        android:name="android.hromovych.com.routineplanner.templates.templates_list.TemplatesFragment"
+        android:label="Templates"
+        tools:layout="@layout/fragment_templates">
+
+        <action
+            android:id="@+id/action_templatesFragment_to_templateEditFragment"
+            app:destination="@id/templateEditFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/templateEditFragment"
+        android:name="android.hromovych.com.routineplanner.templates.template_edit.TemplateEditFragment"
+        android:label="Edit template"
+        tools:layout="@layout/fragment_template_edit">
+
+        <argument
+            android:name="template_id"
+            app:argType="long" />
+
+        <action
+            android:id="@+id/action_templateEditFragment_to_doingsFragment"
+            app:destination="@id/doingsFragment"
+            app:popUpTo="@id/doingsFragment"
+            app:popUpToInclusive="true"
+            />
+
+    </fragment>
+    <fragment
+        android:id="@+id/weekdayDoingsFragment"
+        android:name="android.hromovych.com.routineplanner.doings.weekday_doings.WeekdayDoingsFragment"
+        android:label="Weekday doings"
+        tools:layout="@layout/fragment_weekday_doings"/>
+
+</navigation>

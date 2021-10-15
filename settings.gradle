@@ -1,2 +1,4 @@
-include ':app'
+include ':presentation'
 rootProject.name = "RoutinePlanner"
+include ':domain'
+include ':data'
