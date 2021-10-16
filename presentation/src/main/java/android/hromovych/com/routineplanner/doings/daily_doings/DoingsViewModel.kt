@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 
 class DoingsViewModel(
-    private val datePattern: Int,
+    datePattern: Int,
     private val dailyDoingsRepository: DailyDoingsRepository,
     private val addDoingUseCase: AddDoingUseCase,
     private val updateDoingUseCase: UpdateDoingUseCase,

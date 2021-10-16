@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/programming/Android/project/RoutinePlanner/presentation/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/programming/Android/project/RoutinePlanner/presentation/src/main/res/layout/fragment_doings.xml" value="0.176" />
         <entry key="..\:/programming/Android/project/RoutinePlanner/presentation/src/main/res/layout/item_doing.xml" value="0.13020833333333334" />
         <entry key="..\:/programming/Android/project/RoutinePlanner/presentation/src/main/res/layout/item_template.xml" value="0.2" />
         <entry key="..\:/programming/Android/project/RoutinePlanner/presentation/src/main/res/layout/item_weekday_doing.xml" value="0.13020833333333334" />

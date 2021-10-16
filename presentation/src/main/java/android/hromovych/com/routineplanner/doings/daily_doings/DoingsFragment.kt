@@ -9,6 +9,7 @@ import android.hromovych.com.routineplanner.dialogs.showDoingEditDialog
 import android.hromovych.com.routineplanner.utils.*
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -40,14 +41,17 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val arguments =
-            android.hromovych.com.routineplanner.doings.daily_doings.DoingsFragmentArgs.fromBundle(
-                requireArguments())
+        val arguments = DoingsFragmentArgs.fromBundle(requireArguments())
         date = if (arguments.date == -1) Calendar.getInstance().toDatePattern() else arguments.date
 
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        initRecycler()
+        initBinds()
+    }
+
+    private fun initRecycler() {
         val adapter = object : BasicAdapter<ItemDoingBinding, DailyDoing>() {
 
             override val itemLayoutId: Int = R.layout.item_doing
@@ -75,7 +79,9 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.setHasFixedSize(true)
+    }
 
+    private fun initBinds() {
         viewModel.date.observe(viewLifecycleOwner) {
             viewModel.addWeekdayDoingIfNeed(it)
         }
@@ -91,6 +97,10 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
                     }
                 }
             }
+        }
+
+        viewModel.dateString.observe(viewLifecycleOwner) {
+            (requireActivity() as? AppCompatActivity)?.supportActionBar?.subtitle = it
         }
     }
 
@@ -181,6 +191,11 @@ class DoingsFragment : Fragment(R.layout.fragment_doings) {
 //            else -> context.toast(item.itemId.toString())
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (requireActivity() as? AppCompatActivity)?.supportActionBar?.subtitle = null
     }
 
 }
